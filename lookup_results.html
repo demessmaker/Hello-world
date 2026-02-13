@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ISBN &amp; UPC Lookup Results</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #232733;
+      --border: #2e3345;
+      --text: #e2e4eb;
+      --text-muted: #8b8fa3;
+      --accent: #6c8cff;
+      --accent-dim: #3a4a80;
+      --green: #4cce8a;
+      --red: #f06c6c;
+      --orange: #e8a55a;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 2.5rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      display: flex;
+      gap: 1.5rem;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover {
+      border-color: var(--accent-dim);
+    }
+
+    .card.error-card {
+      border-left: 3px solid var(--red);
+      opacity: 0.7;
+    }
+
+    .card-cover {
+      flex-shrink: 0;
+      width: 100px;
+      height: 140px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--surface2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-cover .placeholder {
+      color: var(--text-muted);
+      font-size: 2rem;
+    }
+
+    .product-image {
+      width: 120px;
+      height: 120px;
+      border-radius: 8px;
+      object-fit: contain;
+      background: #fff;
+    }
+
+    .card-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+    }
+
+    .card-title a {
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .card-title a:hover {
+      color: var(--accent);
+    }
+
+    .card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem 1.2rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    .card-meta span {
+      white-space: nowrap;
+    }
+
+    .label {
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .tag {
+      display: inline-block;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.15rem 0.55rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin: 0.15rem 0.2rem 0.15rem 0;
+    }
+
+    .tags {
+      margin-top: 0.4rem;
+    }
+
+    .code-badge {
+      display: inline-block;
+      font-family: "SF Mono", "Fira Code", monospace;
+      font-size: 0.8rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 0.1rem 0.5rem;
+      color: var(--orange);
+      margin-bottom: 0.4rem;
+    }
+
+    .error-msg {
+      color: var(--red);
+      font-size: 0.9rem;
+      margin-top: 0.25rem;
+    }
+
+    .price-range {
+      color: var(--green);
+      font-weight: 600;
+    }
+
+    .offers-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.6rem;
+      font-size: 0.85rem;
+    }
+
+    .offers-table th {
+      text-align: left;
+      color: var(--text-muted);
+      font-weight: 500;
+      padding: 0.35rem 0.6rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .offers-table td {
+      padding: 0.35rem 0.6rem;
+      border-bottom: 1px solid var(--surface2);
+    }
+
+    .offers-table a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .offers-table a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 1rem; }
+      .card { flex-direction: column; }
+      .card-cover { width: 80px; height: 110px; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <h1>ISBN &amp; UPC Lookup Results</h1>
+  <p class="subtitle">Book and product details retrieved from Open Library and UPC Item DB</p>
+
+  <!-- ======================== BOOKS (ISBN) ======================== -->
+  <div class="section-title">Books (ISBN)</div>
+
+  <!-- ISBN: 978-1-55440-933-4 — not found -->
+  <div class="card error-card">
+    <div class="card-cover"><span class="placeholder">?</span></div>
+    <div class="card-body">
+      <div class="code-badge">ISBN 978-1-55440-933-4</div>
+      <p class="error-msg">Book not found in Open Library database.</p>
+    </div>
+  </div>
+
+  <!-- ISBN: 978-0-7935-7409-4 -->
+  <div class="card">
+    <div class="card-cover">
+      <img src="https://covers.openlibrary.org/b/id/1504241-M.jpg"
+           alt="FastTrack Drums Book 1 cover">
+    </div>
+    <div class="card-body">
+      <div class="code-badge">ISBN 978-0-7935-7409-4</div>
+      <div class="card-title">
+        <a href="https://openlibrary.org/books/OL9733820M/FastTrack_Music_Instruction_-_Drums_Book_1_(Fasttrack_Series)"
+           target="_blank" rel="noopener">
+          FastTrack Music Instruction &ndash; Drums, Book 1
+        </a>
+      </div>
+      <div class="card-meta">
+        <span><span class="label">Authors:</span> Rick Mattingly, Blake Neely</span>
+        <span><span class="label">Publisher:</span> Hal Leonard Corporation</span>
+        <span><span class="label">Published:</span> March 1, 1997</span>
+        <span><span class="label">Pages:</span> 48</span>
+      </div>
+      <div class="tags">
+        <span class="tag">Percussion music</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ISBN: 978-1-61677-075-4 -->
+  <div class="card">
+    <div class="card-cover">
+      <img src="https://covers.openlibrary.org/b/id/7115045-M.jpg"
+           alt="Piano Adventures cover">
+    </div>
+    <div class="card-body">
+      <div class="code-badge">ISBN 978-1-61677-075-4</div>
+      <div class="card-title">
+        <a href="https://openlibrary.org/books/OL25304261M/Piano_Adventures"
+           target="_blank" rel="noopener">
+          Piano Adventures
+        </a>
+      </div>
+      <div class="card-meta">
+        <span><span class="label">Authors:</span> Nancy and Randall Faber</span>
+        <span><span class="label">Publisher:</span> Faber Piano Adventures</span>
+        <span><span class="label">Published:</span> 2011</span>
+        <span><span class="label">Pages:</span> 72</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ISBN: 9780-634-08720-2 -->
+  <div class="card">
+    <div class="card-cover">
+      <img src="https://covers.openlibrary.org/b/id/1331372-M.jpg"
+           alt="Hal Leonard Guitar Method cover">
+    </div>
+    <div class="card-body">
+      <div class="code-badge">ISBN 978-0-634-08720-2</div>
+      <div class="card-title">
+        <a href="https://openlibrary.org/books/OL7624110M/Hal_Leonard_Guitar_Method_Book_1"
+           target="_blank" rel="noopener">
+          Hal Leonard Guitar Method Book 1
+        </a>
+      </div>
+      <div class="card-meta">
+        <span><span class="label">Authors:</span> Will Schmid</span>
+        <span><span class="label">Publisher:</span> Hal Leonard Corporation</span>
+        <span><span class="label">Published:</span> February 1, 2005</span>
+        <span><span class="label">Pages:</span> 48</span>
+      </div>
+      <div class="tags">
+        <span class="tag">Guitar</span>
+        <span class="tag">Methods</span>
+        <span class="tag">Self-instruction</span>
+        <span class="tag">Guitar music</span>
+        <span class="tag">Music</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ISBN: 978-0-7579-0061-7 -->
+  <div class="card">
+    <div class="card-cover"><span class="placeholder">&#9835;</span></div>
+    <div class="card-body">
+      <div class="code-badge">ISBN 978-0-7579-0061-7</div>
+      <div class="card-title">
+        <a href="https://openlibrary.org/books/OL35889601M/Suzuki_Violin_School_Vol_1"
+           target="_blank" rel="noopener">
+          Suzuki Violin School, Vol 1
+        </a>
+      </div>
+      <div class="card-meta">
+        <span><span class="label">Authors:</span> Shinichi Suzuki, Hilary Hahn, Natalie Zhu</span>
+        <span><span class="label">Publisher:</span> Alfred Publishing Company</span>
+        <span><span class="label">Published:</span> 1995</span>
+      </div>
+      <div class="tags">
+        <span class="tag">Violin music</span>
+        <span class="tag">Piano music</span>
+        <span class="tag">Stringed instruments</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== PRODUCTS (UPC) ======================== -->
+  <div class="section-title">Products (UPC)</div>
+
+  <!-- UPC: 33132 16002 — invalid -->
+  <div class="card error-card">
+    <div class="card-cover"><span class="placeholder">?</span></div>
+    <div class="card-body">
+      <div class="code-badge">UPC 33132 16002</div>
+      <p class="error-msg">Invalid UPC format &mdash; check digit validation failed after zero-padding to 12 digits.</p>
+    </div>
+  </div>
+
+  <!-- UPC: 1995416963 — invalid -->
+  <div class="card error-card">
+    <div class="card-cover"><span class="placeholder">?</span></div>
+    <div class="card-body">
+      <div class="code-badge">UPC 1995416963</div>
+      <p class="error-msg">Invalid UPC format &mdash; check digit validation failed after zero-padding to 12 digits.</p>
+    </div>
+  </div>
+
+  <!-- UPC: 10137 01553 — invalid -->
+  <div class="card error-card">
+    <div class="card-cover"><span class="placeholder">?</span></div>
+    <div class="card-body">
+      <div class="code-badge">UPC 10137 01553</div>
+      <p class="error-msg">Invalid UPC format &mdash; check digit validation failed after zero-padding to 12 digits.</p>
+    </div>
+  </div>
+
+  <!-- UPC: 190786073425 — Hohner Marine Band Harmonica -->
+  <div class="card">
+    <div class="card-cover">
+      <img class="product-image"
+           src="https://i5.walmartimages.com/asr/b69e69d4-1e08-4077-8af0-34508bbf9954_1.3f88b53df951eb131f86556cfacb9821.jpeg?odnHeight=450&odnWidth=450&odnBg=ffffff"
+           alt="Hohner Marine Band Harmonica">
+    </div>
+    <div class="card-body">
+      <div class="code-badge">UPC 190786073425</div>
+      <div class="card-title">Marine Band Harmonica &ndash; Key of C</div>
+      <div class="card-meta">
+        <span><span class="label">Brand:</span> Hohner</span>
+        <span><span class="label">Weight:</span> 6.57 lb</span>
+        <span><span class="label">Price range:</span>
+          <span class="price-range">$14.95 &ndash; $89.28</span>
+        </span>
+      </div>
+      <div class="card-meta">
+        <span><span class="label">Category:</span> Woodwinds &rarr; Harmonicas</span>
+      </div>
+      <p style="font-size:0.88rem;color:var(--text-muted);margin-top:0.3rem;">
+        The Marine Band has played a vital role in the development of the blues, folk, rock
+        and pop music since 1896.
+      </p>
+      <table class="offers-table">
+        <thead>
+          <tr><th>Merchant</th><th>Price</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>UnbeatableSale.com</td>
+            <td>$60.30</td>
+          </tr>
+          <tr>
+            <td>Walmart</td>
+            <td>$58.75</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- UPC: 717669524852 — Fender Mini Deluxe Amp -->
+  <div class="card">
+    <div class="card-cover">
+      <img class="product-image"
+           src="https://i5.walmartimages.com/asr/7823a58c-0853-4478-b054-96a188e3181c_1.dc00653031183b8ab548cfb313482ae8.jpeg?odnHeight=450&odnWidth=450&odnBg=ffffff"
+           alt="Fender Mini Deluxe Amp">
+    </div>
+    <div class="card-body">
+      <div class="code-badge">UPC 717669524852</div>
+      <div class="card-title">Fender Mini Deluxe Amp</div>
+      <div class="card-meta">
+        <span><span class="label">Brand:</span> Fender</span>
+        <span><span class="label">Weight:</span> 1.15 lb</span>
+        <span><span class="label">Price range:</span>
+          <span class="price-range">$12.95 &ndash; $2,400.00</span>
+        </span>
+      </div>
+      <div class="card-meta">
+        <span><span class="label">Category:</span> Musical Toys &rarr; Toy Instruments</span>
+      </div>
+      <table class="offers-table">
+        <thead>
+          <tr><th>Merchant</th><th>Price</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Sears</td>
+            <td>$34.95</td>
+          </tr>
+          <tr>
+            <td>Walmart</td>
+            <td>$36.39</td>
+          </tr>
+          <tr>
+            <td>Musician's Friend</td>
+            <td>$37.51</td>
+          </tr>
+          <tr>
+            <td>Guitar Center</td>
+            <td>$37.51</td>
+          </tr>
+          <tr>
+            <td>Rakuten</td>
+            <td>$38.99</td>
+          </tr>
+          <tr>
+            <td>Newegg</td>
+            <td>$49.99</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
