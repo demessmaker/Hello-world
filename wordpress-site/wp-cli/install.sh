@@ -45,6 +45,9 @@ wp plugin install classic-editor --activate
 wp plugin install contact-form-7 --activate
 wp plugin install wordpress-seo --activate
 
+echo "=== Installing SEO Sitemap Plugin ==="
+wp plugin install google-sitemap-generator --activate 2>/dev/null || echo "Sitemap plugin skipped (Yoast includes sitemap functionality)"
+
 echo "=== Removing Default Content ==="
 wp post delete 1 --force 2>/dev/null || true   # Hello World post
 wp post delete 2 --force 2>/dev/null || true   # Sample Page

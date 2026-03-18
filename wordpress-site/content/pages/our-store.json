@@ -3,6 +3,14 @@
   "slug": "our-store",
   "status": "publish",
   "type": "page",
+  "seo": {
+    "meta_title": "Music Store West Island | Guitars, Instruments & Accessories | Pointe-Claire",
+    "meta_description": "Shop Gibson, Fender, Gretsch & Tama instruments at West Island's largest music store. Instrument sales, rentals, music books & accessories in Pointe-Claire.",
+    "focus_keywords": ["music store west island", "guitar store pointe-claire", "instrument rental montreal west island"],
+    "og_title": "Our Music Store - West Island Conservatory of Music",
+    "og_description": "West Island's largest selection of instruments and accessories. Gibson, Fender, Gretsch & more. Sales, rentals, and music books.",
+    "og_type": "website"
+  },
   "content": {
     "heading": "Our Store",
     "description": "West Island's premier musical destination with the West Island's largest selection of instruments and accessories.",

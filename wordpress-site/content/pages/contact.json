@@ -3,6 +3,14 @@
   "slug": "contact-us",
   "status": "publish",
   "type": "page",
+  "seo": {
+    "meta_title": "Contact Us | West Island Conservatory of Music | 514-428-5080",
+    "meta_description": "Contact West Island Conservatory of Music at Plaza Pointe-Claire. Call 514-428-5080 or email us. Open Mon-Sat. Free parking. Book your free trial lesson!",
+    "focus_keywords": ["west island music school contact", "music lessons pointe-claire", "514-428-5080"],
+    "og_title": "Contact West Island Conservatory of Music",
+    "og_description": "Visit us at Plaza Pointe-Claire or call 514-428-5080. Open Monday-Saturday. Free parking available.",
+    "og_type": "website"
+  },
   "content": {
     "heading": "Contact Us",
     "description": "West Island's premier musical destination. Our knowledgeable staff are here to answer your questions.",

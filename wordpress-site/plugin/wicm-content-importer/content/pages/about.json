@@ -3,6 +3,14 @@
   "slug": "about-us",
   "status": "publish",
   "type": "page",
+  "seo": {
+    "meta_title": "About Us | West Island Conservatory of Music | 50+ Years of Excellence",
+    "meta_description": "Founded over 50 years ago in Pointe-Claire, WICM is one of Canada's most elite music schools. Highly qualified international faculty. Serving West Island Montreal.",
+    "focus_keywords": ["west island music school", "music school pointe-claire", "conservatory of music montreal"],
+    "og_title": "About West Island Conservatory of Music",
+    "og_description": "Over 50 years of musical excellence in Pointe-Claire. Learn about our history, qualified teachers, and approach to music education.",
+    "og_type": "website"
+  },
   "content": {
     "heading": "About West Island Conservatory of Music",
     "history": "Founded over 50 years ago and located in Pointe Claire. In 1997, new management under Mossor and Casny took over to modernize and sustain the institution's operations.",
@@ -11,5 +19,5 @@
     "approach": "The institution successfully accommodates diverse students across varying age groups, goals, and musical interests.",
     "motto": "Making music magical"
   },
-  "html_content": "<div class=\"about-hero\">\n  <h1>About West Island Conservatory of Music</h1>\n  <p class=\"motto\"><em>Making music magical</em></p>\n</div>\n\n<div class=\"about-history\">\n  <h2>Our History</h2>\n  <p>Founded over 50 years ago and located in Pointe Claire, the West Island Conservatory of Music has a rich tradition of musical excellence. In 1997, new management under Mossor and Casny took over to modernize and sustain the institution's operations.</p>\n  <p>The conservatory maintains its reputation as one of the most elite music schools in the country.</p>\n</div>\n\n<div class=\"about-staff\">\n  <h2>Our Teachers</h2>\n  <p>The conservatory employs highly qualified teachers who demonstrate excellent communication skills in teaching music and student motivation. Faculty members represent an international background, holding highly recognized university degrees in music from various countries worldwide.</p>\n</div>\n\n<div class=\"about-approach\">\n  <h2>Our Approach</h2>\n  <p>The institution successfully accommodates diverse students across varying age groups, goals, and musical interests.</p>\n</div>"
+  "html_content": "<div class=\"about-hero\">\n  <h1>About West Island Conservatory of Music &mdash; Pointe-Claire, Montreal</h1>\n  <p class=\"motto\"><em>Making music magical for over 50 years</em></p>\n</div>\n\n<div class=\"about-history\">\n  <h2>Our History</h2>\n  <p>Founded over 50 years ago and located in Pointe-Claire, the West Island Conservatory of Music has a rich tradition of musical excellence serving the communities of Pointe-Claire, Dollard-des-Ormeaux, Kirkland, Beaconsfield, Pierrefonds, and Dorval. In 1997, new management under Mossor and Casny took over to modernize and sustain the institution's operations.</p>\n  <p>The conservatory maintains its reputation as one of the most elite music schools in the country, offering private lessons in piano, guitar, voice, drums, violin, and 10 other instruments.</p>\n</div>\n\n<div class=\"about-staff\">\n  <h2>Our Qualified Music Teachers</h2>\n  <p>The conservatory employs highly qualified teachers who demonstrate excellent communication skills in teaching music and student motivation. Faculty members represent an international background, holding highly recognized university degrees in music from various countries worldwide.</p>\n</div>\n\n<div class=\"about-approach\">\n  <h2>Our Approach to Music Education</h2>\n  <p>The institution successfully accommodates diverse students across varying age groups, goals, and musical interests. Whether you're a beginner or preparing for RCM exams, our personalized programs are designed to help you succeed.</p>\n</div>\n\n<div class=\"about-cta\">\n  <h2>Visit Our Pointe-Claire Studio</h2>\n  <p>Located at Plaza Pointe-Claire, 269 St-Jean blvd, Suite 101. <a href=\"/contact-us/\">Get directions and hours</a> or call <a href=\"tel:514-428-5080\">514-428-5080</a> to book your free trial lesson.</p>\n</div>"
 }

@@ -3,6 +3,14 @@
   "slug": "testimonials",
   "status": "publish",
   "type": "page",
+  "seo": {
+    "meta_title": "Student Testimonials | West Island Conservatory of Music Reviews",
+    "meta_description": "Read what students and parents say about West Island Conservatory of Music. Top-rated music school in Pointe-Claire with qualified, passionate teachers.",
+    "focus_keywords": ["west island music school reviews", "music lessons testimonials", "WICM reviews"],
+    "og_title": "What Our Students Say - West Island Conservatory of Music",
+    "og_description": "Hear from our students and parents about their experience at West Island Conservatory of Music.",
+    "og_type": "website"
+  },
   "content": {
     "heading": "What Our Students Say",
     "testimonials": [
