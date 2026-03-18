@@ -1,0 +1,36 @@
+{
+  "title": "Courses",
+  "slug": "courses",
+  "status": "publish",
+  "type": "page",
+  "content": {
+    "heading": "Private music lessons by highly qualified teachers!",
+    "subheading": "From Beginners to Advanced!",
+    "description": "Courses are taught by highly qualified teachers in professional studio classrooms. Programs are customized based on students' age, specific goals and music genres, ranging from rock to R&B to jazz and classical.",
+    "courses": [
+      "Voice",
+      "Piano",
+      "Guitar",
+      "Drums",
+      "Bass",
+      "Violin",
+      "Cello",
+      "Keyboard",
+      "Music Initiation",
+      "Saxophone",
+      "Trumpet",
+      "Flute",
+      "Clarinet",
+      "Rock Band (semi-private)",
+      "Garage Band (semi-private)",
+      "Recording Programming"
+    ],
+    "features": [
+      "Professional concerts - some of the largest amateur concerts in Canada",
+      "RCM exam preparation with internationally recognized credentials",
+      "Band performance opportunities with experienced instructors",
+      "Customized programs based on age, goals, and music genres"
+    ]
+  },
+  "html_content": "<div class=\"courses-hero\">\n  <h1>Private music lessons by highly qualified teachers!</h1>\n  <h2>From Beginners to Advanced!</h2>\n  <p>Courses are taught by highly qualified teachers in professional studio classrooms. Programs are customized based on students' age, specific goals and music genres, ranging from rock to R&amp;B to jazz and classical.</p>\n</div>\n\n<div class=\"course-offerings\">\n  <h2>Our Course Offerings</h2>\n  <div class=\"course-grid\">\n    <div class=\"course-item\">Voice</div>\n    <div class=\"course-item\">Piano</div>\n    <div class=\"course-item\">Guitar</div>\n    <div class=\"course-item\">Drums</div>\n    <div class=\"course-item\">Bass</div>\n    <div class=\"course-item\">Violin</div>\n    <div class=\"course-item\">Cello</div>\n    <div class=\"course-item\">Keyboard</div>\n    <div class=\"course-item\">Music Initiation</div>\n    <div class=\"course-item\">Saxophone</div>\n    <div class=\"course-item\">Trumpet</div>\n    <div class=\"course-item\">Flute</div>\n    <div class=\"course-item\">Clarinet</div>\n    <div class=\"course-item\">Rock Band (semi-private)</div>\n    <div class=\"course-item\">Garage Band (semi-private)</div>\n    <div class=\"course-item\">Recording Programming</div>\n  </div>\n</div>\n\n<div class=\"program-features\">\n  <h2>Program Features</h2>\n  <ul>\n    <li>Professional concerts &ndash; some of the largest amateur concerts in Canada</li>\n    <li>RCM exam preparation with internationally recognized credentials</li>\n    <li>Band performance opportunities with experienced instructors</li>\n    <li>Customized programs based on age, goals, and music genres</li>\n  </ul>\n</div>"
+}
