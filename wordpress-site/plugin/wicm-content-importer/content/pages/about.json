@@ -1,0 +1,15 @@
+{
+  "title": "About Us",
+  "slug": "about-us",
+  "status": "publish",
+  "type": "page",
+  "content": {
+    "heading": "About West Island Conservatory of Music",
+    "history": "Founded over 50 years ago and located in Pointe Claire. In 1997, new management under Mossor and Casny took over to modernize and sustain the institution's operations.",
+    "reputation": "The conservatory maintains its reputation as one of the most elite music schools in the country.",
+    "staff": "The conservatory employs highly qualified teachers who demonstrate excellent communication skills in teaching music and student motivation. Faculty members represent an international background, holding highly recognized university degrees in music from various countries worldwide.",
+    "approach": "The institution successfully accommodates diverse students across varying age groups, goals, and musical interests.",
+    "motto": "Making music magical"
+  },
+  "html_content": "<div class=\"about-hero\">\n  <h1>About West Island Conservatory of Music</h1>\n  <p class=\"motto\"><em>Making music magical</em></p>\n</div>\n\n<div class=\"about-history\">\n  <h2>Our History</h2>\n  <p>Founded over 50 years ago and located in Pointe Claire, the West Island Conservatory of Music has a rich tradition of musical excellence. In 1997, new management under Mossor and Casny took over to modernize and sustain the institution's operations.</p>\n  <p>The conservatory maintains its reputation as one of the most elite music schools in the country.</p>\n</div>\n\n<div class=\"about-staff\">\n  <h2>Our Teachers</h2>\n  <p>The conservatory employs highly qualified teachers who demonstrate excellent communication skills in teaching music and student motivation. Faculty members represent an international background, holding highly recognized university degrees in music from various countries worldwide.</p>\n</div>\n\n<div class=\"about-approach\">\n  <h2>Our Approach</h2>\n  <p>The institution successfully accommodates diverse students across varying age groups, goals, and musical interests.</p>\n</div>"
+}

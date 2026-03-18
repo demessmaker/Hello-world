@@ -1,0 +1,42 @@
+{
+  "menu_name": "Primary Menu",
+  "menu_location": "primary",
+  "items": [
+    {
+      "title": "Home",
+      "type": "page",
+      "slug": "home",
+      "order": 1
+    },
+    {
+      "title": "Courses",
+      "type": "page",
+      "slug": "courses",
+      "order": 2
+    },
+    {
+      "title": "Our Store",
+      "type": "page",
+      "slug": "our-store",
+      "order": 3
+    },
+    {
+      "title": "Testimonials",
+      "type": "page",
+      "slug": "testimonials",
+      "order": 4
+    },
+    {
+      "title": "About Us",
+      "type": "page",
+      "slug": "about-us",
+      "order": 5
+    },
+    {
+      "title": "Contact Us",
+      "type": "page",
+      "slug": "contact-us",
+      "order": 6
+    }
+  ]
+}

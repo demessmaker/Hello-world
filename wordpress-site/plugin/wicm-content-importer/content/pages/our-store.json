@@ -1,0 +1,48 @@
+{
+  "title": "Our Store",
+  "slug": "our-store",
+  "status": "publish",
+  "type": "page",
+  "content": {
+    "heading": "Our Store",
+    "description": "West Island's premier musical destination with the West Island's largest selection of instruments and accessories.",
+    "categories": [
+      {
+        "name": "Instrument Sales",
+        "description": "Top brands including Gibson, Fender, Gretsch, and Tama."
+      },
+      {
+        "name": "Instrument Rental",
+        "description": "Try before you buy to ensure the instrument meets your needs before purchasing."
+      },
+      {
+        "name": "Music Books",
+        "description": "Sheet music and books in stock, with rapid delivery for special orders."
+      },
+      {
+        "name": "Music Accessories",
+        "description": "Wide selection from effect pedals to tuners, straps to picks."
+      }
+    ],
+    "brands": ["Gibson", "Fender", "Gretsch", "Tama"],
+    "featured_products": [
+      {
+        "name": "2016 Gibson Les Paul Studio",
+        "variant": "Alpine White"
+      },
+      {
+        "name": "2017 Gibson Les Paul Classic T",
+        "variant": "Green Ocean Burst"
+      },
+      {
+        "name": "2017 Gibson Les Paul Standard T",
+        "variant": "Cherry Sunburst"
+      },
+      {
+        "name": "Gibson Les Paul 50s Tribute 2016",
+        "variant": "Satin Gold Top"
+      }
+    ]
+  },
+  "html_content": "<div class=\"store-hero\">\n  <h1>Our Store</h1>\n  <p>West Island's premier musical destination with the West Island's largest selection of instruments and accessories.</p>\n</div>\n\n<div class=\"store-categories\">\n  <h2>What We Offer</h2>\n  <div class=\"category-grid\">\n    <div class=\"category-card\">\n      <h3>Instrument Sales</h3>\n      <p>Top brands including Gibson, Fender, Gretsch, and Tama.</p>\n    </div>\n    <div class=\"category-card\">\n      <h3>Instrument Rental</h3>\n      <p>Try before you buy to ensure the instrument meets your needs before purchasing.</p>\n    </div>\n    <div class=\"category-card\">\n      <h3>Music Books</h3>\n      <p>Sheet music and books in stock, with rapid delivery for special orders.</p>\n    </div>\n    <div class=\"category-card\">\n      <h3>Music Accessories</h3>\n      <p>Wide selection from effect pedals to tuners, straps to picks.</p>\n    </div>\n  </div>\n</div>\n\n<div class=\"featured-products\">\n  <h2>Featured Instruments</h2>\n  <div class=\"product-grid\">\n    <div class=\"product-card\">\n      <h3>2016 Gibson Les Paul Studio</h3>\n      <p>Alpine White</p>\n    </div>\n    <div class=\"product-card\">\n      <h3>2017 Gibson Les Paul Classic T</h3>\n      <p>Green Ocean Burst</p>\n    </div>\n    <div class=\"product-card\">\n      <h3>2017 Gibson Les Paul Standard T</h3>\n      <p>Cherry Sunburst</p>\n    </div>\n    <div class=\"product-card\">\n      <h3>Gibson Les Paul 50s Tribute 2016</h3>\n      <p>Satin Gold Top</p>\n    </div>\n  </div>\n</div>"
+}
