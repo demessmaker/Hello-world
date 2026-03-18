@@ -2,8 +2,8 @@
 /**
  * Plugin Name: WICM Content Importer
  * Plugin URI: https://westislandmusiclessons.com
- * Description: One-click importer for West Island Conservatory of Music website content with built-in SEO optimization. Creates all pages, menus, configures site settings, and adds schema markup, meta tags, and Open Graph support.
- * Version: 2.0.0
+ * Description: Complete site importer for West Island Conservatory of Music with SEO optimization, image migration, contact form, blog posts, footer widget, and favicon setup.
+ * Version: 3.0.0
  * Author: West Island Conservatory of Music
  * License: GPL v2 or later
  * Text Domain: wicm-importer
@@ -35,6 +35,9 @@ class WICM_Content_Importer {
             add_filter( 'pre_get_document_title', array( $this, 'custom_page_title' ), 10 );
             add_filter( 'document_title_parts', array( $this, 'filter_title_parts' ), 10 );
         }
+
+        // Register footer widget
+        add_action( 'widgets_init', array( $this, 'register_footer_widget' ) );
     }
 
     /**
@@ -110,9 +113,46 @@ class WICM_Content_Importer {
                         <li><strong>Home</strong> — Hero section, services overview, featured products</li>
                         <li><strong>Courses</strong> — 16 course offerings, program features</li>
                         <li><strong>About Us</strong> — History, staff, mission</li>
-                        <li><strong>Contact Us</strong> — Address, phone, email, hours</li>
+                        <li><strong>Contact Us</strong> — Address, phone, email, hours, contact form</li>
                         <li><strong>Our Store</strong> — Product categories, featured instruments</li>
                         <li><strong>Testimonials</strong> — 7 student/parent testimonials</li>
+                    </ul>
+                </div>
+
+                <div class="import-section">
+                    <h3>Blog Posts (6)</h3>
+                    <ul>
+                        <li>The Piano Man — History of piano in popular music</li>
+                        <li>Percussion Instruments — Drumming guide</li>
+                        <li>History of the Guitar — Origins to modern day</li>
+                        <li>The Sounds of Modern Music — Technology meets tradition</li>
+                        <li>How to Decide Which Guitar to Buy — Buying guide</li>
+                        <li>Saxophone, Clarinet, Trumpet, Violin &amp; Bass Lessons</li>
+                    </ul>
+                </div>
+
+                <div class="import-section">
+                    <h3>Images &amp; Media</h3>
+                    <ul>
+                        <li>Download and import all images from the original site</li>
+                        <li>Set SEO-optimized alt text on all images</li>
+                        <li>Set site logo as favicon/site icon</li>
+                        <li>Attach images to their respective pages</li>
+                    </ul>
+                </div>
+
+                <div class="import-section">
+                    <h3>Contact Form</h3>
+                    <ul>
+                        <li>Create Contact Form 7 form (Name, Email, Phone, Message)</li>
+                        <li>Embed form in Contact Us page</li>
+                    </ul>
+                </div>
+
+                <div class="import-section">
+                    <h3>Footer Widget</h3>
+                    <ul>
+                        <li>Business hours, address, and contact info in footer</li>
                     </ul>
                 </div>
 
@@ -161,7 +201,52 @@ class WICM_Content_Importer {
                             <td>
                                 <label>
                                     <input type="checkbox" name="import_pages" value="1" checked>
-                                    All 6 pages with full content
+                                    All 6 pages with full content + SEO meta
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Import Blog Posts</th>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="import_posts" value="1" checked>
+                                    6 blog posts with SEO meta
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Import Images</th>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="import_images" value="1" checked>
+                                    Download all images from original site
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Setup Contact Form</th>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="import_contact_form" value="1" checked>
+                                    Create Contact Form 7 form and embed in Contact page
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Setup Footer Widget</th>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="import_footer" value="1" checked>
+                                    Add business info to footer widget area
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Set Favicon</th>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="import_favicon" value="1" checked>
+                                    Set site logo as favicon/site icon
                                 </label>
                             </td>
                         </tr>
@@ -235,12 +320,30 @@ class WICM_Content_Importer {
             $results = array_merge( $results, $this->import_settings() );
         }
 
+        // Import images first (so we can use them in pages)
+        $image_ids = array();
+        if ( ! empty( $_POST['import_images'] ) ) {
+            $image_results = $this->import_images();
+            $results       = array_merge( $results, $image_results['results'] );
+            $image_ids     = $image_results['image_ids'];
+        }
+
         // Import pages
         $page_ids = array();
         if ( ! empty( $_POST['import_pages'] ) ) {
-            $page_results = $this->import_pages();
+            $page_results = $this->import_pages( $image_ids );
             $results      = array_merge( $results, $page_results['results'] );
             $page_ids     = $page_results['page_ids'];
+        }
+
+        // Import blog posts
+        if ( ! empty( $_POST['import_posts'] ) ) {
+            $results = array_merge( $results, $this->import_blog_posts() );
+        }
+
+        // Setup contact form and embed in contact page
+        if ( ! empty( $_POST['import_contact_form'] ) ) {
+            $results = array_merge( $results, $this->setup_contact_form( isset( $page_ids['contact'] ) ? $page_ids['contact'] : 0 ) );
         }
 
         // Set static front page
@@ -256,6 +359,20 @@ class WICM_Content_Importer {
         // Import menu
         if ( ! empty( $_POST['import_menu'] ) ) {
             $results = array_merge( $results, $this->import_menu( $page_ids ) );
+        }
+
+        // Setup footer widget
+        if ( ! empty( $_POST['import_footer'] ) ) {
+            $results = array_merge( $results, $this->setup_footer_widget() );
+        }
+
+        // Set favicon
+        if ( ! empty( $_POST['import_favicon'] ) && ! empty( $image_ids['logo'] ) ) {
+            update_option( 'site_icon', $image_ids['logo'] );
+            $results[] = array(
+                'success' => true,
+                'message' => 'Site favicon/icon set from logo',
+            );
         }
 
         update_option( 'wicm_import_completed', true );
@@ -301,9 +418,140 @@ class WICM_Content_Importer {
     }
 
     /**
+     * Download and import all images from the original site.
+     */
+    private function import_images() {
+        $results   = array();
+        $image_ids = array();
+
+        // Ensure media handling functions are available
+        if ( ! function_exists( 'media_sideload_image' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/media.php';
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+            require_once ABSPATH . 'wp-admin/includes/image.php';
+        }
+
+        $images_data = $this->load_json( 'images.json' );
+        if ( ! $images_data ) {
+            $results[] = array(
+                'success' => false,
+                'message' => 'Could not load images.json',
+            );
+            return array( 'results' => $results, 'image_ids' => $image_ids );
+        }
+
+        // Import logo
+        if ( ! empty( $images_data['logo'] ) ) {
+            $logo = $images_data['logo'];
+            $logo_id = $this->sideload_image( $logo['url'], $logo['alt'] );
+            if ( $logo_id ) {
+                $image_ids['logo'] = $logo_id;
+
+                // Also set as custom logo for the theme
+                set_theme_mod( 'custom_logo', $logo_id );
+
+                $results[] = array(
+                    'success' => true,
+                    'message' => "Imported logo (ID: {$logo_id})",
+                );
+            } else {
+                $results[] = array(
+                    'success' => false,
+                    'message' => 'Failed to import logo image',
+                );
+            }
+        }
+
+        // Import page images
+        $page_image_count = 0;
+        if ( ! empty( $images_data['page_images'] ) ) {
+            foreach ( $images_data['page_images'] as $page_key => $page_imgs ) {
+                foreach ( $page_imgs as $img ) {
+                    $img_id = $this->sideload_image( $img['url'], $img['alt'] );
+                    if ( $img_id ) {
+                        $image_ids[ $img['placement'] ] = $img_id;
+                        $page_image_count++;
+                    }
+                }
+            }
+            $results[] = array(
+                'success' => $page_image_count > 0,
+                'message' => "Imported {$page_image_count} page images with SEO alt text",
+            );
+        }
+
+        // Import slider images
+        $slider_count = 0;
+        if ( ! empty( $images_data['slider_images'] ) ) {
+            foreach ( $images_data['slider_images'] as $idx => $img ) {
+                $img_id = $this->sideload_image( $img['url'], $img['alt'] );
+                if ( $img_id ) {
+                    $image_ids[ 'slider_' . $idx ] = $img_id;
+                    $slider_count++;
+                }
+            }
+            $results[] = array(
+                'success' => $slider_count > 0,
+                'message' => "Imported {$slider_count} slider/hero images with SEO alt text",
+            );
+        }
+
+        // Store image IDs for later use
+        update_option( 'wicm_imported_images', $image_ids );
+
+        return array( 'results' => $results, 'image_ids' => $image_ids );
+    }
+
+    /**
+     * Download an image from a URL and add it to the WordPress media library.
+     *
+     * @param string $url The image URL to download.
+     * @param string $alt The alt text for the image.
+     * @param int    $post_id Optional post to attach the image to.
+     * @return int|false The attachment ID, or false on failure.
+     */
+    private function sideload_image( $url, $alt = '', $post_id = 0 ) {
+        if ( ! function_exists( 'media_sideload_image' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/media.php';
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+            require_once ABSPATH . 'wp-admin/includes/image.php';
+        }
+
+        // Download the file to a temp location
+        $tmp = download_url( $url );
+        if ( is_wp_error( $tmp ) ) {
+            return false;
+        }
+
+        // Extract filename from URL
+        $url_path = wp_parse_url( $url, PHP_URL_PATH );
+        $filename = sanitize_file_name( basename( $url_path ) );
+
+        $file_array = array(
+            'name'     => $filename,
+            'tmp_name' => $tmp,
+        );
+
+        // Sideload the file into the media library
+        $attachment_id = media_handle_sideload( $file_array, $post_id );
+
+        if ( is_wp_error( $attachment_id ) ) {
+            @unlink( $tmp );
+            return false;
+        }
+
+        // Set alt text
+        if ( $alt ) {
+            update_post_meta( $attachment_id, '_wp_attachment_image_alt', sanitize_text_field( $alt ) );
+        }
+
+        return $attachment_id;
+    }
+
+    /**
      * Import all pages from JSON files.
      */
-    private function import_pages() {
+    private function import_pages( $image_ids = array() ) {
         $results  = array();
         $page_ids = array();
 
@@ -326,12 +574,19 @@ class WICM_Content_Importer {
                 continue;
             }
 
+            $html_content = $data['html_content'];
+
+            // Insert images into HTML content if we have imported images
+            if ( ! empty( $image_ids ) ) {
+                $html_content = $this->insert_images_into_content( $html_content, $key, $image_ids );
+            }
+
             $page_id = wp_insert_post( array(
-                'post_title'   => $data['title'],
-                'post_name'    => $data['slug'],
-                'post_content' => $data['html_content'],
-                'post_status'  => 'publish',
-                'post_type'    => 'page',
+                'post_title'     => $data['title'],
+                'post_name'      => $data['slug'],
+                'post_content'   => $html_content,
+                'post_status'    => 'publish',
+                'post_type'      => 'page',
                 'comment_status' => 'closed',
             ) );
 
@@ -342,6 +597,9 @@ class WICM_Content_Importer {
                 );
             } else {
                 $page_ids[ $key ] = $page_id;
+
+                // Set featured image if we have a relevant slider image
+                $this->set_page_featured_image( $key, $page_id, $image_ids );
 
                 // Save SEO metadata if present
                 if ( isset( $data['seo'] ) ) {
@@ -377,6 +635,367 @@ class WICM_Content_Importer {
             'results'  => $results,
             'page_ids' => $page_ids,
         );
+    }
+
+    /**
+     * Insert imported images into page HTML content.
+     */
+    private function insert_images_into_content( $html, $page_key, $image_ids ) {
+        if ( 'home' === $page_key ) {
+            // Insert service card images
+            $image_map = array(
+                'service-card-voice' => array( 'before' => '<h3>Voice Training</h3>', 'alt' => 'Voice training lessons at West Island Conservatory of Music' ),
+                'service-card-piano' => array( 'before' => '<h3>Piano &amp; Keyboard Lessons</h3>', 'alt' => 'Piano lessons at West Island Conservatory of Music' ),
+                'service-card-guitar' => array( 'before' => '<h3>Guitar &amp; Strings Lessons</h3>', 'alt' => 'Guitar lessons in West Island Montreal' ),
+            );
+
+            foreach ( $image_map as $placement => $info ) {
+                if ( ! empty( $image_ids[ $placement ] ) ) {
+                    $img_url = wp_get_attachment_url( $image_ids[ $placement ] );
+                    if ( $img_url ) {
+                        $img_tag = '<img src="' . esc_url( $img_url ) . '" alt="' . esc_attr( $info['alt'] ) . '" loading="lazy" width="252" height="111">' . "\n      ";
+                        $html = str_replace( $info['before'], $img_tag . $info['before'], $html );
+                    }
+                }
+            }
+        }
+
+        if ( 'testimonials' === $page_key ) {
+            // Insert Amanda Walsh photo
+            if ( ! empty( $image_ids['testimonial-amanda'] ) ) {
+                $img_url = wp_get_attachment_url( $image_ids['testimonial-amanda'] );
+                if ( $img_url ) {
+                    $img_tag = '<img src="' . esc_url( $img_url ) . '" alt="Amanda Walsh - former violin and voice student" loading="lazy" width="150" height="150" class="testimonial-photo">';
+                    $html = str_replace(
+                        '<strong>Amanda Walsh</strong>',
+                        $img_tag . "\n      <strong>Amanda Walsh</strong>",
+                        $html
+                    );
+                }
+            }
+        }
+
+        return $html;
+    }
+
+    /**
+     * Set featured image for a page based on available slider images.
+     */
+    private function set_page_featured_image( $page_key, $page_id, $image_ids ) {
+        $featured_map = array(
+            'home'         => 'slider_0',  // strings slider
+            'courses'      => 'slider_2',  // piano
+            'about'        => 'slider_1',  // voice
+            'contact'      => 'slider_4',  // store
+            'store'        => 'slider_4',  // store
+            'testimonials' => 'slider_7',  // girl band
+        );
+
+        if ( isset( $featured_map[ $page_key ] ) && ! empty( $image_ids[ $featured_map[ $page_key ] ] ) ) {
+            set_post_thumbnail( $page_id, $image_ids[ $featured_map[ $page_key ] ] );
+        }
+    }
+
+    /**
+     * Import blog posts from JSON.
+     */
+    private function import_blog_posts() {
+        $results = array();
+
+        $posts_data = $this->load_json( 'posts/blog-posts.json' );
+        if ( ! $posts_data || empty( $posts_data['posts'] ) ) {
+            $results[] = array(
+                'success' => false,
+                'message' => 'Could not load posts/blog-posts.json',
+            );
+            return $results;
+        }
+
+        $post_count = 0;
+        foreach ( $posts_data['posts'] as $post_data ) {
+            // Create or get category
+            $cat_id = 0;
+            if ( ! empty( $post_data['category'] ) ) {
+                $cat = get_cat_ID( $post_data['category'] );
+                if ( ! $cat ) {
+                    $cat = wp_create_category( $post_data['category'] );
+                }
+                $cat_id = $cat;
+            }
+
+            $post_id = wp_insert_post( array(
+                'post_title'     => $post_data['title'],
+                'post_name'      => $post_data['slug'],
+                'post_content'   => $post_data['content'],
+                'post_status'    => 'publish',
+                'post_type'      => 'post',
+                'post_category'  => $cat_id ? array( $cat_id ) : array(),
+                'comment_status' => 'closed',
+            ) );
+
+            if ( ! is_wp_error( $post_id ) ) {
+                $post_count++;
+
+                // Save SEO metadata
+                if ( ! empty( $post_data['seo'] ) ) {
+                    $seo = $post_data['seo'];
+                    if ( ! empty( $seo['meta_title'] ) ) {
+                        update_post_meta( $post_id, '_wicm_meta_title', sanitize_text_field( $seo['meta_title'] ) );
+                    }
+                    if ( ! empty( $seo['meta_description'] ) ) {
+                        update_post_meta( $post_id, '_wicm_meta_description', sanitize_text_field( $seo['meta_description'] ) );
+                    }
+                }
+            }
+        }
+
+        $results[] = array(
+            'success' => $post_count > 0,
+            'message' => "Created {$post_count} blog posts with categories and SEO meta",
+        );
+
+        return $results;
+    }
+
+    /**
+     * Create a Contact Form 7 form and embed it in the contact page.
+     */
+    private function setup_contact_form( $contact_page_id ) {
+        $results = array();
+
+        // Check if Contact Form 7 is active
+        if ( ! class_exists( 'WPCF7_ContactForm' ) ) {
+            $results[] = array(
+                'success' => false,
+                'message' => 'Contact Form 7 plugin is not active. Please install and activate it first.',
+            );
+            return $results;
+        }
+
+        // Check if we already created a form
+        $existing = get_posts( array(
+            'post_type'  => 'wpcf7_contact_form',
+            'title'      => 'WICM Contact Form',
+            'numberposts' => 1,
+        ) );
+
+        if ( ! empty( $existing ) ) {
+            $form_id = $existing[0]->ID;
+        } else {
+            // Create the CF7 form
+            $form_template = '<div class="wicm-contact-form">
+<label>Your Name (required)
+    [text* your-name]</label>
+
+<label>Your Email (required)
+    [email* your-email]</label>
+
+<label>Your Phone
+    [tel your-phone]</label>
+
+<label>Instrument of Interest
+    [select instrument "Piano" "Guitar" "Voice" "Drums" "Violin" "Saxophone" "Clarinet" "Trumpet" "Flute" "Bass" "Cello" "Keyboard" "Other"]</label>
+
+<label>Your Message
+    [textarea your-message]</label>
+
+[submit "Send Message"]
+</div>';
+
+            $mail_template = 'From: [your-name] <[your-email]>
+Subject: WICM Website Inquiry - [instrument]
+
+Name: [your-name]
+Email: [your-email]
+Phone: [your-phone]
+Instrument: [instrument]
+
+Message:
+[your-message]
+
+--
+This message was sent from the West Island Conservatory of Music website contact form.';
+
+            $form = WPCF7_ContactForm::get_template();
+            $form->set_properties( array(
+                'form'     => $form_template,
+                'mail'     => array_merge( $form->prop( 'mail' ), array(
+                    'subject'   => 'WICM Website Inquiry - [instrument]',
+                    'body'      => $mail_template,
+                    'recipient' => 'westislandmusic@gmail.com',
+                ) ),
+                'messages' => array_merge( $form->prop( 'messages' ), array(
+                    'mail_sent_ok' => 'Thank you for contacting West Island Conservatory of Music! We will get back to you shortly.',
+                ) ),
+            ) );
+            $form->set_title( 'WICM Contact Form' );
+            $form->save();
+            $form_id = $form->id();
+        }
+
+        $results[] = array(
+            'success' => true,
+            'message' => "Created Contact Form 7 form (ID: {$form_id})",
+        );
+
+        // Embed the form shortcode in the contact page
+        if ( $contact_page_id ) {
+            $contact_page = get_post( $contact_page_id );
+            if ( $contact_page ) {
+                $form_shortcode = "\n\n" . '<div class="contact-form-section">' . "\n" .
+                    '  <h2>Send Us a Message</h2>' . "\n" .
+                    '  <p>Fill out the form below and we\'ll get back to you as soon as possible. Or call us directly at <a href="tel:514-428-5080">514-428-5080</a>.</p>' . "\n" .
+                    '  [contact-form-7 id="' . $form_id . '" title="WICM Contact Form"]' . "\n" .
+                    '</div>';
+
+                wp_update_post( array(
+                    'ID'           => $contact_page_id,
+                    'post_content' => $contact_page->post_content . $form_shortcode,
+                ) );
+
+                $results[] = array(
+                    'success' => true,
+                    'message' => 'Embedded contact form in Contact Us page',
+                );
+            }
+        }
+
+        return $results;
+    }
+
+    /**
+     * Setup footer widget with business hours and contact info.
+     */
+    private function setup_footer_widget() {
+        $results = array();
+
+        $settings = $this->load_json( 'site-settings.json' );
+        if ( ! $settings ) {
+            $results[] = array(
+                'success' => false,
+                'message' => 'Could not load site-settings.json for footer widget',
+            );
+            return $results;
+        }
+
+        $address = $settings['contact']['address'];
+
+        // Build the footer HTML content
+        $footer_html = '<div class="wicm-footer-widget">' . "\n";
+        $footer_html .= '<h4>West Island Conservatory of Music</h4>' . "\n";
+        $footer_html .= '<p><strong>Address:</strong><br>' . "\n";
+        $footer_html .= esc_html( $address['building'] ) . '<br>' . "\n";
+        $footer_html .= esc_html( $address['street'] ) . '<br>' . "\n";
+        $footer_html .= esc_html( $address['city'] ) . ', ' . esc_html( $address['province'] ) . ' ' . esc_html( $address['postal_code'] ) . '</p>' . "\n";
+        $footer_html .= '<p><strong>Phone:</strong> <a href="tel:' . esc_attr( $settings['contact']['phone'] ) . '">' . esc_html( $settings['contact']['phone'] ) . '</a></p>' . "\n";
+        $footer_html .= '<p><strong>Email:</strong> <a href="mailto:' . esc_attr( $settings['contact']['email'] ) . '">' . esc_html( $settings['contact']['email'] ) . '</a></p>' . "\n";
+        $footer_html .= '</div>';
+
+        // Build hours widget
+        $hours_html = '<div class="wicm-hours-widget">' . "\n";
+        $hours_html .= '<h4>Business Hours</h4>' . "\n";
+        $hours_html .= '<table class="wicm-hours-table">' . "\n";
+        $day_labels = array(
+            'monday' => 'Monday', 'tuesday' => 'Tuesday', 'wednesday' => 'Wednesday',
+            'thursday' => 'Thursday', 'friday' => 'Friday', 'saturday' => 'Saturday', 'sunday' => 'Sunday',
+        );
+        foreach ( $day_labels as $key => $label ) {
+            $hours_html .= '<tr><td>' . $label . '</td><td>' . esc_html( $settings['hours'][ $key ] ) . '</td></tr>' . "\n";
+        }
+        $hours_html .= '</table>' . "\n";
+        $hours_html .= '</div>';
+
+        // Find footer widget areas (try common names)
+        $sidebars = wp_get_sidebars_widgets();
+        $footer_sidebar = null;
+
+        $footer_names = array( 'footer-1', 'footer', 'sidebar-footer', 'footer-widget-area', 'footer-sidebar' );
+        foreach ( $footer_names as $name ) {
+            if ( isset( $sidebars[ $name ] ) ) {
+                $footer_sidebar = $name;
+                break;
+            }
+        }
+
+        // If no footer sidebar found, try the first available sidebar
+        if ( ! $footer_sidebar ) {
+            global $wp_registered_sidebars;
+            foreach ( $wp_registered_sidebars as $sidebar_id => $sidebar ) {
+                if ( stripos( $sidebar_id, 'footer' ) !== false || stripos( $sidebar['name'], 'footer' ) !== false ) {
+                    $footer_sidebar = $sidebar_id;
+                    break;
+                }
+            }
+        }
+
+        // Add contact info widget
+        $widget_id_base = 'custom_html';
+        $widget_instances = get_option( 'widget_custom_html', array() );
+        if ( ! is_array( $widget_instances ) ) {
+            $widget_instances = array();
+        }
+
+        // Add contact info widget
+        $next_id = empty( $widget_instances ) ? 2 : max( array_keys( array_filter( $widget_instances, 'is_array' ) ) ) + 1;
+        $widget_instances[ $next_id ] = array(
+            'title'   => 'Contact Us',
+            'content' => $footer_html,
+        );
+
+        // Add hours widget
+        $hours_id = $next_id + 1;
+        $widget_instances[ $hours_id ] = array(
+            'title'   => 'Business Hours',
+            'content' => $hours_html,
+        );
+
+        update_option( 'widget_custom_html', $widget_instances );
+
+        // Assign widgets to footer sidebar if found
+        if ( $footer_sidebar ) {
+            $sidebars[ $footer_sidebar ][] = "custom_html-{$next_id}";
+            $sidebars[ $footer_sidebar ][] = "custom_html-{$hours_id}";
+            wp_set_sidebars_widgets( $sidebars );
+
+            $results[] = array(
+                'success' => true,
+                'message' => "Added contact info and business hours widgets to footer ({$footer_sidebar})",
+            );
+        } else {
+            // If no footer area, try sidebar-1 as fallback
+            if ( isset( $sidebars['sidebar-1'] ) ) {
+                $sidebars['sidebar-1'][] = "custom_html-{$next_id}";
+                $sidebars['sidebar-1'][] = "custom_html-{$hours_id}";
+                wp_set_sidebars_widgets( $sidebars );
+
+                $results[] = array(
+                    'success' => true,
+                    'message' => 'Added contact info and business hours widgets to sidebar (no footer area found — assign manually in Appearance > Widgets)',
+                );
+            } else {
+                $results[] = array(
+                    'success' => false,
+                    'message' => 'No widget area found. Widgets created but not assigned — go to Appearance > Widgets to place them.',
+                );
+            }
+        }
+
+        return $results;
+    }
+
+    /**
+     * Register the WICM footer widget area if the theme doesn't have one.
+     */
+    public function register_footer_widget() {
+        register_sidebar( array(
+            'name'          => 'WICM Footer',
+            'id'            => 'wicm-footer',
+            'description'   => 'Footer widget area for West Island Conservatory of Music',
+            'before_widget' => '<div id="%1$s" class="widget %2$s">',
+            'after_widget'  => '</div>',
+            'before_title'  => '<h4 class="widget-title">',
+            'after_title'   => '</h4>',
+        ) );
     }
 
     /**
@@ -451,11 +1070,15 @@ class WICM_Content_Importer {
         return $results;
     }
 
+    // =========================================================================
+    // SEO OUTPUT METHODS (Frontend)
+    // =========================================================================
+
     /**
      * Output SEO meta description for imported pages.
      */
     public function output_seo_meta() {
-        if ( ! is_page() ) {
+        if ( ! is_page() && ! is_single() ) {
             return;
         }
 
@@ -506,6 +1129,13 @@ class WICM_Content_Importer {
             }
         }
 
+        // Get logo URL if available
+        $logo_url = '';
+        $custom_logo_id = get_theme_mod( 'custom_logo' );
+        if ( $custom_logo_id ) {
+            $logo_url = wp_get_attachment_url( $custom_logo_id );
+        }
+
         $schema = array(
             '@context'    => 'https://schema.org',
             '@type'       => 'MusicSchool',
@@ -554,6 +1184,12 @@ class WICM_Content_Importer {
             ),
         );
 
+        // Add logo to schema if available
+        if ( $logo_url ) {
+            $schema['logo'] = $logo_url;
+            $schema['image'] = $logo_url;
+        }
+
         // Add Review schema from testimonials if on testimonials page
         if ( is_page( 'testimonials' ) ) {
             $testimonials_data = $this->load_json( 'pages/testimonials.json' );
@@ -589,7 +1225,7 @@ class WICM_Content_Importer {
         echo "\n</script>\n";
 
         // BreadcrumbList schema
-        if ( is_page() && ! is_front_page() ) {
+        if ( ( is_page() || is_single() ) && ! is_front_page() ) {
             $breadcrumb = array(
                 '@context'        => 'https://schema.org',
                 '@type'           => 'BreadcrumbList',
@@ -619,7 +1255,7 @@ class WICM_Content_Importer {
      * Output Open Graph meta tags.
      */
     public function output_open_graph() {
-        if ( ! is_page() ) {
+        if ( ! is_page() && ! is_single() ) {
             return;
         }
 
@@ -646,10 +1282,24 @@ class WICM_Content_Importer {
         echo '<meta property="og:site_name" content="' . esc_attr( $site_name ) . '">' . "\n";
         echo '<meta property="og:locale" content="en_CA">' . "\n";
 
+        // Add featured image as og:image if available
+        if ( has_post_thumbnail( $post_id ) ) {
+            $thumb_url = get_the_post_thumbnail_url( $post_id, 'large' );
+            if ( $thumb_url ) {
+                echo '<meta property="og:image" content="' . esc_url( $thumb_url ) . '">' . "\n";
+            }
+        }
+
         // Twitter card tags
-        echo '<meta name="twitter:card" content="summary">' . "\n";
+        echo '<meta name="twitter:card" content="summary_large_image">' . "\n";
         echo '<meta name="twitter:title" content="' . esc_attr( $og_title ) . '">' . "\n";
         echo '<meta name="twitter:description" content="' . esc_attr( $og_desc ) . '">' . "\n";
+        if ( has_post_thumbnail( $post_id ) ) {
+            $thumb_url = get_the_post_thumbnail_url( $post_id, 'large' );
+            if ( $thumb_url ) {
+                echo '<meta name="twitter:image" content="' . esc_url( $thumb_url ) . '">' . "\n";
+            }
+        }
     }
 
     /**
@@ -664,10 +1314,10 @@ class WICM_Content_Importer {
     }
 
     /**
-     * Override document title for imported pages.
+     * Override document title for imported pages and posts.
      */
     public function custom_page_title( $title ) {
-        if ( ! is_page() ) {
+        if ( ! is_page() && ! is_single() ) {
             return $title;
         }
 
