@@ -30,9 +30,10 @@
             </div>
 
             <div class="program-single-sidebar">
+                <?php $wicm_is_fr = function_exists( 'pll_current_language' ) && 'fr' === pll_current_language(); ?>
                 <?php if ( is_array( $features ) && ! empty( $features ) ) : ?>
                     <div class="program-single-features">
-                        <h3><?php esc_html_e( 'What You\'ll Learn', 'wicm-developer' ); ?></h3>
+                        <h3><?php echo $wicm_is_fr ? esc_html( 'Ce que vous apprendrez' ) : esc_html( 'What You\'ll Learn' ); ?></h3>
                         <ul class="program-features">
                             <?php foreach ( $features as $feature ) : ?>
                                 <li>
@@ -45,7 +46,6 @@
                 <?php endif; ?>
 
                 <div class="program-single-cta">
-                    <?php $wicm_is_fr = function_exists( 'pll_current_language' ) && 'fr' === pll_current_language(); ?>
                     <h3><?php echo $wicm_is_fr ? esc_html( 'Prêt à commencer?' ) : esc_html( 'Ready to Start?' ); ?></h3>
                     <p><?php echo $wicm_is_fr ? esc_html( 'Réservez un cours d\'essai gratuit et découvrez la différence.' ) : esc_html( 'Book a free trial lesson and experience the difference.' ); ?></p>
                     <?php
