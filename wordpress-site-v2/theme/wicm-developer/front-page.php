@@ -26,6 +26,7 @@
                 array(
                     'icon'     => '🎹',
                     'name'     => __( 'Piano', 'wicm-developer' ),
+                    'slug'     => 'piano-lessons',
                     'image'    => 'https://images.unsplash.com/photo-1552422535-c45813c61732?w=800&h=500&fit=crop',
                     'desc'     => __( 'From classical to contemporary, learn piano at your own pace with personalized instruction for all skill levels.', 'wicm-developer' ),
                     'features' => array(
@@ -38,6 +39,7 @@
                 array(
                     'icon'     => '🎸',
                     'name'     => __( 'Guitar', 'wicm-developer' ),
+                    'slug'     => 'guitar-lessons',
                     'image'    => 'https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=800&h=500&fit=crop',
                     'desc'     => __( 'Electric, acoustic, or classical - master the guitar with customized lessons tailored to your musical goals.', 'wicm-developer' ),
                     'features' => array(
@@ -50,6 +52,7 @@
                 array(
                     'icon'     => '🥁',
                     'name'     => __( 'Drums', 'wicm-developer' ),
+                    'slug'     => 'drum-lessons',
                     'image'    => 'https://images.unsplash.com/photo-1519892300165-cb5542fb47c7?w=800&h=500&fit=crop',
                     'desc'     => __( 'Build rhythm, coordination, and technique with dynamic drum lessons that get you playing your favorite songs.', 'wicm-developer' ),
                     'features' => array(
@@ -62,6 +65,7 @@
                 array(
                     'icon'     => '🎤',
                     'name'     => __( 'Voice', 'wicm-developer' ),
+                    'slug'     => 'voice-lessons',
                     'image'    => 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=800&h=500&fit=crop',
                     'desc'     => __( 'Unlock your vocal potential with training in breath control, range expansion, and performance techniques.', 'wicm-developer' ),
                     'features' => array(
@@ -74,6 +78,7 @@
                 array(
                     'icon'     => '🎻',
                     'name'     => __( 'Violin', 'wicm-developer' ),
+                    'slug'     => 'violin-lessons',
                     'image'    => 'https://images.unsplash.com/photo-1612225330812-01a9c6b355ec?w=800&h=500&fit=crop',
                     'desc'     => __( 'Embrace the elegance of string music with patient, step-by-step violin instruction for beginners to advanced.', 'wicm-developer' ),
                     'features' => array(
@@ -104,7 +109,7 @@
                         </li>
                         <?php endforeach; ?>
                     </ul>
-                    <a href="<?php echo esc_url( home_url( '/programs/' ) ); ?>" class="btn btn-outline-dark btn-sm"><?php esc_html_e( 'Learn More', 'wicm-developer' ); ?></a>
+                    <a href="<?php echo esc_url( home_url( '/program/' . $program['slug'] . '/' ) ); ?>" class="btn btn-outline-dark btn-sm"><?php esc_html_e( 'Learn More', 'wicm-developer' ); ?></a>
                 </div>
             </div>
             <?php endforeach; ?>

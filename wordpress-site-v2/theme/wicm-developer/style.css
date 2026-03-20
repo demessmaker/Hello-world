@@ -1358,6 +1358,75 @@ p { margin-bottom: 1rem; }
 }
 
 /* ============================================
+   22B. PROGRAM SINGLE PAGE
+   ============================================ */
+.program-page-icon {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.program-single-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+}
+
+@media (min-width: 1024px) {
+    .program-single-grid { grid-template-columns: 2fr 1fr; }
+}
+
+.program-single-image img {
+    width: 100%;
+    border-radius: var(--radius-lg);
+    margin-bottom: 2rem;
+}
+
+.program-single-content .entry-content {
+    max-width: none;
+    margin: 0;
+}
+
+.program-single-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.program-single-features {
+    background: var(--color-gray-50);
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-gray-200);
+}
+
+.program-single-features h3 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.program-single-cta {
+    background: linear-gradient(135deg, var(--color-red-600) 0%, var(--color-red-700) 100%);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    text-align: center;
+    color: var(--color-white);
+}
+
+.program-single-cta h3 {
+    color: var(--color-white);
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.program-single-cta p {
+    color: rgba(255,255,255,0.9);
+    font-size: 0.9375rem;
+    margin-bottom: 1.25rem;
+}
+
+/* ============================================
    23. PRINT
    ============================================ */
 @media print {

@@ -53,7 +53,8 @@ class WICM_Developer_Importer {
                 'singular_name' => 'Program',
             ),
             'public'       => true,
-            'has_archive'  => false,
+            'has_archive'  => true,
+            'rewrite'      => array( 'slug' => 'program', 'with_front' => false ),
             'menu_icon'    => 'dashicons-format-audio',
             'supports'     => array( 'title', 'editor', 'thumbnail', 'custom-fields' ),
             'show_in_rest' => true,
@@ -568,6 +569,7 @@ class WICM_Developer_Importer {
                 }
                 $html .= '</ul>';
             }
+            $html .= '<a href="' . esc_url( get_permalink( $prog->ID ) ) . '" class="btn btn-outline-dark btn-sm">Learn More</a>';
             $html .= '</div></div>';
         }
         $html .= '</div>';

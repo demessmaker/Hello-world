@@ -30,11 +30,11 @@
             <div class="footer-column">
                 <h4><?php esc_html_e( 'Programs', 'wicm-developer' ); ?></h4>
                 <ul>
-                    <li><a href="<?php echo esc_url( home_url( '/programs/' ) ); ?>"><?php esc_html_e( 'Piano Lessons', 'wicm-developer' ); ?></a></li>
-                    <li><a href="<?php echo esc_url( home_url( '/programs/' ) ); ?>"><?php esc_html_e( 'Guitar Lessons', 'wicm-developer' ); ?></a></li>
-                    <li><a href="<?php echo esc_url( home_url( '/programs/' ) ); ?>"><?php esc_html_e( 'Voice Lessons', 'wicm-developer' ); ?></a></li>
-                    <li><a href="<?php echo esc_url( home_url( '/programs/' ) ); ?>"><?php esc_html_e( 'Drum Lessons', 'wicm-developer' ); ?></a></li>
-                    <li><a href="<?php echo esc_url( home_url( '/programs/' ) ); ?>"><?php esc_html_e( 'Violin Lessons', 'wicm-developer' ); ?></a></li>
+                    <li><a href="<?php echo esc_url( home_url( '/program/piano-lessons/' ) ); ?>"><?php esc_html_e( 'Piano Lessons', 'wicm-developer' ); ?></a></li>
+                    <li><a href="<?php echo esc_url( home_url( '/program/guitar-lessons/' ) ); ?>"><?php esc_html_e( 'Guitar Lessons', 'wicm-developer' ); ?></a></li>
+                    <li><a href="<?php echo esc_url( home_url( '/program/voice-lessons/' ) ); ?>"><?php esc_html_e( 'Voice Lessons', 'wicm-developer' ); ?></a></li>
+                    <li><a href="<?php echo esc_url( home_url( '/program/drum-lessons/' ) ); ?>"><?php esc_html_e( 'Drum Lessons', 'wicm-developer' ); ?></a></li>
+                    <li><a href="<?php echo esc_url( home_url( '/program/violin-lessons/' ) ); ?>"><?php esc_html_e( 'Violin Lessons', 'wicm-developer' ); ?></a></li>
                 </ul>
             </div>
 
