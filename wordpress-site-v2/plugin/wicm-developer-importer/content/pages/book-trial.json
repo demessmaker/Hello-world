@@ -1,0 +1,77 @@
+{
+  "title": "Book a Trial",
+  "slug": "book-a-trial",
+  "template": "",
+  "meta_title": "Book a Free Trial Lesson | West Island Music School",
+  "meta_description": "Book a free trial music lesson at West Island Music School. Try Piano, Guitar, Drums, Voice or Violin with no obligation. Located in Pointe-Claire, QC.",
+  "og_title": "Book a Free Trial Lesson | West Island Music School",
+  "og_description": "Try a free music lesson at West Island Music School. No obligation, no pressure - just music!",
+  "og_type": "website",
+  "sections": {
+    "hero": {
+      "heading": "Book a Free Trial Lesson",
+      "subheading": "Experience the West Island Music School difference with a no-obligation trial lesson"
+    },
+    "intro": {
+      "heading": "Your Musical Journey Starts Here",
+      "content": "We believe the best way to find out if music lessons are right for you or your child is to experience one firsthand. Our free trial lesson gives you the opportunity to meet your instructor, explore your chosen instrument, and see our facility - all with no obligation."
+    },
+    "what_to_expect": {
+      "heading": "What to Expect",
+      "steps": [
+        {
+          "title": "Choose Your Instrument",
+          "description": "Select from Piano, Guitar, Drums, Voice, or Violin. Not sure? We can help you decide!"
+        },
+        {
+          "title": "Meet Your Instructor",
+          "description": "You will be matched with an experienced instructor who specializes in your chosen instrument."
+        },
+        {
+          "title": "Try a Lesson",
+          "description": "Enjoy a 30-minute introductory lesson tailored to your age and skill level."
+        },
+        {
+          "title": "Find Your Plan",
+          "description": "After your trial, we will help you choose the perfect lesson package for your goals and schedule."
+        }
+      ]
+    },
+    "form": {
+      "heading": "Reserve Your Spot",
+      "description": "Fill out the form below to book your free trial lesson. We will contact you within 24 hours to confirm your appointment.",
+      "fields": [
+        {"name": "student_name", "label": "Student Name", "type": "text", "required": true},
+        {"name": "parent_name", "label": "Parent/Guardian Name (if under 18)", "type": "text", "required": false},
+        {"name": "email", "label": "Email Address", "type": "email", "required": true},
+        {"name": "phone", "label": "Phone Number", "type": "tel", "required": true},
+        {"name": "instrument", "label": "Preferred Instrument", "type": "select", "required": true, "options": ["Piano", "Guitar", "Drums", "Voice", "Violin", "Not Sure"]},
+        {"name": "age_group", "label": "Age Group", "type": "select", "required": true, "options": ["Under 6", "6-12", "13-17", "18+"]},
+        {"name": "experience", "label": "Experience Level", "type": "select", "required": true, "options": ["Complete Beginner", "Some Experience", "Intermediate", "Advanced"]},
+        {"name": "preferred_day", "label": "Preferred Day", "type": "select", "required": false, "options": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]},
+        {"name": "message", "label": "Additional Notes", "type": "textarea", "required": false}
+      ]
+    },
+    "faq": {
+      "heading": "Frequently Asked Questions",
+      "items": [
+        {
+          "question": "Is the trial lesson really free?",
+          "answer": "Yes! Your first lesson is completely free with no obligation to continue."
+        },
+        {
+          "question": "Do I need to bring my own instrument?",
+          "answer": "No, we provide instruments for all trial lessons. Just bring yourself and your enthusiasm!"
+        },
+        {
+          "question": "How long is the trial lesson?",
+          "answer": "Trial lessons are approximately 30 minutes long."
+        },
+        {
+          "question": "What ages do you teach?",
+          "answer": "We welcome students of all ages, from young children to adults."
+        }
+      ]
+    }
+  }
+}

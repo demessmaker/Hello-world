@@ -1,0 +1,33 @@
+{
+  "site_title": "West Island Music School",
+  "tagline": "Making music magical",
+  "timezone": "America/Toronto",
+  "contact": {
+    "phone": "+1-514-XXX-XXXX",
+    "email": "info@westislandmusicschool.com",
+    "website": "https://westislandmusicschool.com",
+    "address": {
+      "street": "Your Street Address",
+      "city": "Pointe-Claire",
+      "province": "QC",
+      "postal_code": "H9R XXX",
+      "country": "CA"
+    }
+  },
+  "hours": {
+    "monday": "9:00 AM - 9:00 PM",
+    "tuesday": "9:00 AM - 9:00 PM",
+    "wednesday": "9:00 AM - 9:00 PM",
+    "thursday": "9:00 AM - 9:00 PM",
+    "friday": "9:00 AM - 9:00 PM",
+    "saturday": "9:00 AM - 5:00 PM",
+    "sunday": "Closed"
+  },
+  "social_media": {
+    "facebook": "https://www.facebook.com/westislandmusicschool",
+    "instagram": "https://www.instagram.com/westislandmusicschool"
+  },
+  "service_areas": ["Pointe-Claire", "Dorval", "Dollard-des-Ormeaux", "Kirkland", "Beaconsfield", "Pierrefonds"],
+  "payment_methods": ["Cash", "Credit Card", "Debit Card", "E-Transfer"],
+  "currency": "CAD"
+}

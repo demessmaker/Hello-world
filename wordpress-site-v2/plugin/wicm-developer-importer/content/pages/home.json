@@ -1,0 +1,69 @@
+{
+  "title": "Home",
+  "slug": "home",
+  "template": "",
+  "is_front_page": true,
+  "meta_title": "West Island Music School | Music Lessons in Pointe-Claire",
+  "meta_description": "West Island Music School offers professional music lessons in Piano, Guitar, Drums, Voice & Violin for all ages in Pointe-Claire and the West Island of Montreal.",
+  "og_title": "West Island Music School | Making Music Magical",
+  "og_description": "Professional music lessons for all ages in the West Island of Montreal. Piano, Guitar, Drums, Voice & Violin.",
+  "og_type": "website",
+  "sections": {
+    "hero": {
+      "heading": "Making Music Magical",
+      "subheading": "Professional music lessons for all ages in the heart of the West Island",
+      "cta_primary": {
+        "text": "Book a Free Trial",
+        "url": "/book-a-trial/"
+      },
+      "cta_secondary": {
+        "text": "Explore Programs",
+        "url": "/programs/"
+      }
+    },
+    "intro": {
+      "heading": "Welcome to West Island Music School",
+      "content": "For over 15 years, we have been nurturing musical talent in the West Island of Montreal. Our experienced instructors provide personalized lessons in a warm and supportive environment, helping students of all ages discover the joy of music."
+    },
+    "programs_overview": {
+      "heading": "Our Programs",
+      "subheading": "Discover the perfect instrument for you or your child",
+      "display": "shortcode",
+      "shortcode": "[wicm_programs]"
+    },
+    "why_choose_us": {
+      "heading": "Why Choose Us?",
+      "features": [
+        {
+          "title": "Experienced Instructors",
+          "description": "Our teachers are professional musicians with years of teaching experience and formal music education."
+        },
+        {
+          "title": "Personalized Lessons",
+          "description": "Every student receives a customized curriculum tailored to their skill level, interests, and goals."
+        },
+        {
+          "title": "Recital Opportunities",
+          "description": "Regular recitals and performance opportunities help students build confidence and stage presence."
+        },
+        {
+          "title": "Flexible Scheduling",
+          "description": "We offer lessons Monday through Saturday with flexible scheduling to fit your busy lifestyle."
+        }
+      ]
+    },
+    "testimonials": {
+      "heading": "What Our Families Say",
+      "display": "shortcode",
+      "shortcode": "[wicm_testimonials]"
+    },
+    "cta_banner": {
+      "heading": "Ready to Start Your Musical Journey?",
+      "content": "Book a free trial lesson today and experience the West Island Music School difference.",
+      "cta": {
+        "text": "Book a Free Trial",
+        "url": "/book-a-trial/"
+      }
+    }
+  }
+}

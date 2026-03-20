@@ -1,0 +1,62 @@
+{
+  "title": "About Us",
+  "slug": "about-us",
+  "template": "",
+  "meta_title": "About Us | West Island Music School",
+  "meta_description": "Learn about West Island Music School's story, mission, and state-of-the-art facilities in Pointe-Claire, QC. Over 15 years of music education excellence.",
+  "og_title": "About West Island Music School",
+  "og_description": "Over 15 years of music education excellence in the West Island of Montreal.",
+  "og_type": "website",
+  "sections": {
+    "hero": {
+      "heading": "About West Island Music School",
+      "subheading": "Our passion for music education drives everything we do"
+    },
+    "story": {
+      "heading": "Our Story",
+      "content": "Founded over 15 years ago, West Island Music School began with a simple vision: to create a welcoming space where students of all ages could discover and develop their musical talents. What started as a small studio has grown into one of the West Island's most respected music schools, serving hundreds of families across Pointe-Claire, Dorval, Dollard-des-Ormeaux, Kirkland, Beaconsfield, and Pierrefonds.\n\nOver the years, our students have gone on to perform at prestigious events, earn music scholarships, and most importantly, develop a lifelong love of music. We take pride in every student's journey, whether they aspire to be professional musicians or simply want to enjoy the enrichment that music brings to life."
+    },
+    "mission": {
+      "heading": "Our Mission",
+      "content": "To provide exceptional music education in a nurturing and inspiring environment, empowering students of all ages and skill levels to achieve their musical potential and develop a lifelong appreciation for the arts.",
+      "values": [
+        {
+          "title": "Excellence",
+          "description": "We maintain the highest standards in music education, continuously improving our curriculum and teaching methods."
+        },
+        {
+          "title": "Inclusivity",
+          "description": "Music is for everyone. We welcome students of all ages, backgrounds, and skill levels."
+        },
+        {
+          "title": "Creativity",
+          "description": "We encourage creative expression and help students find their unique musical voice."
+        },
+        {
+          "title": "Community",
+          "description": "We foster a supportive community where students, parents, and teachers collaborate and celebrate music together."
+        }
+      ]
+    },
+    "facilities": {
+      "heading": "Our Facilities",
+      "content": "Our modern, purpose-built facility features soundproofed practice rooms, a recital hall, and a comfortable waiting area for parents. Each room is equipped with professional-grade instruments and the latest teaching technology to ensure the best possible learning experience.",
+      "features": [
+        "Soundproofed practice rooms",
+        "Recital hall for performances",
+        "Professional-grade instruments",
+        "Comfortable parent waiting area",
+        "Free parking",
+        "Accessible facility"
+      ]
+    },
+    "cta": {
+      "heading": "Come Visit Us",
+      "content": "We would love to show you around our facility and discuss how we can help you or your child begin their musical journey.",
+      "cta": {
+        "text": "Book a Free Trial",
+        "url": "/book-a-trial/"
+      }
+    }
+  }
+}
