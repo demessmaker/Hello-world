@@ -41,6 +41,23 @@ class WICM_Developer_Importer {
         // Shortcodes
         add_shortcode( 'wicm_programs', array( $this, 'programs_shortcode' ) );
         add_shortcode( 'wicm_testimonials', array( $this, 'testimonials_shortcode' ) );
+
+        // Disable wpautop on pages to prevent HTML mangling
+        add_action( 'init', array( $this, 'disable_wpautop_pages' ) );
+    }
+
+    /**
+     * Disable wpautop on pages so custom HTML sections are not mangled.
+     */
+    public function disable_wpautop_pages() {
+        add_filter( 'the_content', array( $this, 'maybe_skip_wpautop' ), 0 );
+    }
+
+    public function maybe_skip_wpautop( $content ) {
+        if ( is_page() ) {
+            remove_filter( 'the_content', 'wpautop' );
+        }
+        return $content;
     }
 
     /**
@@ -117,7 +134,7 @@ class WICM_Developer_Importer {
             <h1>West Island Music School - V2 Content Importer</h1>
 
             <?php if ( $imported ) : ?>
-                <div class="notice notice-warning"><p><strong>Content was already imported.</strong> Re-importing creates duplicates.</p></div>
+                <div class="notice notice-info"><p><strong>Content was already imported.</strong> Re-importing will update existing pages with the latest content.</p></div>
             <?php endif; ?>
 
             <?php $this->show_results(); ?>
@@ -260,14 +277,35 @@ class WICM_Developer_Importer {
                 continue;
             }
 
-            $page_id = wp_insert_post( array(
-                'post_title'     => $data['title'],
-                'post_name'      => $data['slug'],
-                'post_content'   => isset( $data['html_content'] ) ? $data['html_content'] : '',
-                'post_status'    => 'publish',
-                'post_type'      => 'page',
-                'comment_status' => 'closed',
-            ) );
+            $content = isset( $data['html_content'] ) ? $data['html_content'] : '';
+
+            // Wrap content in Gutenberg HTML block so the block editor can handle it
+            if ( ! empty( $content ) ) {
+                $content = '<!-- wp:html -->' . "\n" . $content . "\n" . '<!-- /wp:html -->';
+            }
+
+            // Check if page already exists by slug — update it instead of creating a duplicate
+            $existing = get_page_by_path( $data['slug'], OBJECT, 'page' );
+            if ( $existing ) {
+                $page_id = wp_update_post( array(
+                    'ID'             => $existing->ID,
+                    'post_title'     => $data['title'],
+                    'post_content'   => $content,
+                    'post_status'    => 'publish',
+                    'comment_status' => 'closed',
+                ) );
+                $action = 'Updated';
+            } else {
+                $page_id = wp_insert_post( array(
+                    'post_title'     => $data['title'],
+                    'post_name'      => $data['slug'],
+                    'post_content'   => $content,
+                    'post_status'    => 'publish',
+                    'post_type'      => 'page',
+                    'comment_status' => 'closed',
+                ) );
+                $action = 'Created';
+            }
 
             if ( ! is_wp_error( $page_id ) ) {
                 $page_ids[ $key ] = $page_id;
@@ -276,7 +314,7 @@ class WICM_Developer_Importer {
                         update_post_meta( $page_id, '_wicm_' . $meta_key, sanitize_text_field( $meta_val ) );
                     }
                 }
-                $results[] = array( 'success' => true, 'message' => "Created page: {$data['title']}" );
+                $results[] = array( 'success' => true, 'message' => "{$action} page: {$data['title']}" );
             } else {
                 $results[] = array( 'success' => false, 'message' => "Failed: {$data['title']}" );
             }
