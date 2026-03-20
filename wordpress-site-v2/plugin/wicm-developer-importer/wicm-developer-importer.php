@@ -1020,8 +1020,10 @@ class WICM_Developer_Importer {
             'email'       => $s['contact']['email'],
             'address'     => array(
                 '@type'           => 'PostalAddress',
+                'streetAddress'   => $s['contact']['address']['street'],
                 'addressLocality' => $s['contact']['address']['city'],
                 'addressRegion'   => $s['contact']['address']['province'],
+                'postalCode'      => $s['contact']['address']['postal_code'],
                 'addressCountry'  => $s['contact']['address']['country'],
             ),
             'geo' => array( '@type' => 'GeoCoordinates', 'latitude' => 45.4469, 'longitude' => -73.8167 ),

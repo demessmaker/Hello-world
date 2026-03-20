@@ -234,7 +234,7 @@ function wicm_customize_register( $wp_customize ) {
 
     // Contact - Address
     $wp_customize->add_setting( 'wicm_contact_address', array(
-        'default'           => 'Pointe-Claire, QC, Canada',
+        'default'           => 'Bb-245 Blvd St-Jean, Pointe-Claire, QC, H9R-3J1',
         'sanitize_callback' => 'sanitize_text_field',
     ) );
     $wp_customize->add_control( 'wicm_contact_address', array(
