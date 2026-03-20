@@ -153,6 +153,7 @@ class WICM_Developer_Importer {
                         <tr><th>Contact Form</th><td><label><input type="checkbox" name="import_cf7" value="1" checked> Create CF7 form + embed in Contact page</label></td></tr>
                         <tr><th>Menu</th><td><label><input type="checkbox" name="import_menu" value="1" checked> Primary navigation menu</label></td></tr>
                         <tr><th>Front Page</th><td><label><input type="checkbox" name="set_front_page" value="1" checked> Set Home as static front page</label></td></tr>
+                        <tr><th>French Content</th><td><label><input type="checkbox" name="import_french" value="1" checked> French pages, programs, testimonials &amp; menu (Polylang)</label><?php if ( ! function_exists( 'pll_set_post_language' ) ) : ?><br><small style="color:#dc2626;">Polylang plugin not active — French content will be created but not linked as translations.</small><?php endif; ?></td></tr>
                     </table>
                     <?php submit_button( 'Import All Content', 'primary', 'submit', true ); ?>
                 </form>
@@ -230,6 +231,12 @@ class WICM_Developer_Importer {
 
         if ( ! empty( $_POST['import_menu'] ) ) {
             $results = array_merge( $results, $this->import_menu( $page_ids ) );
+        }
+
+        // French content (Polylang)
+        if ( ! empty( $_POST['import_french'] ) ) {
+            $fr = $this->import_french_content( $page_ids, $program_ids );
+            $results = array_merge( $results, $fr );
         }
 
         update_option( 'wicm_dev_import_done', true );
@@ -590,6 +597,318 @@ class WICM_Developer_Importer {
         set_theme_mod( 'nav_menu_locations', $locations );
 
         $results[] = array( 'success' => true, 'message' => "Created menu with {$added} items (assigned to primary)" );
+        return $results;
+    }
+
+    // =========================================================================
+    // FRENCH CONTENT (POLYLANG)
+    // =========================================================================
+
+    /**
+     * Import all French content and link translations via Polylang.
+     */
+    private function import_french_content( $en_page_ids, $en_program_ids ) {
+        $results      = array();
+        $has_polylang = function_exists( 'pll_set_post_language' );
+
+        // Set English language on existing EN posts
+        if ( $has_polylang ) {
+            foreach ( $en_page_ids as $en_id ) {
+                pll_set_post_language( $en_id, 'en' );
+            }
+            foreach ( $en_program_ids as $en_id ) {
+                pll_set_post_language( $en_id, 'en' );
+            }
+            // Set EN on testimonials
+            $en_testimonials = get_posts( array( 'post_type' => 'wicm_testimonial', 'numberposts' => 20, 'fields' => 'ids' ) );
+            foreach ( $en_testimonials as $t_id ) {
+                pll_set_post_language( $t_id, 'en' );
+            }
+        }
+
+        // --- French Pages ---
+        $fr_page_ids = array();
+        $fr_pages    = array(
+            'home'    => 'pages/fr/home.json',
+            'about'   => 'pages/fr/about.json',
+            'contact' => 'pages/fr/contact.json',
+            'programs'=> 'pages/fr/programs.json',
+            'trial'   => 'pages/fr/book-trial.json',
+        );
+
+        foreach ( $fr_pages as $key => $file ) {
+            $data = $this->load_json( $file );
+            if ( ! $data ) {
+                $results[] = array( 'success' => false, 'message' => "Could not load {$file}" );
+                continue;
+            }
+
+            $content = isset( $data['html_content'] ) ? $data['html_content'] : '';
+            if ( ! empty( $content ) ) {
+                $content = $this->html_to_gutenberg_blocks( $content );
+            }
+
+            $existing = get_page_by_path( $data['slug'], OBJECT, 'page' );
+            if ( $existing ) {
+                $page_id = wp_update_post( array(
+                    'ID'             => $existing->ID,
+                    'post_title'     => $data['title'],
+                    'post_content'   => $content,
+                    'post_status'    => 'publish',
+                    'comment_status' => 'closed',
+                ) );
+                $action = 'Updated';
+            } else {
+                $page_id = wp_insert_post( array(
+                    'post_title'     => $data['title'],
+                    'post_name'      => $data['slug'],
+                    'post_content'   => $content,
+                    'post_status'    => 'publish',
+                    'post_type'      => 'page',
+                    'comment_status' => 'closed',
+                ) );
+                $action = 'Created';
+            }
+
+            if ( ! is_wp_error( $page_id ) ) {
+                $fr_page_ids[ $key ] = $page_id;
+
+                // SEO meta
+                if ( ! empty( $data['seo'] ) ) {
+                    foreach ( $data['seo'] as $meta_key => $meta_val ) {
+                        update_post_meta( $page_id, '_wicm_' . $meta_key, sanitize_text_field( $meta_val ) );
+                    }
+                }
+                // Yoast SEO
+                if ( ! empty( $data['yoast_seo'] ) ) {
+                    $yoast_fields = array(
+                        'focuskw'               => '_yoast_wpseo_focuskw',
+                        'title'                 => '_yoast_wpseo_title',
+                        'metadesc'              => '_yoast_wpseo_metadesc',
+                        'opengraph-title'       => '_yoast_wpseo_opengraph-title',
+                        'opengraph-description' => '_yoast_wpseo_opengraph-description',
+                    );
+                    foreach ( $yoast_fields as $json_key => $meta_key ) {
+                        if ( ! empty( $data['yoast_seo'][ $json_key ] ) ) {
+                            update_post_meta( $page_id, $meta_key, sanitize_text_field( $data['yoast_seo'][ $json_key ] ) );
+                        }
+                    }
+                }
+
+                // Polylang: set language and link translation
+                if ( $has_polylang ) {
+                    pll_set_post_language( $page_id, 'fr' );
+                    if ( ! empty( $en_page_ids[ $key ] ) ) {
+                        pll_save_post_translations( array(
+                            'en' => $en_page_ids[ $key ],
+                            'fr' => $page_id,
+                        ) );
+                    }
+                }
+
+                $results[] = array( 'success' => true, 'message' => "{$action} FR page: {$data['title']}" );
+            } else {
+                $results[] = array( 'success' => false, 'message' => "Failed FR: {$data['title']}" );
+            }
+        }
+
+        // FR Blog page
+        $fr_blog_id = wp_insert_post( array(
+            'post_title'     => 'Blogue',
+            'post_name'      => 'blogue',
+            'post_content'   => '',
+            'post_status'    => 'publish',
+            'post_type'      => 'page',
+            'comment_status' => 'closed',
+        ) );
+        if ( ! is_wp_error( $fr_blog_id ) ) {
+            $fr_page_ids['blog'] = $fr_blog_id;
+            if ( $has_polylang ) {
+                pll_set_post_language( $fr_blog_id, 'fr' );
+                if ( ! empty( $en_page_ids['blog'] ) ) {
+                    pll_save_post_translations( array(
+                        'en' => $en_page_ids['blog'],
+                        'fr' => $fr_blog_id,
+                    ) );
+                }
+            }
+        }
+
+        // --- French Programs ---
+        $fr_program_ids = array();
+        $fr_programs = array(
+            array(
+                'name'     => 'Cours de piano',
+                'slug'     => 'cours-de-piano',
+                'en_slug'  => 'piano-lessons',
+                'icon'     => "\xF0\x9F\x8E\xB9",
+                'desc'     => 'Du classique au contemporain, apprenez le piano à votre rythme avec un enseignement personnalisé pour tous les niveaux.',
+                'features' => array( 'Classique et contemporain', 'Théorie musicale', 'Lecture à vue', 'Compétences de performance' ),
+            ),
+            array(
+                'name'     => 'Cours de guitare',
+                'slug'     => 'cours-de-guitare',
+                'en_slug'  => 'guitar-lessons',
+                'icon'     => "\xF0\x9F\x8E\xB8",
+                'desc'     => 'Électrique, acoustique ou classique — maîtrisez la guitare avec des cours personnalisés adaptés à vos objectifs musicaux.',
+                'features' => array( 'Électrique et acoustique', 'Progressions d\'accords', 'Fingerpicking', 'Composition' ),
+            ),
+            array(
+                'name'     => 'Cours de batterie',
+                'slug'     => 'cours-de-batterie',
+                'en_slug'  => 'drum-lessons',
+                'icon'     => "\xF0\x9F\xA5\x81",
+                'desc'     => 'Développez le rythme, la coordination et la technique avec des cours de batterie dynamiques qui vous font jouer vos chansons préférées.',
+                'features' => array( 'Fondamentaux du rythme', 'Coordination des mains', 'Styles multiples', 'Intégration en groupe' ),
+            ),
+            array(
+                'name'     => 'Cours de chant',
+                'slug'     => 'cours-de-chant',
+                'en_slug'  => 'voice-lessons',
+                'icon'     => "\xF0\x9F\x8E\xA4",
+                'desc'     => 'Libérez votre potentiel vocal avec une formation en contrôle de la respiration, expansion de la tessiture et techniques de performance.',
+                'features' => array( 'Contrôle de la respiration', 'Expansion de la tessiture', 'Coaching de performance', 'Genres multiples' ),
+            ),
+            array(
+                'name'     => 'Cours de violon',
+                'slug'     => 'cours-de-violon',
+                'en_slug'  => 'violin-lessons',
+                'icon'     => "\xF0\x9F\x8E\xBB",
+                'desc'     => 'Embrassez l\'élégance de la musique à cordes avec un enseignement patient et progressif du violon, pour débutants à avancés.',
+                'features' => array( 'Formation classique', 'Technique appropriée', 'Préparation orchestrale', 'Performance solo' ),
+            ),
+        );
+
+        foreach ( $fr_programs as $prog ) {
+            $post_id = wp_insert_post( array(
+                'post_title'   => $prog['name'],
+                'post_name'    => $prog['slug'],
+                'post_content' => '<p>' . $prog['desc'] . '</p>',
+                'post_status'  => 'publish',
+                'post_type'    => 'wicm_program',
+            ) );
+
+            if ( ! is_wp_error( $post_id ) ) {
+                update_post_meta( $post_id, '_wicm_icon', $prog['icon'] );
+                update_post_meta( $post_id, '_wicm_features', $prog['features'] );
+                $fr_program_ids[ $prog['en_slug'] ] = $post_id;
+
+                if ( $has_polylang ) {
+                    pll_set_post_language( $post_id, 'fr' );
+                    if ( ! empty( $en_program_ids[ $prog['en_slug'] ] ) ) {
+                        pll_save_post_translations( array(
+                            'en' => $en_program_ids[ $prog['en_slug'] ],
+                            'fr' => $post_id,
+                        ) );
+                    }
+                }
+
+                // Share the same featured image as the EN version
+                if ( ! empty( $en_program_ids[ $prog['en_slug'] ] ) ) {
+                    $thumb_id = get_post_thumbnail_id( $en_program_ids[ $prog['en_slug'] ] );
+                    if ( $thumb_id ) {
+                        set_post_thumbnail( $post_id, $thumb_id );
+                    }
+                }
+
+                $results[] = array( 'success' => true, 'message' => "Created FR program: {$prog['name']}" );
+            }
+        }
+
+        // --- French Testimonials ---
+        $fr_testimonials = array(
+            array( 'name' => 'Amanda Walsh', 'role' => 'Étudiante en chant', 'quote' => "L'environnement chaleureux et les professeurs bienveillants m'ont aidée à développer une confiance que je ne savais pas avoir. Ma tessiture vocale s'est énormément élargie!" ),
+            array( 'name' => 'Donna Burgess', 'role' => 'Parent', 'quote' => "Qualité d'enseignement de premier ordre. Nous sommes clients depuis 15 ans et mes deux enfants ont épanoui sous leur guidance." ),
+            array( 'name' => 'Damien Holtz', 'role' => 'Parent', 'quote' => "Les compétences et la joie durable que ma fille a développées grâce à ses cours de piano ici sont inestimables. Hautement recommandé!" ),
+            array( 'name' => 'John McGuinness', 'role' => 'Parent', 'quote' => "Mon fils a été sélectionné pour le Blues Camp du Festival de Jazz de Montréal grâce à la formation exceptionnelle qu'il a reçue ici." ),
+        );
+
+        $en_testimonials = get_posts( array(
+            'post_type'   => 'wicm_testimonial',
+            'numberposts' => 20,
+            'orderby'     => 'date',
+            'order'       => 'ASC',
+        ) );
+        // Map EN testimonials by name for linking
+        $en_test_map = array();
+        foreach ( $en_testimonials as $et ) {
+            $en_test_map[ $et->post_title ] = $et->ID;
+        }
+
+        $fr_test_count = 0;
+        foreach ( $fr_testimonials as $t ) {
+            $post_id = wp_insert_post( array(
+                'post_title'  => $t['name'],
+                'post_status' => 'publish',
+                'post_type'   => 'wicm_testimonial',
+            ) );
+            if ( ! is_wp_error( $post_id ) ) {
+                update_post_meta( $post_id, '_wicm_quote', $t['quote'] );
+                update_post_meta( $post_id, '_wicm_role', $t['role'] );
+                update_post_meta( $post_id, '_wicm_rating', 5 );
+                $fr_test_count++;
+
+                if ( $has_polylang ) {
+                    pll_set_post_language( $post_id, 'fr' );
+                    if ( ! empty( $en_test_map[ $t['name'] ] ) ) {
+                        pll_save_post_translations( array(
+                            'en' => $en_test_map[ $t['name'] ],
+                            'fr' => $post_id,
+                        ) );
+                    }
+                }
+            }
+        }
+        $results[] = array( 'success' => $fr_test_count > 0, 'message' => "Created {$fr_test_count} FR testimonials" );
+
+        // --- French Navigation Menu ---
+        $existing_fr_menu = wp_get_nav_menu_object( 'Menu principal' );
+        if ( $existing_fr_menu ) {
+            wp_delete_nav_menu( $existing_fr_menu->term_id );
+        }
+
+        $fr_menu_id = wp_create_nav_menu( 'Menu principal' );
+        if ( ! is_wp_error( $fr_menu_id ) ) {
+            $fr_menu_items = array(
+                array( 'key' => 'home', 'title' => 'Accueil', 'order' => 1 ),
+                array( 'key' => 'programs', 'title' => 'Programmes', 'order' => 2 ),
+                array( 'key' => 'about', 'title' => 'À propos', 'order' => 3 ),
+                array( 'key' => 'contact', 'title' => 'Contact', 'order' => 5 ),
+            );
+
+            $fr_added = 0;
+            foreach ( $fr_menu_items as $item ) {
+                if ( empty( $fr_page_ids[ $item['key'] ] ) ) continue;
+                $r = wp_update_nav_menu_item( $fr_menu_id, 0, array(
+                    'menu-item-title'     => $item['title'],
+                    'menu-item-object'    => 'page',
+                    'menu-item-object-id' => $fr_page_ids[ $item['key'] ],
+                    'menu-item-type'      => 'post_type',
+                    'menu-item-status'    => 'publish',
+                    'menu-item-position'  => $item['order'],
+                ) );
+                if ( ! is_wp_error( $r ) ) $fr_added++;
+            }
+
+            // Polylang: link FR menu to the FR language
+            if ( $has_polylang && function_exists( 'pll_set_term_language' ) ) {
+                pll_set_term_language( $fr_menu_id, 'fr' );
+                // Also set EN menu language
+                $en_menu = wp_get_nav_menu_object( 'Primary Menu' );
+                if ( $en_menu ) {
+                    pll_set_term_language( $en_menu->term_id, 'en' );
+                }
+            }
+
+            $results[] = array( 'success' => true, 'message' => "Created FR menu 'Menu principal' with {$fr_added} items" );
+        }
+
+        if ( $has_polylang ) {
+            $results[] = array( 'success' => true, 'message' => 'Polylang: All EN/FR translations linked' );
+        } else {
+            $results[] = array( 'success' => true, 'message' => 'French content created (activate Polylang to link translations)' );
+        }
+
         return $results;
     }
 
