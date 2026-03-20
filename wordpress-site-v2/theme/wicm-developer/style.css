@@ -1440,26 +1440,43 @@ ol.wp-block-list li {
     margin: 0 !important;
 }
 
-/* --- Group Block (CTA section) --- */
-.wp-block-group.alignfull {
-    margin-left: calc(-50vw + 50%);
-    margin-right: calc(-50vw + 50%);
-    width: 100vw;
-    max-width: 100vw;
-    padding: 5rem 2rem;
+/* --- Group Block (full-width sections) --- */
+.front-page-content .wp-block-group.alignfull {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 2rem;
+    padding-right: 2rem;
 }
 
-.wp-block-group.alignfull:not([class*="has-background"]) {
-    background: linear-gradient(135deg, var(--color-red-600) 0%, var(--color-red-700) 100%);
+/* Section-specific heading styles within groups */
+.wp-block-group.alignfull > .wp-block-heading,
+.wp-block-group.alignfull > .wp-block-group__inner-container > .wp-block-heading {
+    margin-top: 0;
 }
 
-.wp-block-group.alignfull .wp-block-heading {
+/* Section subtitle after heading */
+.wp-block-group.alignfull h2.has-text-align-center + .has-text-align-center {
+    font-size: 1.125rem;
+    color: var(--color-gray-600);
+    max-width: 42rem;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2.5rem;
+}
+
+/* CTA section styling */
+.wicm-section-cta {
+    text-align: center;
+}
+
+.wicm-section-cta .wp-block-heading {
     color: var(--color-white) !important;
     font-size: 2.25rem;
     font-weight: 800;
+    margin-top: 0;
 }
 
-.wp-block-group.alignfull p {
+.wicm-section-cta p {
     font-size: 1.125rem;
     color: rgba(255,255,255,0.9) !important;
     max-width: 36rem;
@@ -1467,14 +1484,34 @@ ol.wp-block-list li {
     margin-right: auto;
 }
 
-.wp-block-group.alignfull .wp-block-button.is-style-outline .wp-block-button__link {
+.wicm-section-cta .wp-block-button.is-style-outline .wp-block-button__link {
     color: var(--color-white) !important;
     border-color: var(--color-white);
 }
 
-.wp-block-group.alignfull .wp-block-button.is-style-outline .wp-block-button__link:hover {
+.wicm-section-cta .wp-block-button.is-style-outline .wp-block-button__link:hover {
     background: var(--color-white) !important;
     color: var(--color-red-600) !important;
+}
+
+/* Why Choose Us card hover */
+.wicm-why-card {
+    transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.wicm-why-card:hover {
+    border-color: var(--color-red-500) !important;
+    box-shadow: var(--shadow-lg);
+}
+
+/* Stats section - prevent heading margin overrides */
+.wicm-section-stats .wp-block-heading {
+    margin-top: 0;
+    margin-bottom: 0.25rem;
+}
+
+.wicm-section-stats p {
+    margin-bottom: 0;
 }
 
 /* --- Shortcode Block --- */
@@ -1494,25 +1531,10 @@ ol.wp-block-list li {
     overflow: hidden;
 }
 
-/* Constrained content blocks on front page */
-.front-page-content > .wp-block-heading,
-.front-page-content > p,
-.front-page-content > .wp-block-columns,
-.front-page-content > .wp-block-list,
-.front-page-content > .wp-block-buttons,
-.front-page-content > .wp-block-separator,
-.front-page-content > .wp-block-shortcode {
-    max-width: var(--container-max);
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 2rem;
-    padding-right: 2rem;
-}
-
 /* Full-width blocks on front page */
 .front-page-content > .wp-block-cover,
 .front-page-content > .wp-block-group.alignfull {
-    max-width: 100vw;
+    max-width: 100%;
     width: 100%;
 }
 
