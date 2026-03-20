@@ -67,8 +67,8 @@
             <div class="footer-column">
                 <h4><?php esc_html_e( 'Contact', 'wicm-developer' ); ?></h4>
                 <ul>
-                    <li><?php echo esc_html( get_theme_mod( 'wicm_contact_address', 'Pointe-Claire, QC, Canada' ) ); ?></li>
-                    <?php $email = get_theme_mod( 'wicm_contact_email', 'info@westislandmusicschool.com' ); ?>
+                    <li><?php echo esc_html( get_theme_mod( 'wicm_contact_address', 'Bb-245 Blvd St-Jean, Pointe-Claire, QC, H9R-3J1' ) ); ?></li>
+                    <?php $email = get_theme_mod( 'wicm_contact_email', 'musiconlinewestisland@gmail.com' ); ?>
                     <li><a href="mailto:<?php echo esc_attr( $email ); ?>"><?php echo esc_html( $email ); ?></a></li>
                     <li><?php echo esc_html( get_theme_mod( 'wicm_hours_weekday', 'Mon-Fri: 9:00 AM - 9:00 PM' ) ); ?></li>
                     <li><?php echo esc_html( get_theme_mod( 'wicm_hours_weekend', 'Saturday: 9:00 AM - 5:00 PM' ) ); ?></li>

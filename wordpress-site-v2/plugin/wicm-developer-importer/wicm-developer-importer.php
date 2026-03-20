@@ -547,7 +547,7 @@ class WICM_Developer_Importer {
             'mail' => array_merge( $form->prop( 'mail' ), array(
                 'subject'   => 'WICM Inquiry - [instrument]',
                 'body'      => "Name: [your-name]\nEmail: [your-email]\nPhone: [your-phone]\nInstrument: [instrument]\n\n[your-message]",
-                'recipient' => 'info@westislandmusicschool.com',
+                'recipient' => 'musiconlinewestisland@gmail.com',
             ) ),
         ) );
         $form->set_title( 'WICM Contact Form' );

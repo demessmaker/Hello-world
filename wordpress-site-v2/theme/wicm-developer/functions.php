@@ -245,7 +245,7 @@ function wicm_customize_register( $wp_customize ) {
 
     // Contact - Email
     $wp_customize->add_setting( 'wicm_contact_email', array(
-        'default'           => 'info@westislandmusicschool.com',
+        'default'           => 'musiconlinewestisland@gmail.com',
         'sanitize_callback' => 'sanitize_email',
     ) );
     $wp_customize->add_control( 'wicm_contact_email', array(
