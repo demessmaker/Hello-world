@@ -1070,12 +1070,14 @@ class WICM_Developer_Importer {
     // =========================================================================
 
     /**
-     * Convert raw HTML into individual Gutenberg blocks.
+     * Convert raw HTML into Gutenberg-compatible content.
      *
-     * Uses DOMDocument to split top-level elements into separate blocks.
-     * <section> and wrapper <div> elements become wp:html blocks.
-     * Simple elements (headings, paragraphs) become native Gutenberg blocks.
-     * Shortcodes become wp:shortcode blocks.
+     * Section-based layouts (like the homepage) are stored as a single
+     * Classic (freeform) block so the visual editor renders them properly
+     * instead of showing raw HTML code blocks.
+     *
+     * Simple page content (headings, paragraphs, lists) is converted to
+     * native Gutenberg blocks.
      */
     private function html_to_gutenberg_blocks( $html ) {
         $html = trim( $html );
@@ -1083,21 +1085,26 @@ class WICM_Developer_Importer {
             return '';
         }
 
-        // Use DOMDocument to reliably parse top-level elements
+        // If the content contains <section> tags, it's a full-page layout.
+        // Wrap it in a single Classic block so the visual editor shows it
+        // as rendered HTML rather than raw code.
+        if ( false !== strpos( $html, '<section' ) ) {
+            return "<!-- wp:freeform -->\n" . $html . "\n<!-- /wp:freeform -->";
+        }
+
+        // For simpler content (e.g. inner pages without sections),
+        // parse into individual Gutenberg blocks.
         $doc = new DOMDocument();
         libxml_use_internal_errors( true );
-        $doc->loadHTML(
-            '<html><body>' . mb_convert_encoding( $html, 'HTML-ENTITIES', 'UTF-8' ) . '</body></html>',
-            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
-        );
+        $wrapped = '<html><body>' . $html . '</body></html>';
+        $doc->loadHTML( $wrapped, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD );
         libxml_clear_errors();
 
         $body   = $doc->getElementsByTagName( 'body' )->item( 0 );
         $blocks = array();
 
         if ( ! $body ) {
-            // Fallback: wrap entire content in a single HTML block
-            return "<!-- wp:html -->\n" . $html . "\n<!-- /wp:html -->";
+            return "<!-- wp:freeform -->\n" . $html . "\n<!-- /wp:freeform -->";
         }
 
         foreach ( $body->childNodes as $node ) {
@@ -1106,9 +1113,7 @@ class WICM_Developer_Importer {
                 if ( empty( $text ) ) {
                     continue;
                 }
-                // Check for shortcodes in text nodes
                 if ( preg_match( '/\[[\w_-]+/', $text ) ) {
-                    // Split shortcodes out
                     $parts = preg_split( '/(\[[^\]]+\])/', $text, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY );
                     foreach ( $parts as $p ) {
                         $p = trim( $p );
@@ -1129,19 +1134,13 @@ class WICM_Developer_Importer {
                 continue;
             }
 
-            $tag       = strtolower( $node->nodeName );
+            $tag        = strtolower( $node->nodeName );
             $inner_html = $this->dom_inner_html( $doc, $node );
             $outer_html = $doc->saveHTML( $node );
 
-            // Sections: each becomes its own wp:html block
-            if ( $tag === 'section' ) {
-                $blocks[] = "<!-- wp:html -->\n" . $outer_html . "\n<!-- /wp:html -->";
-                continue;
-            }
-
-            // page-content wrapper div — extract children as individual blocks
+            // page-content wrapper div — unwrap into a Classic block
             if ( $tag === 'div' && strpos( $node->getAttribute( 'class' ), 'page-content' ) !== false ) {
-                $blocks[] = $this->convert_page_content_div( $doc, $node );
+                $blocks[] = "<!-- wp:freeform -->\n" . $outer_html . "\n<!-- /wp:freeform -->";
                 continue;
             }
 
@@ -1154,9 +1153,8 @@ class WICM_Developer_Importer {
                 continue;
             }
 
-            // Paragraphs → native paragraph blocks
+            // Paragraphs
             if ( $tag === 'p' ) {
-                // Check if paragraph contains only a shortcode
                 $trimmed_inner = trim( strip_tags( $inner_html ) );
                 if ( preg_match( '/^\[[\w_-]+/', $trimmed_inner ) ) {
                     $blocks[] = "<!-- wp:shortcode -->\n" . $trimmed_inner . "\n<!-- /wp:shortcode -->";
@@ -1166,89 +1164,21 @@ class WICM_Developer_Importer {
                 continue;
             }
 
-            // Ordered lists → native list block
+            // Lists
             if ( $tag === 'ol' ) {
                 $blocks[] = '<!-- wp:list {"ordered":true} -->' . "\n" . $outer_html . "\n" . '<!-- /wp:list -->';
                 continue;
             }
-
-            // Unordered lists → native list block
             if ( $tag === 'ul' ) {
                 $blocks[] = "<!-- wp:list -->\n" . $outer_html . "\n<!-- /wp:list -->";
                 continue;
             }
 
-            // Everything else → wp:html
-            $blocks[] = "<!-- wp:html -->\n" . $outer_html . "\n<!-- /wp:html -->";
+            // Everything else → Classic block
+            $blocks[] = "<!-- wp:freeform -->\n" . $outer_html . "\n<!-- /wp:freeform -->";
         }
 
         return implode( "\n\n", array_filter( $blocks ) );
-    }
-
-    /**
-     * Extract children of a page-content wrapper into individual blocks.
-     */
-    private function convert_page_content_div( $doc, $wrapper_node ) {
-        $blocks = array();
-
-        // Find the wicm-container inside
-        $container = $wrapper_node;
-        foreach ( $wrapper_node->childNodes as $child ) {
-            if ( $child->nodeType === XML_ELEMENT_NODE
-                 && strpos( $child->getAttribute( 'class' ), 'wicm-container' ) !== false ) {
-                $container = $child;
-                break;
-            }
-        }
-
-        foreach ( $container->childNodes as $node ) {
-            if ( $node->nodeType === XML_TEXT_NODE ) {
-                $text = trim( $node->textContent );
-                if ( empty( $text ) ) continue;
-                // Shortcodes
-                if ( preg_match( '/\[[\w_-]+/', $text ) ) {
-                    $parts = preg_split( '/(\[[^\]]+\])/', $text, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY );
-                    foreach ( $parts as $p ) {
-                        $p = trim( $p );
-                        if ( empty( $p ) ) continue;
-                        if ( preg_match( '/^\[/', $p ) ) {
-                            $blocks[] = "<!-- wp:shortcode -->\n" . $p . "\n<!-- /wp:shortcode -->";
-                        }
-                    }
-                    continue;
-                }
-                continue;
-            }
-            if ( $node->nodeType !== XML_ELEMENT_NODE ) continue;
-
-            $tag        = strtolower( $node->nodeName );
-            $inner_html = $this->dom_inner_html( $doc, $node );
-            $outer_html = $doc->saveHTML( $node );
-
-            if ( preg_match( '/^h([1-6])$/', $tag, $m ) ) {
-                $level = (int) $m[1];
-                $blocks[] = '<!-- wp:heading {"level":' . $level . '} -->' . "\n"
-                    . '<' . $tag . ' class="wp-block-heading">' . $inner_html . '</' . $tag . '>' . "\n"
-                    . '<!-- /wp:heading -->';
-            } elseif ( $tag === 'p' ) {
-                $trimmed_inner = trim( strip_tags( $inner_html ) );
-                if ( preg_match( '/^\[[\w_-]+/', $trimmed_inner ) ) {
-                    $blocks[] = "<!-- wp:shortcode -->\n" . $trimmed_inner . "\n<!-- /wp:shortcode -->";
-                } else {
-                    $blocks[] = "<!-- wp:paragraph -->\n" . $outer_html . "\n<!-- /wp:paragraph -->";
-                }
-            } elseif ( $tag === 'ol' ) {
-                $blocks[] = '<!-- wp:list {"ordered":true} -->' . "\n" . $outer_html . "\n" . '<!-- /wp:list -->';
-            } elseif ( $tag === 'ul' ) {
-                $blocks[] = "<!-- wp:list -->\n" . $outer_html . "\n<!-- /wp:list -->";
-            } elseif ( $tag === 'div' ) {
-                $blocks[] = "<!-- wp:html -->\n" . $outer_html . "\n<!-- /wp:html -->";
-            } else {
-                $blocks[] = "<!-- wp:html -->\n" . $outer_html . "\n<!-- /wp:html -->";
-            }
-        }
-
-        return implode( "\n\n", $blocks );
     }
 
     /**
