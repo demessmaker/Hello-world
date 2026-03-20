@@ -45,9 +45,19 @@
                 <?php endif; ?>
 
                 <div class="program-single-cta">
-                    <h3><?php esc_html_e( 'Ready to Start?', 'wicm-developer' ); ?></h3>
-                    <p><?php esc_html_e( 'Book a free trial lesson and experience the difference.', 'wicm-developer' ); ?></p>
-                    <a href="<?php echo esc_url( home_url( '/book-a-trial/' ) ); ?>" class="btn btn-primary"><?php esc_html_e( 'Book a Free Trial', 'wicm-developer' ); ?></a>
+                    <?php $wicm_is_fr = function_exists( 'pll_current_language' ) && 'fr' === pll_current_language(); ?>
+                    <h3><?php echo $wicm_is_fr ? esc_html( 'Prêt à commencer?' ) : esc_html( 'Ready to Start?' ); ?></h3>
+                    <p><?php echo $wicm_is_fr ? esc_html( 'Réservez un cours d\'essai gratuit et découvrez la différence.' ) : esc_html( 'Book a free trial lesson and experience the difference.' ); ?></p>
+                    <?php
+                    if ( $wicm_is_fr ) {
+                        $trial_url  = get_theme_mod( 'wicm_header_cta_url_fr', '/fr/reserver-un-essai/' );
+                        $trial_text = 'Réserver un essai gratuit';
+                    } else {
+                        $trial_url  = get_theme_mod( 'wicm_header_cta_url', '/book-a-trial/' );
+                        $trial_text = 'Book a Free Trial';
+                    }
+                    ?>
+                    <a href="<?php echo esc_url( home_url( $trial_url ) ); ?>" class="btn btn-primary"><?php echo esc_html( $trial_text ); ?></a>
                 </div>
             </div>
         </div>

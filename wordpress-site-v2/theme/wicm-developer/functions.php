@@ -178,6 +178,28 @@ function wicm_customize_register( $wp_customize ) {
         'type'    => 'url',
     ) );
 
+    // CTA button text (French)
+    $wp_customize->add_setting( 'wicm_header_cta_text_fr', array(
+        'default'           => 'Réserver un essai',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'wicm_header_cta_text_fr', array(
+        'label'   => __( 'Header Button Text (French)', 'wicm-developer' ),
+        'section' => 'wicm_header',
+        'type'    => 'text',
+    ) );
+
+    // CTA button URL (French)
+    $wp_customize->add_setting( 'wicm_header_cta_url_fr', array(
+        'default'           => '/fr/reserver-un-essai/',
+        'sanitize_callback' => 'esc_url_raw',
+    ) );
+    $wp_customize->add_control( 'wicm_header_cta_url_fr', array(
+        'label'   => __( 'Header Button URL (French)', 'wicm-developer' ),
+        'section' => 'wicm_header',
+        'type'    => 'url',
+    ) );
+
     // ===========================
     // FOOTER SECTION
     // ===========================

@@ -47,8 +47,14 @@
                 </div>
             <?php endif; ?>
             <?php
-            $cta_text = get_theme_mod( 'wicm_header_cta_text', 'Book a Trial' );
-            $cta_url  = get_theme_mod( 'wicm_header_cta_url', '/book-a-trial/' );
+            $wicm_is_fr = function_exists( 'pll_current_language' ) && 'fr' === pll_current_language();
+            if ( $wicm_is_fr ) {
+                $cta_text = get_theme_mod( 'wicm_header_cta_text_fr', 'Réserver un essai' );
+                $cta_url  = get_theme_mod( 'wicm_header_cta_url_fr', '/fr/reserver-un-essai/' );
+            } else {
+                $cta_text = get_theme_mod( 'wicm_header_cta_text', 'Book a Trial' );
+                $cta_url  = get_theme_mod( 'wicm_header_cta_url', '/book-a-trial/' );
+            }
             ?>
             <a href="<?php echo esc_url( home_url( $cta_url ) ); ?>" class="btn btn-primary btn-sm"><?php echo esc_html( $cta_text ); ?></a>
 
