@@ -26,7 +26,7 @@
             </div>
             <?php the_posts_pagination( array( 'mid_size' => 2 ) ); ?>
         <?php else : ?>
-            <p>No posts found.</p>
+            <p><?php esc_html_e( 'No posts found.', 'wicm-developer' ); ?></p>
         <?php endif; ?>
     </div>
 </div>

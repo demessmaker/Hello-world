@@ -11,6 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Theme setup.
  */
 function wicm_theme_setup() {
+    load_theme_textdomain( 'wicm-developer', get_template_directory() . '/languages' );
+
     add_theme_support( 'title-tag' );
     add_theme_support( 'post-thumbnails' );
     add_theme_support( 'custom-logo', array(
@@ -97,9 +99,9 @@ add_action( 'wp_enqueue_scripts', 'wicm_enqueue_assets' );
  * Custom nav walker to output clean list items.
  */
 function wicm_fallback_menu() {
-    echo '<a href="' . esc_url( home_url( '/' ) ) . '">Home</a>';
-    echo '<a href="' . esc_url( home_url( '/programs/' ) ) . '">Programs</a>';
-    echo '<a href="' . esc_url( home_url( '/about-us/' ) ) . '">About Us</a>';
-    echo '<a href="' . esc_url( home_url( '/testimonials/' ) ) . '">Testimonials</a>';
-    echo '<a href="' . esc_url( home_url( '/contact-us/' ) ) . '">Contact</a>';
+    echo '<a href="' . esc_url( home_url( '/' ) ) . '">' . esc_html__( 'Home', 'wicm-developer' ) . '</a>';
+    echo '<a href="' . esc_url( home_url( '/programs/' ) ) . '">' . esc_html__( 'Programs', 'wicm-developer' ) . '</a>';
+    echo '<a href="' . esc_url( home_url( '/about-us/' ) ) . '">' . esc_html__( 'About Us', 'wicm-developer' ) . '</a>';
+    echo '<a href="' . esc_url( home_url( '/testimonials/' ) ) . '">' . esc_html__( 'Testimonials', 'wicm-developer' ) . '</a>';
+    echo '<a href="' . esc_url( home_url( '/contact-us/' ) ) . '">' . esc_html__( 'Contact', 'wicm-developer' ) . '</a>';
 }

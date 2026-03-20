@@ -3,8 +3,8 @@
         <div class="footer-grid">
             <!-- Brand Column -->
             <div class="footer-brand">
-                <div class="footer-tagline">Making music magical since 1999</div>
-                <p>Professional music education for all ages in West Island, Montreal. Piano, guitar, voice, drums, violin and more.</p>
+                <div class="footer-tagline"><?php esc_html_e( 'Making music magical since 1999', 'wicm-developer' ); ?></div>
+                <p><?php esc_html_e( 'Professional music education for all ages in West Island, Montreal. Piano, guitar, voice, drums, violin and more.', 'wicm-developer' ); ?></p>
                 <div class="footer-social">
                     <a href="https://www.facebook.com/westislandmusicschool" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
@@ -17,47 +17,56 @@
 
             <!-- Quick Links -->
             <div class="footer-column">
-                <h4>Quick Links</h4>
+                <h4><?php esc_html_e( 'Quick Links', 'wicm-developer' ); ?></h4>
                 <ul>
-                    <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>">Home</a></li>
-                    <li><a href="<?php echo esc_url( home_url( '/about-us/' ) ); ?>">About Us</a></li>
-                    <li><a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>">Contact</a></li>
-                    <li><a href="<?php echo esc_url( home_url( '/book-a-trial/' ) ); ?>">Book a Trial</a></li>
+                    <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Home', 'wicm-developer' ); ?></a></li>
+                    <li><a href="<?php echo esc_url( home_url( '/about-us/' ) ); ?>"><?php esc_html_e( 'About Us', 'wicm-developer' ); ?></a></li>
+                    <li><a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>"><?php esc_html_e( 'Contact', 'wicm-developer' ); ?></a></li>
+                    <li><a href="<?php echo esc_url( home_url( '/book-a-trial/' ) ); ?>"><?php esc_html_e( 'Book a Trial', 'wicm-developer' ); ?></a></li>
                 </ul>
             </div>
 
             <!-- Programs -->
             <div class="footer-column">
-                <h4>Programs</h4>
+                <h4><?php esc_html_e( 'Programs', 'wicm-developer' ); ?></h4>
                 <ul>
-                    <li><a href="<?php echo esc_url( home_url( '/programs/' ) ); ?>">Piano Lessons</a></li>
-                    <li><a href="<?php echo esc_url( home_url( '/programs/' ) ); ?>">Guitar Lessons</a></li>
-                    <li><a href="<?php echo esc_url( home_url( '/programs/' ) ); ?>">Voice Lessons</a></li>
-                    <li><a href="<?php echo esc_url( home_url( '/programs/' ) ); ?>">Drum Lessons</a></li>
-                    <li><a href="<?php echo esc_url( home_url( '/programs/' ) ); ?>">Violin Lessons</a></li>
+                    <li><a href="<?php echo esc_url( home_url( '/programs/' ) ); ?>"><?php esc_html_e( 'Piano Lessons', 'wicm-developer' ); ?></a></li>
+                    <li><a href="<?php echo esc_url( home_url( '/programs/' ) ); ?>"><?php esc_html_e( 'Guitar Lessons', 'wicm-developer' ); ?></a></li>
+                    <li><a href="<?php echo esc_url( home_url( '/programs/' ) ); ?>"><?php esc_html_e( 'Voice Lessons', 'wicm-developer' ); ?></a></li>
+                    <li><a href="<?php echo esc_url( home_url( '/programs/' ) ); ?>"><?php esc_html_e( 'Drum Lessons', 'wicm-developer' ); ?></a></li>
+                    <li><a href="<?php echo esc_url( home_url( '/programs/' ) ); ?>"><?php esc_html_e( 'Violin Lessons', 'wicm-developer' ); ?></a></li>
                 </ul>
             </div>
 
             <!-- Contact Info -->
             <div class="footer-column">
-                <h4>Contact</h4>
+                <h4><?php esc_html_e( 'Contact', 'wicm-developer' ); ?></h4>
                 <ul>
-                    <li>Pointe-Claire, QC, Canada</li>
+                    <li><?php esc_html_e( 'Pointe-Claire, QC, Canada', 'wicm-developer' ); ?></li>
                     <li><a href="mailto:info@westislandmusicschool.com">info@westislandmusicschool.com</a></li>
-                    <li>Mon-Fri: 9:00 AM - 9:00 PM</li>
-                    <li>Saturday: 9:00 AM - 5:00 PM</li>
+                    <li><?php
+                        /* translators: business hours weekday */
+                        esc_html_e( 'Mon-Fri: 9:00 AM - 9:00 PM', 'wicm-developer' );
+                    ?></li>
+                    <li><?php
+                        /* translators: business hours weekend */
+                        esc_html_e( 'Saturday: 9:00 AM - 5:00 PM', 'wicm-developer' );
+                    ?></li>
                 </ul>
             </div>
         </div>
 
         <div class="footer-bottom">
-            &copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> West Island Music School. All rights reserved.
+            &copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> <?php
+                /* translators: %s: site name in copyright notice */
+                printf( esc_html__( '%s. All rights reserved.', 'wicm-developer' ), 'West Island Music School' );
+            ?>
         </div>
     </div>
 </footer>
 
 <!-- Back to Top -->
-<button class="back-to-top" id="back-to-top" aria-label="Back to top">
+<button class="back-to-top" id="back-to-top" aria-label="<?php esc_attr_e( 'Back to top', 'wicm-developer' ); ?>">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
     </svg>

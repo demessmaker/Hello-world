@@ -1296,7 +1296,58 @@ p { margin-bottom: 1rem; }
 @media (min-width: 1024px) { .hide-desktop { display: none; } }
 
 /* ============================================
-   22. PRINT
+   22. POLYLANG LANGUAGE SWITCHER
+   ============================================ */
+.lang-switcher,
+.lang-switcher-mobile {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.lang-switcher ul,
+.lang-switcher-mobile ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.lang-switcher li a,
+.lang-switcher-mobile li a {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary, #6B7280);
+    text-decoration: none;
+    transition: color 0.2s, background-color 0.2s;
+}
+
+.lang-switcher li a:hover,
+.lang-switcher-mobile li a:hover {
+    color: var(--primary, #DC2626);
+    background-color: rgba(220, 38, 38, 0.05);
+}
+
+.lang-switcher li a img,
+.lang-switcher-mobile li a img {
+    width: 20px;
+    height: 14px;
+    border-radius: 2px;
+}
+
+.lang-switcher-mobile {
+    margin: 1rem;
+    justify-content: center;
+}
+
+/* ============================================
+   23. PRINT
    ============================================ */
 @media print {
     .site-header, .site-footer, .back-to-top, .cta-section { display: none; }
