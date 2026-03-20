@@ -210,7 +210,7 @@ function wicm_customize_register( $wp_customize ) {
 
     // Footer tagline
     $wp_customize->add_setting( 'wicm_footer_tagline', array(
-        'default'           => 'Making music magical since 1999',
+        'default'           => 'Making music magical since 1997',
         'sanitize_callback' => 'sanitize_text_field',
         'transport'         => 'postMessage',
     ) );
@@ -278,7 +278,7 @@ function wicm_customize_register( $wp_customize ) {
 
     // Contact - Hours Line 1
     $wp_customize->add_setting( 'wicm_hours_weekday', array(
-        'default'           => 'Mon-Fri: 9:00 AM - 9:00 PM',
+        'default'           => 'Tue-Fri: 12:00 PM - 6:00 PM',
         'sanitize_callback' => 'sanitize_text_field',
     ) );
     $wp_customize->add_control( 'wicm_hours_weekday', array(
@@ -289,7 +289,7 @@ function wicm_customize_register( $wp_customize ) {
 
     // Contact - Hours Line 2
     $wp_customize->add_setting( 'wicm_hours_weekend', array(
-        'default'           => 'Saturday: 9:00 AM - 5:00 PM',
+        'default'           => 'Saturday: 10:00 AM - 4:00 PM',
         'sanitize_callback' => 'sanitize_text_field',
     ) );
     $wp_customize->add_control( 'wicm_hours_weekend', array(
@@ -300,7 +300,7 @@ function wicm_customize_register( $wp_customize ) {
 
     // Copyright text
     $wp_customize->add_setting( 'wicm_copyright', array(
-        'default'           => 'West Island Music School. All rights reserved.',
+        'default'           => 'West Island Conservatory of Music. All rights reserved.',
         'sanitize_callback' => 'sanitize_text_field',
     ) );
     $wp_customize->add_control( 'wicm_copyright', array(
@@ -311,7 +311,7 @@ function wicm_customize_register( $wp_customize ) {
 
     // --- French Footer Translations ---
     $wp_customize->add_setting( 'wicm_footer_tagline_fr', array(
-        'default'           => 'La magie de la musique depuis 1999',
+        'default'           => 'La magie de la musique depuis 1997',
         'sanitize_callback' => 'sanitize_text_field',
     ) );
     $wp_customize->add_control( 'wicm_footer_tagline_fr', array(
@@ -331,7 +331,7 @@ function wicm_customize_register( $wp_customize ) {
     ) );
 
     $wp_customize->add_setting( 'wicm_copyright_fr', array(
-        'default'           => 'École de musique West Island. Tous droits réservés.',
+        'default'           => 'Conservatoire de musique West Island. Tous droits réservés.',
         'sanitize_callback' => 'sanitize_text_field',
     ) );
     $wp_customize->add_control( 'wicm_copyright_fr', array(
@@ -341,7 +341,7 @@ function wicm_customize_register( $wp_customize ) {
     ) );
 
     $wp_customize->add_setting( 'wicm_hours_weekday_fr', array(
-        'default'           => 'Lun-Ven: 9h00 - 21h00',
+        'default'           => 'Mar-Ven: 12h00 - 18h00',
         'sanitize_callback' => 'sanitize_text_field',
     ) );
     $wp_customize->add_control( 'wicm_hours_weekday_fr', array(
@@ -351,7 +351,7 @@ function wicm_customize_register( $wp_customize ) {
     ) );
 
     $wp_customize->add_setting( 'wicm_hours_weekend_fr', array(
-        'default'           => 'Samedi: 9h00 - 17h00',
+        'default'           => 'Samedi: 10h00 - 16h00',
         'sanitize_callback' => 'sanitize_text_field',
     ) );
     $wp_customize->add_control( 'wicm_hours_weekend_fr', array(

@@ -1026,8 +1026,8 @@ class WICM_Developer_Importer {
             ),
             'geo' => array( '@type' => 'GeoCoordinates', 'latitude' => 45.4469, 'longitude' => -73.8167 ),
             'openingHoursSpecification' => array(
-                array( '@type' => 'OpeningHoursSpecification', 'dayOfWeek' => array( 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday' ), 'opens' => '09:00', 'closes' => '21:00' ),
-                array( '@type' => 'OpeningHoursSpecification', 'dayOfWeek' => 'Saturday', 'opens' => '09:00', 'closes' => '17:00' ),
+                array( '@type' => 'OpeningHoursSpecification', 'dayOfWeek' => array( 'Tuesday', 'Wednesday', 'Thursday', 'Friday' ), 'opens' => '12:00', 'closes' => '18:00' ),
+                array( '@type' => 'OpeningHoursSpecification', 'dayOfWeek' => 'Saturday', 'opens' => '10:00', 'closes' => '16:00' ),
             ),
             'areaServed'      => array_map( function( $a ) { return array( '@type' => 'City', 'name' => $a ); }, $s['service_areas'] ),
             'paymentAccepted' => implode( ', ', $s['payment_methods'] ),

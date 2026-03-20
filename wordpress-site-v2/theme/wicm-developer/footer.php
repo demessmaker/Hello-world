@@ -9,14 +9,14 @@ $wicm_is_fr = ( 'fr' === $wicm_lang );
 // --- Translated footer strings ---
 $wicm_footer_strings = array(
     'en' => array(
-        'tagline'     => get_theme_mod( 'wicm_footer_tagline', 'Making music magical since 1999' ),
+        'tagline'     => get_theme_mod( 'wicm_footer_tagline', 'Making music magical since 1997' ),
         'description' => get_theme_mod( 'wicm_footer_description', 'Professional music education for all ages in West Island, Montreal. Piano, guitar, voice, drums, violin and more.' ),
         'quick_links' => 'Quick Links',
         'programs'    => 'Programs',
         'contact'     => 'Contact',
-        'copyright'   => get_theme_mod( 'wicm_copyright', 'West Island Music School. All rights reserved.' ),
-        'hours_week'  => get_theme_mod( 'wicm_hours_weekday', 'Mon-Fri: 9:00 AM - 9:00 PM' ),
-        'hours_wknd'  => get_theme_mod( 'wicm_hours_weekend', 'Saturday: 9:00 AM - 5:00 PM' ),
+        'copyright'   => get_theme_mod( 'wicm_copyright', 'West Island Conservatory of Music. All rights reserved.' ),
+        'hours_week'  => get_theme_mod( 'wicm_hours_weekday', 'Tue-Fri: 12:00 PM - 6:00 PM' ),
+        'hours_wknd'  => get_theme_mod( 'wicm_hours_weekend', 'Saturday: 10:00 AM - 4:00 PM' ),
         'view_progs'  => 'View Programs',
         'back_to_top' => 'Back to top',
         'links'       => array(
@@ -26,14 +26,14 @@ $wicm_footer_strings = array(
         ),
     ),
     'fr' => array(
-        'tagline'     => get_theme_mod( 'wicm_footer_tagline_fr', 'La magie de la musique depuis 1999' ),
+        'tagline'     => get_theme_mod( 'wicm_footer_tagline_fr', 'La magie de la musique depuis 1997' ),
         'description' => get_theme_mod( 'wicm_footer_description_fr', 'Éducation musicale professionnelle pour tous les âges dans l\'Ouest-de-l\'Île de Montréal. Piano, guitare, chant, batterie, violon et plus.' ),
         'quick_links' => 'Liens rapides',
         'programs'    => 'Programmes',
         'contact'     => 'Contact',
-        'copyright'   => get_theme_mod( 'wicm_copyright_fr', 'École de musique West Island. Tous droits réservés.' ),
-        'hours_week'  => get_theme_mod( 'wicm_hours_weekday_fr', 'Lun-Ven: 9h00 - 21h00' ),
-        'hours_wknd'  => get_theme_mod( 'wicm_hours_weekend_fr', 'Samedi: 9h00 - 17h00' ),
+        'copyright'   => get_theme_mod( 'wicm_copyright_fr', 'Conservatoire de musique West Island. Tous droits réservés.' ),
+        'hours_week'  => get_theme_mod( 'wicm_hours_weekday_fr', 'Mar-Ven: 12h00 - 18h00' ),
+        'hours_wknd'  => get_theme_mod( 'wicm_hours_weekend_fr', 'Samedi: 10h00 - 16h00' ),
         'view_progs'  => 'Voir les programmes',
         'back_to_top' => 'Retour en haut',
         'links'       => array(
