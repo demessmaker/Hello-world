@@ -370,6 +370,100 @@ function wicm_customize_register( $wp_customize ) {
         'section' => 'wicm_footer',
         'type'    => 'checkbox',
     ) );
+
+    // ===========================
+    // SMTP / EMAIL SECTION
+    // ===========================
+    $wp_customize->add_section( 'wicm_smtp', array(
+        'title'    => __( 'Email / SMTP Settings', 'wicm-developer' ),
+        'priority' => 160,
+    ) );
+
+    $wp_customize->add_setting( 'wicm_smtp_enabled', array(
+        'default'           => false,
+        'sanitize_callback' => 'wicm_sanitize_checkbox',
+    ) );
+    $wp_customize->add_control( 'wicm_smtp_enabled', array(
+        'label'   => __( 'Enable SMTP', 'wicm-developer' ),
+        'section' => 'wicm_smtp',
+        'type'    => 'checkbox',
+    ) );
+
+    $wp_customize->add_setting( 'wicm_smtp_host', array(
+        'default'           => 'smtp.gmail.com',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'wicm_smtp_host', array(
+        'label'   => __( 'SMTP Host', 'wicm-developer' ),
+        'section' => 'wicm_smtp',
+        'type'    => 'text',
+    ) );
+
+    $wp_customize->add_setting( 'wicm_smtp_port', array(
+        'default'           => '587',
+        'sanitize_callback' => 'absint',
+    ) );
+    $wp_customize->add_control( 'wicm_smtp_port', array(
+        'label'   => __( 'SMTP Port', 'wicm-developer' ),
+        'section' => 'wicm_smtp',
+        'type'    => 'number',
+    ) );
+
+    $wp_customize->add_setting( 'wicm_smtp_encryption', array(
+        'default'           => 'tls',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'wicm_smtp_encryption', array(
+        'label'   => __( 'Encryption', 'wicm-developer' ),
+        'section' => 'wicm_smtp',
+        'type'    => 'select',
+        'choices' => array(
+            'tls'  => 'TLS',
+            'ssl'  => 'SSL',
+            'none' => 'None',
+        ),
+    ) );
+
+    $wp_customize->add_setting( 'wicm_smtp_username', array(
+        'default'           => '',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'wicm_smtp_username', array(
+        'label'   => __( 'SMTP Username', 'wicm-developer' ),
+        'section' => 'wicm_smtp',
+        'type'    => 'text',
+    ) );
+
+    $wp_customize->add_setting( 'wicm_smtp_password', array(
+        'default'           => '',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'wicm_smtp_password', array(
+        'label'       => __( 'SMTP Password (App Password)', 'wicm-developer' ),
+        'description' => __( 'For Gmail, use an App Password from your Google Account security settings.', 'wicm-developer' ),
+        'section'     => 'wicm_smtp',
+        'type'        => 'password',
+    ) );
+
+    $wp_customize->add_setting( 'wicm_smtp_from_email', array(
+        'default'           => 'musiconlinewestisland@gmail.com',
+        'sanitize_callback' => 'sanitize_email',
+    ) );
+    $wp_customize->add_control( 'wicm_smtp_from_email', array(
+        'label'   => __( 'From Email Address', 'wicm-developer' ),
+        'section' => 'wicm_smtp',
+        'type'    => 'email',
+    ) );
+
+    $wp_customize->add_setting( 'wicm_smtp_from_name', array(
+        'default'           => 'West Island Conservatory of Music',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'wicm_smtp_from_name', array(
+        'label'   => __( 'From Name', 'wicm-developer' ),
+        'section' => 'wicm_smtp',
+        'type'    => 'text',
+    ) );
 }
 add_action( 'customize_register', 'wicm_customize_register' );
 
@@ -378,4 +472,54 @@ add_action( 'customize_register', 'wicm_customize_register' );
  */
 function wicm_sanitize_checkbox( $value ) {
     return ( isset( $value ) && true == $value ) ? true : false;
+}
+
+/**
+ * Configure wp_mail to use SMTP when enabled in Customizer.
+ *
+ * WordPress uses PHP mail() by default which most hosts block or
+ * routes to spam. This hooks into PHPMailer to use authenticated
+ * SMTP instead, ensuring Contact Form 7 emails are delivered.
+ */
+function wicm_smtp_setup( $phpmailer ) {
+    if ( ! get_theme_mod( 'wicm_smtp_enabled', false ) ) {
+        return;
+    }
+
+    $host     = get_theme_mod( 'wicm_smtp_host', 'smtp.gmail.com' );
+    $port     = (int) get_theme_mod( 'wicm_smtp_port', 587 );
+    $encrypt  = get_theme_mod( 'wicm_smtp_encryption', 'tls' );
+    $username = get_theme_mod( 'wicm_smtp_username', '' );
+    $password = get_theme_mod( 'wicm_smtp_password', '' );
+
+    if ( empty( $host ) || empty( $username ) || empty( $password ) ) {
+        return;
+    }
+
+    $phpmailer->isSMTP();
+    $phpmailer->Host       = $host;
+    $phpmailer->Port       = $port;
+    $phpmailer->SMTPSecure = ( 'none' === $encrypt ) ? '' : $encrypt;
+    $phpmailer->SMTPAuth   = true;
+    $phpmailer->Username   = $username;
+    $phpmailer->Password   = $password;
+}
+add_action( 'phpmailer_init', 'wicm_smtp_setup' );
+
+/**
+ * Set the From email and name for all outgoing WordPress emails.
+ */
+function wicm_mail_from( $email ) {
+    $custom = get_theme_mod( 'wicm_smtp_from_email', '' );
+    return ! empty( $custom ) ? $custom : $email;
+}
+
+function wicm_mail_from_name( $name ) {
+    $custom = get_theme_mod( 'wicm_smtp_from_name', '' );
+    return ! empty( $custom ) ? $custom : $name;
+}
+
+if ( get_theme_mod( 'wicm_smtp_enabled', false ) ) {
+    add_filter( 'wp_mail_from', 'wicm_mail_from' );
+    add_filter( 'wp_mail_from_name', 'wicm_mail_from_name' );
 }
