@@ -586,7 +586,6 @@ class WICM_Developer_Importer {
             array( 'key' => 'home', 'title' => 'Home', 'order' => 1 ),
             array( 'key' => 'programs', 'title' => 'Programs', 'order' => 2 ),
             array( 'key' => 'about', 'title' => 'About Us', 'order' => 3 ),
-            array( 'key' => 'contact', 'title' => 'Contact', 'order' => 5 ),
         );
 
         $added = 0;
@@ -885,7 +884,6 @@ class WICM_Developer_Importer {
                 array( 'key' => 'home', 'title' => 'Accueil', 'order' => 1 ),
                 array( 'key' => 'programs', 'title' => 'Programmes', 'order' => 2 ),
                 array( 'key' => 'about', 'title' => 'À propos', 'order' => 3 ),
-                array( 'key' => 'contact', 'title' => 'Contact', 'order' => 5 ),
             );
 
             $fr_added = 0;
