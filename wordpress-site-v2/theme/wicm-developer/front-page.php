@@ -298,25 +298,7 @@
 
             <div class="contact-form fade-in">
                 <h3><?php esc_html_e( 'Send Us a Message', 'wicm-developer' ); ?></h3>
-                <form>
-                    <div class="form-group">
-                        <label for="contact-name"><?php esc_html_e( 'Your Name *', 'wicm-developer' ); ?></label>
-                        <input type="text" id="contact-name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="contact-email"><?php esc_html_e( 'Email *', 'wicm-developer' ); ?></label>
-                        <input type="email" id="contact-email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="contact-phone"><?php esc_html_e( 'Phone', 'wicm-developer' ); ?></label>
-                        <input type="tel" id="contact-phone" name="phone">
-                    </div>
-                    <div class="form-group">
-                        <label for="contact-message"><?php esc_html_e( 'Message', 'wicm-developer' ); ?></label>
-                        <textarea id="contact-message" name="message" rows="4"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary"><?php esc_html_e( 'Send Message', 'wicm-developer' ); ?></button>
-                </form>
+                <?php echo do_shortcode( '[contact-form-7 id="93fd017" title="WICM Contact Form"]' ); ?>
             </div>
         </div>
     </div>
