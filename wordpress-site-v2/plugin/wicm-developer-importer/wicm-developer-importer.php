@@ -917,7 +917,7 @@ class WICM_Developer_Importer {
     // =========================================================================
 
     public function programs_shortcode() {
-        $programs = get_posts( array( 'post_type' => 'wicm_program', 'numberposts' => 10, 'orderby' => 'date', 'order' => 'ASC' ) );
+        $programs = get_posts( array( 'post_type' => 'wicm_program', 'numberposts' => 10, 'orderby' => 'date', 'order' => 'ASC', 'suppress_filters' => false ) );
         if ( empty( $programs ) ) return '';
 
         $html = '<div class="programs-grid">';
@@ -941,7 +941,8 @@ class WICM_Developer_Importer {
                 }
                 $html .= '</ul>';
             }
-            $html .= '<a href="' . esc_url( get_permalink( $prog->ID ) ) . '" class="btn btn-outline-dark btn-sm">Learn More</a>';
+            $learn_more = ( function_exists( 'pll_current_language' ) && pll_current_language() === 'fr' ) ? 'En savoir plus' : 'Learn More';
+            $html .= '<a href="' . esc_url( get_permalink( $prog->ID ) ) . '" class="btn btn-outline-dark btn-sm">' . esc_html( $learn_more ) . '</a>';
             $html .= '</div></div>';
         }
         $html .= '</div>';
@@ -949,7 +950,7 @@ class WICM_Developer_Importer {
     }
 
     public function testimonials_shortcode() {
-        $items = get_posts( array( 'post_type' => 'wicm_testimonial', 'numberposts' => 10 ) );
+        $items = get_posts( array( 'post_type' => 'wicm_testimonial', 'numberposts' => 10, 'suppress_filters' => false ) );
         if ( empty( $items ) ) return '';
 
         $html = '<div class="testimonials-grid">';
