@@ -314,6 +314,21 @@ class WICM_Developer_Importer {
                         update_post_meta( $page_id, '_wicm_' . $meta_key, sanitize_text_field( $meta_val ) );
                     }
                 }
+                // Yoast SEO meta fields
+                if ( ! empty( $data['yoast_seo'] ) ) {
+                    $yoast_fields = array(
+                        'focuskw'               => '_yoast_wpseo_focuskw',
+                        'title'                 => '_yoast_wpseo_title',
+                        'metadesc'              => '_yoast_wpseo_metadesc',
+                        'opengraph-title'       => '_yoast_wpseo_opengraph-title',
+                        'opengraph-description' => '_yoast_wpseo_opengraph-description',
+                    );
+                    foreach ( $yoast_fields as $json_key => $meta_key ) {
+                        if ( ! empty( $data['yoast_seo'][ $json_key ] ) ) {
+                            update_post_meta( $page_id, $meta_key, sanitize_text_field( $data['yoast_seo'][ $json_key ] ) );
+                        }
+                    }
+                }
                 $results[] = array( 'success' => true, 'message' => "{$action} page: {$data['title']}" );
             } else {
                 $results[] = array( 'success' => false, 'message' => "Failed: {$data['title']}" );

@@ -6,5 +6,12 @@
     "meta_title": "Music Programs | West Island Music School",
     "meta_description": "Explore our music programs: Piano, Guitar, Drums, Voice & Violin lessons for all ages and skill levels at West Island Music School in Pointe-Claire."
   },
+  "yoast_seo": {
+    "focuskw": "music programs Pointe-Claire",
+    "title": "Music Programs & Lessons | West Island Music School",
+    "metadesc": "Explore our music programs: Piano, Guitar, Drums, Voice & Violin lessons for all ages and skill levels at West Island Music School in Pointe-Claire, QC.",
+    "opengraph-title": "Music Programs | West Island Music School",
+    "opengraph-description": "Piano, Guitar, Drums, Voice & Violin lessons for all ages. Find the perfect music program at West Island Music School in Pointe-Claire."
+  },
   "html_content": "<section class=\"page-hero\">\n<div class=\"wicm-container\">\n<h1>Our Programs</h1>\n<p>Discover the perfect instrument for you or your child</p>\n</div>\n</section>\n\n<div class=\"page-content\">\n<div class=\"wicm-container\">\n\n<h2>Find Your Sound</h2>\n<p>At West Island Music School, we offer comprehensive music programs designed for students of all ages and skill levels. Whether you are a complete beginner or an advanced player looking to refine your technique, our experienced instructors will create a personalized learning plan just for you.</p>\n\n[wicm_programs]\n\n<h2>Lesson Packages</h2>\n<p>We offer flexible lesson packages to suit every schedule and budget. Contact us for current pricing and availability.</p>\n<p><a href=\"/contact-us/\" class=\"btn btn-outline-dark\">Contact Us for Pricing</a></p>\n\n<h2>Not Sure Which Program Is Right for You?</h2>\n<p>Book a free trial lesson and our instructors will help you find the perfect fit.</p>\n<p><a href=\"/book-a-trial/\" class=\"btn btn-primary\">Book a Free Trial</a></p>\n\n</div>\n</div>"
 }
