@@ -1,0 +1,935 @@
+/**
+ * WICM Custom Theme Styles
+ * Replicates the look and feel of the original Jupiter-based website
+ * for West Island Conservatory of Music
+ */
+
+/* ============================================
+   1. FONTS
+   ============================================ */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap');
+
+:root {
+    --wicm-red:        #dd3333;
+    --wicm-orange:     #f97352;
+    --wicm-blue:       #0066bf;
+    --wicm-blue-dark:  #0b6bbf;
+    --wicm-teal:       #1bbc9b;
+    --wicm-dark:       #252525;
+    --wicm-text:       #4d4d4d;
+    --wicm-text-light: #a3a3a3;
+    --wicm-bg:         #ffffff;
+    --wicm-bg-light:   #f7f7f7;
+    --wicm-bg-header:  #f2f2f2;
+    --wicm-border:     #e0e0e0;
+    --wicm-container:  1140px;
+}
+
+/* ============================================
+   2. GLOBAL RESET & BASE
+   ============================================ */
+body,
+.entry-content,
+.site-content,
+.wp-site-blocks {
+    font-family: 'Open Sans', Arial, Helvetica, sans-serif !important;
+    color: var(--wicm-text);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+a {
+    color: var(--wicm-blue);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--wicm-teal);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ============================================
+   3. CONTAINER / LAYOUT
+   ============================================ */
+.wicm-container,
+.entry-content > *,
+.wp-block-group__inner-container {
+    max-width: var(--wicm-container);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/* ============================================
+   4. HEADER & NAVIGATION
+   ============================================ */
+.site-header,
+header.wp-block-template-part,
+.wp-block-template-part.site-header {
+    background-color: var(--wicm-bg-header) !important;
+    border-bottom: 1px solid var(--wicm-border);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    position: relative;
+    z-index: 100;
+}
+
+/* Logo sizing */
+.site-header img,
+.custom-logo,
+.wp-block-site-logo img {
+    max-height: 107px !important;
+    width: auto !important;
+}
+
+/* Navigation links */
+.wp-block-navigation a,
+.wp-block-navigation-item a,
+.main-navigation a,
+.primary-menu a,
+nav a {
+    font-family: 'Open Sans', Arial, sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase;
+    color: var(--wicm-text) !important;
+    padding: 10px 15px !important;
+    letter-spacing: 0.5px;
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.wp-block-navigation a:hover,
+.wp-block-navigation-item a:hover,
+.main-navigation a:hover,
+nav a:hover {
+    color: var(--wicm-orange) !important;
+}
+
+.wp-block-navigation-item.current-menu-item > a,
+.current_page_item > a {
+    color: var(--wicm-orange) !important;
+}
+
+/* ============================================
+   5. HERO / SLIDER SECTION
+   ============================================ */
+.hero-section,
+.wicm-hero {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: #ffffff;
+    text-align: center;
+    padding: 80px 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.3);
+    z-index: 1;
+}
+
+.hero-section > * {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-section h1 {
+    font-size: 38px !important;
+    font-weight: 700;
+    color: #ffffff !important;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.hero-section p {
+    font-size: 16px;
+    max-width: 700px;
+    margin: 0 auto 25px;
+    color: rgba(255,255,255,0.9);
+    line-height: 1.8;
+}
+
+.hero-section .promo {
+    font-size: 14px;
+    color: #ffd700;
+    font-weight: 600;
+    margin-top: 15px;
+}
+
+/* ============================================
+   6. BUTTONS
+   ============================================ */
+.btn,
+.btn-primary,
+.wp-block-button__link,
+a.btn,
+.wicm-btn,
+input[type="submit"],
+button[type="submit"] {
+    display: inline-block;
+    background-color: var(--wicm-teal) !important;
+    color: #ffffff !important;
+    font-family: 'Open Sans', Arial, sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    padding: 12px 30px !important;
+    border: none !important;
+    border-radius: 4px !important;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    letter-spacing: 1px;
+    text-decoration: none !important;
+}
+
+.btn:hover,
+.btn-primary:hover,
+.wp-block-button__link:hover,
+a.btn:hover,
+input[type="submit"]:hover,
+button[type="submit"]:hover {
+    background-color: var(--wicm-dark) !important;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+}
+
+/* ============================================
+   7. SERVICE CARDS
+   ============================================ */
+.services-section {
+    padding: 60px 20px;
+    background: var(--wicm-bg);
+}
+
+.services-section h2 {
+    text-align: center;
+    color: var(--wicm-blue) !important;
+    font-size: 30px !important;
+    font-weight: 700;
+    margin-bottom: 40px;
+}
+
+.service-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    max-width: var(--wicm-container);
+    margin: 0 auto;
+}
+
+.service-card {
+    background: #ffffff;
+    border: 1px solid #000000;
+    padding: 25px 20px;
+    min-height: 100px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-card:hover {
+    background: linear-gradient(to bottom, #ffffff, #e5e5e5);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.service-card img {
+    width: 100%;
+    max-width: 252px;
+    height: auto;
+    margin-bottom: 15px;
+    border-radius: 2px;
+}
+
+.service-card h3 {
+    color: var(--wicm-blue) !important;
+    font-size: 20px !important;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.service-card p {
+    color: var(--wicm-text);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* ============================================
+   8. ABOUT SNIPPET SECTION
+   ============================================ */
+.about-snippet {
+    background: var(--wicm-bg-light);
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.about-snippet h2 {
+    color: var(--wicm-blue) !important;
+    font-size: 30px !important;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.about-snippet p {
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--wicm-text);
+}
+
+/* ============================================
+   9. FEATURED PRODUCTS
+   ============================================ */
+.featured-products {
+    padding: 60px 20px;
+    background: var(--wicm-bg);
+}
+
+.featured-products h2 {
+    text-align: center;
+    color: var(--wicm-blue) !important;
+    font-size: 30px !important;
+    font-weight: 700;
+    margin-bottom: 40px;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    max-width: var(--wicm-container);
+    margin: 0 auto;
+}
+
+.product-card {
+    background: #ffffff;
+    border: 1px solid var(--wicm-border);
+    padding: 20px;
+    text-align: center;
+    transition: box-shadow 0.3s ease;
+    border-radius: 2px;
+}
+
+.product-card:hover {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+
+.product-card img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+.product-card h3 {
+    font-size: 16px !important;
+    font-weight: 700;
+    color: var(--wicm-dark);
+    margin-bottom: 5px;
+}
+
+.product-card p {
+    color: var(--wicm-text-light);
+    font-size: 13px;
+}
+
+/* ============================================
+   10. BLOG TEASERS
+   ============================================ */
+.blog-teasers {
+    background: var(--wicm-bg-light);
+    padding: 60px 20px;
+}
+
+.blog-teasers h2 {
+    color: var(--wicm-blue) !important;
+    font-size: 30px !important;
+    font-weight: 700;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.blog-teasers ul {
+    list-style: none;
+    padding: 0;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.blog-teasers li {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--wicm-border);
+    font-size: 15px;
+    color: var(--wicm-text);
+    position: relative;
+    padding-left: 25px;
+}
+
+.blog-teasers li::before {
+    content: '\2022';
+    color: var(--wicm-orange);
+    font-size: 20px;
+    position: absolute;
+    left: 0;
+    top: 10px;
+}
+
+.blog-teasers li:last-child {
+    border-bottom: none;
+}
+
+.blog-teasers a {
+    color: var(--wicm-blue);
+    font-weight: 600;
+}
+
+.blog-teasers a:hover {
+    color: var(--wicm-orange);
+}
+
+/* ============================================
+   11. HEADINGS (Global)
+   ============================================ */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Open Sans', Arial, sans-serif !important;
+    color: #444444;
+}
+
+h1 { font-size: 34px; font-weight: 700; }
+h2 { font-size: 30px; font-weight: 700; color: var(--wicm-blue) !important; }
+h3 { font-size: 26px; font-weight: 600; }
+h4 { font-size: 20px; font-weight: 600; }
+
+.entry-content h2,
+.wp-block-heading {
+    color: var(--wicm-blue) !important;
+}
+
+/* ============================================
+   12. CONTACT PAGE
+   ============================================ */
+.contact-hero {
+    background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
+    color: #ffffff;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.contact-hero h1 {
+    color: #ffffff !important;
+    font-size: 38px !important;
+}
+
+.contact-hero p {
+    color: rgba(255,255,255,0.85);
+    font-size: 18px;
+}
+
+.contact-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    padding: 50px 20px;
+    max-width: var(--wicm-container);
+    margin: 0 auto;
+}
+
+.contact-info h2,
+.contact-hours h2 {
+    color: var(--wicm-blue) !important;
+    font-size: 24px !important;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--wicm-orange);
+}
+
+.contact-info h3 {
+    color: var(--wicm-dark);
+    font-size: 16px !important;
+    font-weight: 700;
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+
+.contact-hours table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.contact-hours table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--wicm-border);
+    font-size: 14px;
+}
+
+.contact-hours table tr:last-child td {
+    border-bottom: none;
+}
+
+.contact-hours table td:first-child {
+    font-weight: 600;
+    color: var(--wicm-dark);
+}
+
+.contact-parking {
+    background: var(--wicm-bg-light);
+    padding: 20px;
+    text-align: center;
+    margin-top: 30px;
+    border-radius: 4px;
+}
+
+/* Contact Form */
+.contact-form-section {
+    padding: 50px 20px;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.contact-form-section h2 {
+    color: var(--wicm-blue) !important;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.wpcf7 input[type="text"],
+.wpcf7 input[type="email"],
+.wpcf7 input[type="tel"],
+.wpcf7 textarea,
+.wpcf7 select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--wicm-border);
+    border-radius: 4px;
+    font-family: 'Open Sans', Arial, sans-serif;
+    font-size: 14px;
+    margin-bottom: 15px;
+    transition: border-color 0.3s ease;
+}
+
+.wpcf7 input:focus,
+.wpcf7 textarea:focus,
+.wpcf7 select:focus {
+    border-color: var(--wicm-blue);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0,102,191,0.15);
+}
+
+.wpcf7 label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--wicm-dark);
+    font-size: 14px;
+}
+
+/* ============================================
+   13. TESTIMONIALS PAGE
+   ============================================ */
+.testimonial-card,
+.testimonial {
+    background: #ffffff;
+    border: 1px solid var(--wicm-border);
+    border-left: 4px solid var(--wicm-orange);
+    padding: 25px 30px;
+    margin-bottom: 20px;
+    border-radius: 0 4px 4px 0;
+    transition: box-shadow 0.3s ease;
+}
+
+.testimonial-card:hover,
+.testimonial:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.testimonial-photo {
+    border-radius: 50%;
+    width: 80px !important;
+    height: 80px !important;
+    object-fit: cover;
+    float: left;
+    margin-right: 20px;
+    margin-bottom: 10px;
+    border: 3px solid var(--wicm-orange);
+}
+
+blockquote,
+.testimonial-card blockquote {
+    font-style: italic;
+    color: var(--wicm-text);
+    font-size: 15px;
+    line-height: 1.7;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 0 10px !important;
+}
+
+/* ============================================
+   14. COURSES PAGE
+   ============================================ */
+.course-card,
+.course {
+    background: #ffffff;
+    border: 1px solid var(--wicm-border);
+    padding: 20px 25px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    transition: border-left-color 0.3s ease, box-shadow 0.3s ease;
+    border-left: 3px solid transparent;
+}
+
+.course-card:hover,
+.course:hover {
+    border-left-color: var(--wicm-teal);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+.course-card h3,
+.course h3 {
+    color: var(--wicm-blue) !important;
+    font-size: 18px !important;
+    margin-bottom: 8px;
+}
+
+/* ============================================
+   15. STORE PAGE
+   ============================================ */
+.store-section,
+.store-categories {
+    padding: 40px 20px;
+}
+
+.store-section h2 {
+    color: var(--wicm-blue) !important;
+}
+
+/* ============================================
+   16. FOOTER
+   ============================================ */
+.site-footer,
+footer.wp-block-template-part,
+.wp-block-template-part.site-footer,
+footer {
+    background-color: var(--wicm-red) !important;
+    color: #ffffff !important;
+    padding: 30px 0;
+}
+
+.site-footer *,
+footer *,
+.wp-block-template-part.site-footer *,
+footer a {
+    color: #ffffff !important;
+}
+
+.site-footer a:hover,
+footer a:hover {
+    color: #ffd700 !important;
+    text-decoration: underline;
+}
+
+/* Footer widgets */
+.wicm-footer-widget,
+.wicm-hours-widget {
+    color: #ffffff;
+}
+
+.wicm-footer-widget h4,
+.wicm-hours-widget h4,
+.widget-title {
+    color: #ffffff !important;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+}
+
+.wicm-hours-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.wicm-hours-table td {
+    padding: 6px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    color: #ffffff !important;
+    font-size: 13px;
+}
+
+.wicm-hours-table td:first-child {
+    font-weight: 600;
+}
+
+/* Footer bottom bar */
+.site-footer .site-info,
+.footer-bottom {
+    text-align: center;
+    padding-top: 20px;
+    margin-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    font-size: 12px;
+}
+
+/* ============================================
+   17. SITE FOOTER INFO (on homepage)
+   ============================================ */
+.site-footer-info {
+    background: var(--wicm-bg-light);
+    padding: 40px 20px;
+    text-align: center;
+    border-top: 3px solid var(--wicm-orange);
+}
+
+.site-footer-info h2 {
+    color: var(--wicm-blue) !important;
+    font-size: 26px !important;
+    margin-bottom: 15px;
+}
+
+/* ============================================
+   18. TABLES (General)
+   ============================================ */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table th {
+    background: var(--wicm-blue);
+    color: #ffffff;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+table td {
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--wicm-border);
+    font-size: 14px;
+}
+
+table tr:nth-child(even) {
+    background: var(--wicm-bg-light);
+}
+
+/* ============================================
+   19. RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+    .hero-section,
+    .contact-hero {
+        padding: 50px 15px;
+    }
+
+    .hero-section h1,
+    .contact-hero h1 {
+        font-size: 28px !important;
+    }
+
+    .service-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .product-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .contact-details {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    h1 { font-size: 26px !important; }
+    h2 { font-size: 22px !important; }
+    h3 { font-size: 18px !important; }
+}
+
+@media (max-width: 480px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-section h1 {
+        font-size: 24px !important;
+    }
+}
+
+/* ============================================
+   20. IMAGE SLIDER (CSS-only fallback)
+   ============================================ */
+.wicm-slider {
+    position: relative;
+    width: 100%;
+    max-height: 404px;
+    overflow: hidden;
+    background: #111;
+}
+
+.wicm-slider img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.wicm-slider-track {
+    display: flex;
+    animation: wicm-slide 40s linear infinite;
+}
+
+.wicm-slider-track img {
+    min-width: 100%;
+    flex-shrink: 0;
+}
+
+@keyframes wicm-slide {
+    0%   { transform: translateX(0); }
+    8%   { transform: translateX(0); }
+    10%  { transform: translateX(-100%); }
+    18%  { transform: translateX(-100%); }
+    20%  { transform: translateX(-200%); }
+    28%  { transform: translateX(-200%); }
+    30%  { transform: translateX(-300%); }
+    38%  { transform: translateX(-300%); }
+    40%  { transform: translateX(-400%); }
+    48%  { transform: translateX(-400%); }
+    50%  { transform: translateX(-500%); }
+    58%  { transform: translateX(-500%); }
+    60%  { transform: translateX(-600%); }
+    68%  { transform: translateX(-600%); }
+    70%  { transform: translateX(-700%); }
+    78%  { transform: translateX(-700%); }
+    80%  { transform: translateX(-800%); }
+    88%  { transform: translateX(-800%); }
+    90%  { transform: translateX(-900%); }
+    98%  { transform: translateX(-900%); }
+    100% { transform: translateX(0); }
+}
+
+/* ============================================
+   21. BACK TO TOP BUTTON
+   ============================================ */
+.wicm-back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--wicm-orange);
+    color: #ffffff;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease, background-color 0.3s ease;
+    z-index: 999;
+    text-decoration: none;
+    border: none;
+}
+
+.wicm-back-to-top:hover {
+    background: var(--wicm-dark);
+}
+
+.wicm-back-to-top.visible {
+    opacity: 1;
+}
+
+/* ============================================
+   22. WORDPRESS BLOCK OVERRIDES
+   ============================================ */
+/* Override Wonder Blocks / NFD default styles */
+.wp-block-group,
+.wp-block-columns {
+    margin-bottom: 0 !important;
+}
+
+.wp-block-column {
+    padding: 10px;
+}
+
+/* Ensure entry content uses our styles */
+.entry-content {
+    max-width: none !important;
+    padding: 0 !important;
+}
+
+.entry-content > .hero-section,
+.entry-content > .contact-hero {
+    margin-left: calc(-50vw + 50%) !important;
+    margin-right: calc(-50vw + 50%) !important;
+    max-width: 100vw !important;
+    width: 100vw !important;
+}
+
+.entry-content > .services-section,
+.entry-content > .about-snippet,
+.entry-content > .featured-products,
+.entry-content > .blog-teasers,
+.entry-content > .site-footer-info {
+    margin-left: calc(-50vw + 50%) !important;
+    margin-right: calc(-50vw + 50%) !important;
+    max-width: 100vw !important;
+    width: 100vw !important;
+}
+
+/* Remove default page title if theme shows it */
+.page .entry-header {
+    display: none;
+}
+
+/* ============================================
+   23. BLOG / SINGLE POST
+   ============================================ */
+.single .entry-content,
+.blog .entry-content {
+    max-width: 800px !important;
+    margin: 0 auto;
+    padding: 30px 20px !important;
+}
+
+.single .entry-title,
+.blog .entry-title {
+    color: var(--wicm-blue) !important;
+    font-size: 28px;
+}
+
+.single .entry-meta,
+.blog .entry-meta {
+    color: var(--wicm-text-light);
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+/* Category badges */
+.cat-links a,
+.tag-links a {
+    background: var(--wicm-bg-light);
+    padding: 3px 10px;
+    border-radius: 3px;
+    font-size: 12px;
+    color: var(--wicm-text) !important;
+}
+
+/* ============================================
+   24. PRINT STYLES
+   ============================================ */
+@media print {
+    .site-header, .site-footer, .wicm-back-to-top { display: none; }
+    body { color: #000; }
+    a { color: #000; text-decoration: underline; }
+}

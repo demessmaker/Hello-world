@@ -3,7 +3,7 @@
  * Plugin Name: WICM Content Importer
  * Plugin URI: https://westislandmusiclessons.com
  * Description: Complete site importer for West Island Conservatory of Music with SEO optimization, image migration, contact form, blog posts, footer widget, and favicon setup.
- * Version: 3.0.0
+ * Version: 3.1.0
  * Author: West Island Conservatory of Music
  * License: GPL v2 or later
  * Text Domain: wicm-importer
@@ -26,8 +26,10 @@ class WICM_Content_Importer {
         add_action( 'admin_post_wicm_import', array( $this, 'handle_import' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 
-        // SEO hooks — only run on the frontend
+        // Frontend hooks — only run on the frontend
         if ( ! is_admin() ) {
+            add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_styles' ) );
+            add_action( 'wp_footer', array( $this, 'output_back_to_top' ) );
             add_action( 'wp_head', array( $this, 'output_seo_meta' ), 1 );
             add_action( 'wp_head', array( $this, 'output_schema_markup' ), 2 );
             add_action( 'wp_head', array( $this, 'output_open_graph' ), 3 );
@@ -72,6 +74,40 @@ class WICM_Content_Importer {
             .wicm-results li { padding: 4px 0; }
             .wicm-results .dashicons { margin-right: 5px; }
         ' );
+    }
+
+    /**
+     * Enqueue custom theme styles on the frontend.
+     */
+    public function enqueue_frontend_styles() {
+        wp_enqueue_style(
+            'wicm-theme-styles',
+            plugin_dir_url( __FILE__ ) . 'assets/css/wicm-theme.css',
+            array(),
+            '3.1.0'
+        );
+    }
+
+    /**
+     * Output back-to-top button and scroll script in footer.
+     */
+    public function output_back_to_top() {
+        ?>
+        <a href="#" class="wicm-back-to-top" id="wicm-back-to-top" aria-label="Back to top">&uarr;</a>
+        <script>
+        (function(){
+            var btn = document.getElementById('wicm-back-to-top');
+            if (!btn) return;
+            window.addEventListener('scroll', function(){
+                btn.classList.toggle('visible', window.scrollY > 300);
+            });
+            btn.addEventListener('click', function(e){
+                e.preventDefault();
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            });
+        })();
+        </script>
+        <?php
     }
 
     /**
@@ -642,6 +678,17 @@ class WICM_Content_Importer {
      */
     private function insert_images_into_content( $html, $page_key, $image_ids ) {
         if ( 'home' === $page_key ) {
+            // Build image slider from imported slider images
+            $slider_html = $this->build_slider_html( $image_ids );
+            if ( $slider_html ) {
+                // Replace the hero section with slider + hero overlay
+                $html = str_replace(
+                    '<div class="hero-section">',
+                    $slider_html . "\n" . '<div class="hero-section">',
+                    $html
+                );
+            }
+
             // Insert service card images
             $image_map = array(
                 'service-card-voice' => array( 'before' => '<h3>Voice Training</h3>', 'alt' => 'Voice training lessons at West Island Conservatory of Music' ),
@@ -654,6 +701,22 @@ class WICM_Content_Importer {
                     $img_url = wp_get_attachment_url( $image_ids[ $placement ] );
                     if ( $img_url ) {
                         $img_tag = '<img src="' . esc_url( $img_url ) . '" alt="' . esc_attr( $info['alt'] ) . '" loading="lazy" width="252" height="111">' . "\n      ";
+                        $html = str_replace( $info['before'], $img_tag . $info['before'], $html );
+                    }
+                }
+            }
+
+            // Insert product images (Gibson guitars)
+            $product_image_map = array(
+                'slider_11' => array( 'before' => '<h3>2016 Gibson Les Paul Studio</h3>', 'alt' => 'Gibson Les Paul Studio Alpine White' ),
+                'slider_12' => array( 'before' => '<h3>2017 Gibson Les Paul Classic T</h3>', 'alt' => 'Gibson Les Paul Classic Green Ocean Burst' ),
+            );
+
+            foreach ( $product_image_map as $key => $info ) {
+                if ( ! empty( $image_ids[ $key ] ) ) {
+                    $img_url = wp_get_attachment_url( $image_ids[ $key ] );
+                    if ( $img_url ) {
+                        $img_tag = '<img src="' . esc_url( $img_url ) . '" alt="' . esc_attr( $info['alt'] ) . '" loading="lazy">' . "\n      ";
                         $html = str_replace( $info['before'], $img_tag . $info['before'], $html );
                     }
                 }
@@ -674,6 +737,37 @@ class WICM_Content_Importer {
                 }
             }
         }
+
+        return $html;
+    }
+
+    /**
+     * Build a CSS-only image slider from imported slider images.
+     */
+    private function build_slider_html( $image_ids ) {
+        $slider_images = array();
+        for ( $i = 0; $i < 13; $i++ ) {
+            $key = 'slider_' . $i;
+            if ( ! empty( $image_ids[ $key ] ) ) {
+                $url = wp_get_attachment_url( $image_ids[ $key ] );
+                $alt = get_post_meta( $image_ids[ $key ], '_wp_attachment_image_alt', true );
+                if ( $url ) {
+                    $slider_images[] = array( 'url' => $url, 'alt' => $alt );
+                }
+            }
+        }
+
+        if ( empty( $slider_images ) ) {
+            return '';
+        }
+
+        $html = '<div class="wicm-slider">' . "\n";
+        $html .= '  <div class="wicm-slider-track">' . "\n";
+        foreach ( $slider_images as $img ) {
+            $html .= '    <img src="' . esc_url( $img['url'] ) . '" alt="' . esc_attr( $img['alt'] ) . '" width="1197" height="404">' . "\n";
+        }
+        $html .= '  </div>' . "\n";
+        $html .= '</div>' . "\n";
 
         return $html;
     }
