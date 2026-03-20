@@ -99,9 +99,10 @@ add_action( 'wp_enqueue_scripts', 'wicm_enqueue_assets' );
  * Custom nav walker to output clean list items.
  */
 function wicm_fallback_menu() {
-    echo '<a href="' . esc_url( home_url( '/' ) ) . '">' . esc_html__( 'Home', 'wicm-developer' ) . '</a>';
-    echo '<a href="' . esc_url( home_url( '/programs/' ) ) . '">' . esc_html__( 'Programs', 'wicm-developer' ) . '</a>';
-    echo '<a href="' . esc_url( home_url( '/about-us/' ) ) . '">' . esc_html__( 'About Us', 'wicm-developer' ) . '</a>';
-    echo '<a href="' . esc_url( home_url( '/testimonials/' ) ) . '">' . esc_html__( 'Testimonials', 'wicm-developer' ) . '</a>';
-    echo '<a href="' . esc_url( home_url( '/contact-us/' ) ) . '">' . esc_html__( 'Contact', 'wicm-developer' ) . '</a>';
+    $base = esc_url( home_url( '/' ) );
+    echo '<a href="' . $base . '">' . esc_html__( 'Home', 'wicm-developer' ) . '</a>';
+    echo '<a href="' . $base . '#programs">' . esc_html__( 'Programs', 'wicm-developer' ) . '</a>';
+    echo '<a href="' . $base . '#about">' . esc_html__( 'About Us', 'wicm-developer' ) . '</a>';
+    echo '<a href="' . $base . '#testimonials">' . esc_html__( 'Testimonials', 'wicm-developer' ) . '</a>';
+    echo '<a href="' . $base . '#contact">' . esc_html__( 'Contact', 'wicm-developer' ) . '</a>';
 }
