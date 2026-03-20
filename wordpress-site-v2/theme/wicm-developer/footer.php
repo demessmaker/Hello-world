@@ -34,7 +34,6 @@
                     <ul>
                         <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Home', 'wicm-developer' ); ?></a></li>
                         <li><a href="<?php echo esc_url( home_url( '/about-us/' ) ); ?>"><?php esc_html_e( 'About Us', 'wicm-developer' ); ?></a></li>
-                        <li><a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>"><?php esc_html_e( 'Contact', 'wicm-developer' ); ?></a></li>
                         <li><a href="<?php echo esc_url( home_url( '/book-a-trial/' ) ); ?>"><?php esc_html_e( 'Book a Trial', 'wicm-developer' ); ?></a></li>
                     </ul>
                 <?php endif; ?>
