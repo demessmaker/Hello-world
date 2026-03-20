@@ -917,7 +917,11 @@ class WICM_Developer_Importer {
     // =========================================================================
 
     public function programs_shortcode() {
-        $programs = get_posts( array( 'post_type' => 'wicm_program', 'numberposts' => 10, 'orderby' => 'date', 'order' => 'ASC', 'suppress_filters' => false ) );
+        $args = array( 'post_type' => 'wicm_program', 'numberposts' => 10, 'orderby' => 'date', 'order' => 'ASC' );
+        if ( function_exists( 'pll_current_language' ) ) {
+            $args['lang'] = pll_current_language();
+        }
+        $programs = get_posts( $args );
         if ( empty( $programs ) ) return '';
 
         $html = '<div class="programs-grid">';
@@ -950,7 +954,11 @@ class WICM_Developer_Importer {
     }
 
     public function testimonials_shortcode() {
-        $items = get_posts( array( 'post_type' => 'wicm_testimonial', 'numberposts' => 10, 'suppress_filters' => false ) );
+        $args = array( 'post_type' => 'wicm_testimonial', 'numberposts' => 10 );
+        if ( function_exists( 'pll_current_language' ) ) {
+            $args['lang'] = pll_current_language();
+        }
+        $items = get_posts( $args );
         if ( empty( $items ) ) return '';
 
         $html = '<div class="testimonials-grid">';
