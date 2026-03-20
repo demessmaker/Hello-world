@@ -2,50 +2,9 @@
   "title": "Contact Us",
   "slug": "contact-us",
   "template": "",
-  "meta_title": "Contact Us | West Island Music School",
-  "meta_description": "Get in touch with West Island Music School in Pointe-Claire, QC. Call us, email us, or visit our facility. We'd love to hear from you!",
-  "og_title": "Contact West Island Music School",
-  "og_description": "Get in touch with West Island Music School. Located in Pointe-Claire, serving the West Island of Montreal.",
-  "og_type": "website",
-  "sections": {
-    "hero": {
-      "heading": "Contact Us",
-      "subheading": "We would love to hear from you"
-    },
-    "contact_info": {
-      "heading": "Get In Touch",
-      "address": {
-        "label": "Visit Us",
-        "street": "Your Street Address",
-        "city": "Pointe-Claire",
-        "province": "QC",
-        "postal_code": "H9R XXX"
-      },
-      "phone": {
-        "label": "Call Us",
-        "number": "+1-514-XXX-XXXX"
-      },
-      "email": {
-        "label": "Email Us",
-        "address": "info@westislandmusicschool.com"
-      }
-    },
-    "hours": {
-      "heading": "Business Hours",
-      "schedule": {
-        "monday": "9:00 AM - 9:00 PM",
-        "tuesday": "9:00 AM - 9:00 PM",
-        "wednesday": "9:00 AM - 9:00 PM",
-        "thursday": "9:00 AM - 9:00 PM",
-        "friday": "9:00 AM - 9:00 PM",
-        "saturday": "9:00 AM - 5:00 PM",
-        "sunday": "Closed"
-      }
-    },
-    "form": {
-      "heading": "Send Us a Message",
-      "description": "Fill out the form below and we will get back to you within 24 hours.",
-      "placeholder": "[contact-form-7 id=\"wicm-contact-form\"]"
-    }
-  }
+  "seo": {
+    "meta_title": "Contact Us | West Island Music School",
+    "meta_description": "Get in touch with West Island Music School in Pointe-Claire, QC. Call us, email us, or visit our facility. We'd love to hear from you!"
+  },
+  "html_content": "<section class=\"page-hero\">\n<div class=\"wicm-container\">\n<h1>Contact Us</h1>\n<p>We would love to hear from you</p>\n</div>\n</section>\n\n<div class=\"page-content\">\n<div class=\"wicm-container\">\n\n<h2>Get In Touch</h2>\n\n<div class=\"contact-grid\">\n<div class=\"contact-info\">\n<div class=\"contact-item\">\n<h4>Visit Us</h4>\n<p>Pointe-Claire, QC, Canada</p>\n</div>\n<div class=\"contact-item\">\n<h4>Call Us</h4>\n<p>+1-514-XXX-XXXX</p>\n</div>\n<div class=\"contact-item\">\n<h4>Email Us</h4>\n<p><a href=\"mailto:info@westislandmusicschool.com\">info@westislandmusicschool.com</a></p>\n</div>\n</div>\n</div>\n\n<h2>Business Hours</h2>\n<ul>\n<li><strong>Monday - Friday:</strong> 9:00 AM - 9:00 PM</li>\n<li><strong>Saturday:</strong> 9:00 AM - 5:00 PM</li>\n<li><strong>Sunday:</strong> Closed</li>\n</ul>\n\n<h2>Send Us a Message</h2>\n<p>Fill out the form below and we will get back to you within 24 hours.</p>\n[contact-form-7 title=\"WICM Contact Form\"]\n\n</div>\n</div>"
 }

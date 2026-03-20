@@ -263,7 +263,7 @@ class WICM_Developer_Importer {
             $page_id = wp_insert_post( array(
                 'post_title'     => $data['title'],
                 'post_name'      => $data['slug'],
-                'post_content'   => $data['html_content'],
+                'post_content'   => isset( $data['html_content'] ) ? $data['html_content'] : '',
                 'post_status'    => 'publish',
                 'post_type'      => 'page',
                 'comment_status' => 'closed',
