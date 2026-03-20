@@ -14,9 +14,14 @@
         <div class="header-logo">
             <?php if ( has_custom_logo() ) : ?>
                 <?php the_custom_logo(); ?>
-            <?php else : ?>
+            <?php else :
+                $logo_text   = get_theme_mod( 'wicm_logo_text', 'West Island Music School' );
+                $logo_accent = get_theme_mod( 'wicm_logo_accent', 'West Island' );
+                // Split text: accent part in red, remainder in normal color
+                $remainder   = trim( str_replace( $logo_accent, '', $logo_text ) );
+            ?>
                 <a href="<?php echo esc_url( home_url( '/' ) ); ?>">
-                    <span class="logo-text"><span><?php esc_html_e( 'West Island', 'wicm-developer' ); ?></span> <?php esc_html_e( 'Music School', 'wicm-developer' ); ?></span>
+                    <span class="logo-text"><span><?php echo esc_html( $logo_accent ); ?></span> <?php echo esc_html( $remainder ); ?></span>
                 </a>
             <?php endif; ?>
         </div>
@@ -41,7 +46,11 @@
                     <?php pll_the_languages( array( 'show_flags' => 1, 'show_names' => 1, 'hide_current' => 1 ) ); ?>
                 </div>
             <?php endif; ?>
-            <a href="<?php echo esc_url( home_url( '/book-a-trial/' ) ); ?>" class="btn btn-primary btn-sm"><?php esc_html_e( 'Book a Trial', 'wicm-developer' ); ?></a>
+            <?php
+            $cta_text = get_theme_mod( 'wicm_header_cta_text', 'Book a Trial' );
+            $cta_url  = get_theme_mod( 'wicm_header_cta_url', '/book-a-trial/' );
+            ?>
+            <a href="<?php echo esc_url( home_url( $cta_url ) ); ?>" class="btn btn-primary btn-sm"><?php echo esc_html( $cta_text ); ?></a>
 
             <!-- Mobile Menu Button -->
             <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="<?php esc_attr_e( 'Toggle menu', 'wicm-developer' ); ?>" aria-expanded="false">
@@ -68,6 +77,6 @@
                 <?php pll_the_languages( array( 'show_flags' => 1, 'show_names' => 1, 'hide_current' => 1 ) ); ?>
             </div>
         <?php endif; ?>
-        <a href="<?php echo esc_url( home_url( '/book-a-trial/' ) ); ?>" class="btn btn-primary" style="margin: 1rem; display: block; text-align: center;"><?php esc_html_e( 'Book a Trial', 'wicm-developer' ); ?></a>
+        <a href="<?php echo esc_url( home_url( $cta_url ) ); ?>" class="btn btn-primary" style="margin: 1rem; display: block; text-align: center;"><?php echo esc_html( $cta_text ); ?></a>
     </nav>
 </header>
