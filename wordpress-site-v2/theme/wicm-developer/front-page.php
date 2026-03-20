@@ -1,7 +1,7 @@
 <?php get_header(); ?>
 
 <!-- HERO -->
-<section class="hero-section" id="hero">
+<section class="hero-section" id="hero" style="background-image: url('https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1920&q=80&fit=crop');">
     <div class="hero-content">
         <h1 class="fade-in"><?php esc_html_e( 'Making Music Magical', 'wicm-developer' ); ?></h1>
         <p class="hero-subtitle fade-in"><?php esc_html_e( 'Music lessons for all ages in the West Island', 'wicm-developer' ); ?></p>

@@ -399,19 +399,30 @@ p { margin-bottom: 1rem; }
    6. HERO SECTION
    ============================================ */
 .hero-section {
-    background: linear-gradient(135deg, var(--color-gray-900) 0%, var(--color-gray-800) 100%);
+    background: linear-gradient(135deg, rgba(17, 24, 39, 0.82) 0%, rgba(31, 41, 55, 0.78) 100%);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     color: var(--color-white);
-    padding: 6rem 0;
+    padding: 8rem 0;
     text-align: center;
     position: relative;
     overflow: hidden;
+    min-height: 520px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-section[style*="background-image"] {
+    background-blend-mode: multiply;
 }
 
 .hero-section::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse at 30% 50%, rgba(220, 38, 38, 0.15) 0%, transparent 70%);
+    background: radial-gradient(ellipse at 30% 50%, rgba(220, 38, 38, 0.2) 0%, transparent 70%);
     pointer-events: none;
 }
 
