@@ -29,6 +29,9 @@ class WICM_Developer_Importer {
         // Register custom post types
         add_action( 'init', array( $this, 'register_post_types' ) );
 
+        // Register CPTs as translatable with Polylang
+        add_filter( 'pll_get_post_types', array( $this, 'add_cpt_to_polylang' ), 10, 2 );
+
         // Frontend SEO hooks
         if ( ! is_admin() ) {
             add_action( 'wp_head', array( $this, 'output_seo_meta' ), 1 );
@@ -88,6 +91,15 @@ class WICM_Developer_Importer {
             'supports'     => array( 'title', 'custom-fields' ),
             'show_in_rest' => true,
         ) );
+    }
+
+    /**
+     * Make custom post types translatable in Polylang.
+     */
+    public function add_cpt_to_polylang( $post_types, $is_settings ) {
+        $post_types['wicm_program']     = 'wicm_program';
+        $post_types['wicm_testimonial'] = 'wicm_testimonial';
+        return $post_types;
     }
 
     /**
@@ -917,7 +929,7 @@ class WICM_Developer_Importer {
     // =========================================================================
 
     public function programs_shortcode() {
-        $args = array( 'post_type' => 'wicm_program', 'numberposts' => 10, 'orderby' => 'date', 'order' => 'ASC' );
+        $args = array( 'post_type' => 'wicm_program', 'numberposts' => 10, 'orderby' => 'date', 'order' => 'ASC', 'suppress_filters' => false );
         if ( function_exists( 'pll_current_language' ) ) {
             $args['lang'] = pll_current_language();
         }
@@ -954,7 +966,7 @@ class WICM_Developer_Importer {
     }
 
     public function testimonials_shortcode() {
-        $args = array( 'post_type' => 'wicm_testimonial', 'numberposts' => 10 );
+        $args = array( 'post_type' => 'wicm_testimonial', 'numberposts' => 10, 'suppress_filters' => false );
         if ( function_exists( 'pll_current_language' ) ) {
             $args['lang'] = pll_current_language();
         }
