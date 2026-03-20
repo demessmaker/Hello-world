@@ -1,10 +1,58 @@
+<?php
+/**
+ * Detect current language via Polylang.
+ * Falls back to 'en' if Polylang is not active.
+ */
+$wicm_lang = function_exists( 'pll_current_language' ) ? pll_current_language() : 'en';
+$wicm_is_fr = ( 'fr' === $wicm_lang );
+
+// --- Translated footer strings ---
+$wicm_footer_strings = array(
+    'en' => array(
+        'tagline'     => get_theme_mod( 'wicm_footer_tagline', 'Making music magical since 1999' ),
+        'description' => get_theme_mod( 'wicm_footer_description', 'Professional music education for all ages in West Island, Montreal. Piano, guitar, voice, drums, violin and more.' ),
+        'quick_links' => 'Quick Links',
+        'programs'    => 'Programs',
+        'contact'     => 'Contact',
+        'copyright'   => get_theme_mod( 'wicm_copyright', 'West Island Music School. All rights reserved.' ),
+        'hours_week'  => get_theme_mod( 'wicm_hours_weekday', 'Mon-Fri: 9:00 AM - 9:00 PM' ),
+        'hours_wknd'  => get_theme_mod( 'wicm_hours_weekend', 'Saturday: 9:00 AM - 5:00 PM' ),
+        'view_progs'  => 'View Programs',
+        'back_to_top' => 'Back to top',
+        'links'       => array(
+            array( 'url' => '/',             'label' => 'Home' ),
+            array( 'url' => '/about-us/',    'label' => 'About Us' ),
+            array( 'url' => '/book-a-trial/','label' => 'Book a Trial' ),
+        ),
+    ),
+    'fr' => array(
+        'tagline'     => get_theme_mod( 'wicm_footer_tagline_fr', 'La magie de la musique depuis 1999' ),
+        'description' => get_theme_mod( 'wicm_footer_description_fr', 'Éducation musicale professionnelle pour tous les âges dans l\'Ouest-de-l\'Île de Montréal. Piano, guitare, chant, batterie, violon et plus.' ),
+        'quick_links' => 'Liens rapides',
+        'programs'    => 'Programmes',
+        'contact'     => 'Contact',
+        'copyright'   => get_theme_mod( 'wicm_copyright_fr', 'École de musique West Island. Tous droits réservés.' ),
+        'hours_week'  => get_theme_mod( 'wicm_hours_weekday_fr', 'Lun-Ven: 9h00 - 21h00' ),
+        'hours_wknd'  => get_theme_mod( 'wicm_hours_weekend_fr', 'Samedi: 9h00 - 17h00' ),
+        'view_progs'  => 'Voir les programmes',
+        'back_to_top' => 'Retour en haut',
+        'links'       => array(
+            array( 'url' => '/fr/accueil/',          'label' => 'Accueil' ),
+            array( 'url' => '/fr/a-propos/',         'label' => 'À propos' ),
+            array( 'url' => '/fr/reserver-un-essai/', 'label' => 'Réserver un essai' ),
+        ),
+    ),
+);
+
+$ft = $wicm_is_fr ? $wicm_footer_strings['fr'] : $wicm_footer_strings['en'];
+?>
 <footer class="site-footer">
     <div class="wicm-container">
         <div class="footer-grid">
             <!-- Brand Column -->
             <div class="footer-brand">
-                <div class="footer-tagline"><?php echo esc_html( get_theme_mod( 'wicm_footer_tagline', 'Making music magical since 1999' ) ); ?></div>
-                <p><?php echo esc_html( get_theme_mod( 'wicm_footer_description', 'Professional music education for all ages in West Island, Montreal. Piano, guitar, voice, drums, violin and more.' ) ); ?></p>
+                <div class="footer-tagline"><?php echo esc_html( $ft['tagline'] ); ?></div>
+                <p><?php echo esc_html( $ft['description'] ); ?></p>
                 <div class="footer-social">
                     <?php $fb_url = get_theme_mod( 'wicm_facebook_url', 'https://www.facebook.com/westislandmusicschool' ); ?>
                     <?php if ( $fb_url ) : ?>
@@ -21,9 +69,9 @@
                 </div>
             </div>
 
-            <!-- Quick Links (from nav menu) -->
+            <!-- Quick Links -->
             <div class="footer-column">
-                <h4><?php esc_html_e( 'Quick Links', 'wicm-developer' ); ?></h4>
+                <h4><?php echo esc_html( $ft['quick_links'] ); ?></h4>
                 <?php if ( has_nav_menu( 'footer-links' ) ) : ?>
                     <?php wp_nav_menu( array(
                         'theme_location' => 'footer-links',
@@ -32,31 +80,36 @@
                     ) ); ?>
                 <?php else : ?>
                     <ul>
-                        <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Home', 'wicm-developer' ); ?></a></li>
-                        <li><a href="<?php echo esc_url( home_url( '/about-us/' ) ); ?>"><?php esc_html_e( 'About Us', 'wicm-developer' ); ?></a></li>
-                        <li><a href="<?php echo esc_url( home_url( '/book-a-trial/' ) ); ?>"><?php esc_html_e( 'Book a Trial', 'wicm-developer' ); ?></a></li>
+                        <?php foreach ( $ft['links'] as $link ) : ?>
+                            <li><a href="<?php echo esc_url( home_url( $link['url'] ) ); ?>"><?php echo esc_html( $link['label'] ); ?></a></li>
+                        <?php endforeach; ?>
                     </ul>
                 <?php endif; ?>
             </div>
 
-            <!-- Programs (auto-generated from published programs) -->
+            <!-- Programs -->
             <?php if ( get_theme_mod( 'wicm_footer_show_programs', true ) ) : ?>
             <div class="footer-column">
-                <h4><?php esc_html_e( 'Programs', 'wicm-developer' ); ?></h4>
+                <h4><?php echo esc_html( $ft['programs'] ); ?></h4>
                 <ul>
                     <?php
-                    $programs = get_posts( array(
-                        'post_type'   => 'wicm_program',
-                        'numberposts' => 10,
-                        'orderby'     => 'date',
-                        'order'       => 'ASC',
-                    ) );
+                    $prog_args = array(
+                        'post_type'        => 'wicm_program',
+                        'numberposts'      => 10,
+                        'orderby'          => 'date',
+                        'order'            => 'ASC',
+                        'suppress_filters' => false,
+                    );
+                    if ( function_exists( 'pll_current_language' ) ) {
+                        $prog_args['lang'] = pll_current_language();
+                    }
+                    $programs = get_posts( $prog_args );
                     if ( $programs ) :
                         foreach ( $programs as $prog ) : ?>
                             <li><a href="<?php echo esc_url( get_permalink( $prog->ID ) ); ?>"><?php echo esc_html( $prog->post_title ); ?></a></li>
                         <?php endforeach;
                     else : ?>
-                        <li><a href="<?php echo esc_url( home_url( '/programs/' ) ); ?>"><?php esc_html_e( 'View Programs', 'wicm-developer' ); ?></a></li>
+                        <li><a href="<?php echo esc_url( home_url( $wicm_is_fr ? '/fr/programmes/' : '/programs/' ) ); ?>"><?php echo esc_html( $ft['view_progs'] ); ?></a></li>
                     <?php endif; ?>
                 </ul>
             </div>
@@ -64,25 +117,25 @@
 
             <!-- Contact Info -->
             <div class="footer-column">
-                <h4><?php esc_html_e( 'Contact', 'wicm-developer' ); ?></h4>
+                <h4><?php echo esc_html( $ft['contact'] ); ?></h4>
                 <ul>
                     <li><?php echo esc_html( get_theme_mod( 'wicm_contact_address', 'Bb-245 Blvd St-Jean, Pointe-Claire, QC, H9R-3J1' ) ); ?></li>
                     <?php $email = get_theme_mod( 'wicm_contact_email', 'musiconlinewestisland@gmail.com' ); ?>
                     <li><a href="mailto:<?php echo esc_attr( $email ); ?>"><?php echo esc_html( $email ); ?></a></li>
-                    <li><?php echo esc_html( get_theme_mod( 'wicm_hours_weekday', 'Mon-Fri: 9:00 AM - 9:00 PM' ) ); ?></li>
-                    <li><?php echo esc_html( get_theme_mod( 'wicm_hours_weekend', 'Saturday: 9:00 AM - 5:00 PM' ) ); ?></li>
+                    <li><?php echo esc_html( $ft['hours_week'] ); ?></li>
+                    <li><?php echo esc_html( $ft['hours_wknd'] ); ?></li>
                 </ul>
             </div>
         </div>
 
         <div class="footer-bottom">
-            &copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> <?php echo esc_html( get_theme_mod( 'wicm_copyright', 'West Island Music School. All rights reserved.' ) ); ?>
+            &copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> <?php echo esc_html( $ft['copyright'] ); ?>
         </div>
     </div>
 </footer>
 
 <!-- Back to Top -->
-<button class="back-to-top" id="back-to-top" aria-label="<?php esc_attr_e( 'Back to top', 'wicm-developer' ); ?>">
+<button class="back-to-top" id="back-to-top" aria-label="<?php echo esc_attr( $ft['back_to_top'] ); ?>">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
     </svg>

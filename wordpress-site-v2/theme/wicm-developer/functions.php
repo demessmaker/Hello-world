@@ -287,6 +287,57 @@ function wicm_customize_register( $wp_customize ) {
         'type'        => 'text',
     ) );
 
+    // --- French Footer Translations ---
+    $wp_customize->add_setting( 'wicm_footer_tagline_fr', array(
+        'default'           => 'La magie de la musique depuis 1999',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'wicm_footer_tagline_fr', array(
+        'label'   => __( 'Footer Tagline (French)', 'wicm-developer' ),
+        'section' => 'wicm_footer',
+        'type'    => 'text',
+    ) );
+
+    $wp_customize->add_setting( 'wicm_footer_description_fr', array(
+        'default'           => 'Éducation musicale professionnelle pour tous les âges dans l\'Ouest-de-l\'Île de Montréal. Piano, guitare, chant, batterie, violon et plus.',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'wicm_footer_description_fr', array(
+        'label'   => __( 'Footer Description (French)', 'wicm-developer' ),
+        'section' => 'wicm_footer',
+        'type'    => 'textarea',
+    ) );
+
+    $wp_customize->add_setting( 'wicm_copyright_fr', array(
+        'default'           => 'École de musique West Island. Tous droits réservés.',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'wicm_copyright_fr', array(
+        'label'   => __( 'Copyright Text - French', 'wicm-developer' ),
+        'section' => 'wicm_footer',
+        'type'    => 'text',
+    ) );
+
+    $wp_customize->add_setting( 'wicm_hours_weekday_fr', array(
+        'default'           => 'Lun-Ven: 9h00 - 21h00',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'wicm_hours_weekday_fr', array(
+        'label'   => __( 'Business Hours Weekdays (French)', 'wicm-developer' ),
+        'section' => 'wicm_footer',
+        'type'    => 'text',
+    ) );
+
+    $wp_customize->add_setting( 'wicm_hours_weekend_fr', array(
+        'default'           => 'Samedi: 9h00 - 17h00',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'wicm_hours_weekend_fr', array(
+        'label'   => __( 'Business Hours Weekend (French)', 'wicm-developer' ),
+        'section' => 'wicm_footer',
+        'type'    => 'text',
+    ) );
+
     // Show Programs in Footer
     $wp_customize->add_setting( 'wicm_footer_show_programs', array(
         'default'           => true,
