@@ -267,7 +267,7 @@ function wicm_customize_register( $wp_customize ) {
 
     // Contact - Email
     $wp_customize->add_setting( 'wicm_contact_email', array(
-        'default'           => 'musiconlinewestisland@gmail.com',
+        'default'           => 'info@westisland.music',
         'sanitize_callback' => 'sanitize_email',
     ) );
     $wp_customize->add_control( 'wicm_contact_email', array(
@@ -390,7 +390,7 @@ function wicm_customize_register( $wp_customize ) {
     ) );
 
     $wp_customize->add_setting( 'wicm_smtp_host', array(
-        'default'           => 'smtp.gmail.com',
+        'default'           => 'mail.westisland.music',
         'sanitize_callback' => 'sanitize_text_field',
     ) );
     $wp_customize->add_control( 'wicm_smtp_host', array(
@@ -400,7 +400,7 @@ function wicm_customize_register( $wp_customize ) {
     ) );
 
     $wp_customize->add_setting( 'wicm_smtp_port', array(
-        'default'           => '587',
+        'default'           => '465',
         'sanitize_callback' => 'absint',
     ) );
     $wp_customize->add_control( 'wicm_smtp_port', array(
@@ -410,7 +410,7 @@ function wicm_customize_register( $wp_customize ) {
     ) );
 
     $wp_customize->add_setting( 'wicm_smtp_encryption', array(
-        'default'           => 'tls',
+        'default'           => 'ssl',
         'sanitize_callback' => 'sanitize_text_field',
     ) );
     $wp_customize->add_control( 'wicm_smtp_encryption', array(
@@ -439,14 +439,14 @@ function wicm_customize_register( $wp_customize ) {
         'sanitize_callback' => 'sanitize_text_field',
     ) );
     $wp_customize->add_control( 'wicm_smtp_password', array(
-        'label'       => __( 'SMTP Password (App Password)', 'wicm-developer' ),
-        'description' => __( 'For Gmail, use an App Password from your Google Account security settings.', 'wicm-developer' ),
+        'label'       => __( 'SMTP Password', 'wicm-developer' ),
+        'description' => __( 'Enter the password for your email account.', 'wicm-developer' ),
         'section'     => 'wicm_smtp',
         'type'        => 'password',
     ) );
 
     $wp_customize->add_setting( 'wicm_smtp_from_email', array(
-        'default'           => 'musiconlinewestisland@gmail.com',
+        'default'           => 'info@westisland.music',
         'sanitize_callback' => 'sanitize_email',
     ) );
     $wp_customize->add_control( 'wicm_smtp_from_email', array(
@@ -486,9 +486,9 @@ function wicm_smtp_setup( $phpmailer ) {
         return;
     }
 
-    $host     = get_theme_mod( 'wicm_smtp_host', 'smtp.gmail.com' );
-    $port     = (int) get_theme_mod( 'wicm_smtp_port', 587 );
-    $encrypt  = get_theme_mod( 'wicm_smtp_encryption', 'tls' );
+    $host     = get_theme_mod( 'wicm_smtp_host', 'mail.westisland.music' );
+    $port     = (int) get_theme_mod( 'wicm_smtp_port', 465 );
+    $encrypt  = get_theme_mod( 'wicm_smtp_encryption', 'ssl' );
     $username = get_theme_mod( 'wicm_smtp_username', '' );
     $password = get_theme_mod( 'wicm_smtp_password', '' );
 

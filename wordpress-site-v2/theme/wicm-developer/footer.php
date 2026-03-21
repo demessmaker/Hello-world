@@ -120,7 +120,7 @@ $ft = $wicm_is_fr ? $wicm_footer_strings['fr'] : $wicm_footer_strings['en'];
                 <h4><?php echo esc_html( $ft['contact'] ); ?></h4>
                 <ul>
                     <li><?php echo esc_html( get_theme_mod( 'wicm_contact_address', 'Bb-245 Blvd St-Jean, Pointe-Claire, QC, H9R-3J1' ) ); ?></li>
-                    <?php $email = get_theme_mod( 'wicm_contact_email', 'musiconlinewestisland@gmail.com' ); ?>
+                    <?php $email = get_theme_mod( 'wicm_contact_email', 'info@westisland.music' ); ?>
                     <li><a href="mailto:<?php echo esc_attr( $email ); ?>"><?php echo esc_html( $email ); ?></a></li>
                     <li><?php echo esc_html( $ft['hours_week'] ); ?></li>
                     <li><?php echo esc_html( $ft['hours_wknd'] ); ?></li>
