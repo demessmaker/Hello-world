@@ -68,12 +68,23 @@ function wicm_widgets_init() {
 add_action( 'widgets_init', 'wicm_widgets_init' );
 
 /**
+ * Add resource hints for external domains (preconnect, dns-prefetch).
+ */
+function wicm_resource_hints() {
+    echo '<link rel="preconnect" href="https://fonts.googleapis.com">' . "\n";
+    echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' . "\n";
+    echo '<link rel="dns-prefetch" href="//fonts.googleapis.com">' . "\n";
+    echo '<link rel="dns-prefetch" href="//fonts.gstatic.com">' . "\n";
+}
+add_action( 'wp_head', 'wicm_resource_hints', 1 );
+
+/**
  * Enqueue scripts and styles.
  */
 function wicm_enqueue_assets() {
     wp_enqueue_style(
         'wicm-fonts',
-        'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap',
+        'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
         array(),
         null
     );
@@ -94,6 +105,65 @@ function wicm_enqueue_assets() {
     );
 }
 add_action( 'wp_enqueue_scripts', 'wicm_enqueue_assets' );
+
+/**
+ * Disable WordPress emoji scripts and styles.
+ * These add ~20KB of unused JS/CSS on every page load.
+ */
+function wicm_disable_emojis() {
+    remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+    remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
+    remove_action( 'wp_print_styles', 'print_emoji_styles' );
+    remove_action( 'admin_print_styles', 'print_emoji_styles' );
+    remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
+    remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );
+    remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
+    add_filter( 'tiny_mce_plugins', 'wicm_disable_emojis_tinymce' );
+    add_filter( 'wp_resource_hints', 'wicm_disable_emojis_dns_prefetch', 10, 2 );
+}
+add_action( 'init', 'wicm_disable_emojis' );
+
+function wicm_disable_emojis_tinymce( $plugins ) {
+    if ( is_array( $plugins ) ) {
+        return array_diff( $plugins, array( 'wpemoji' ) );
+    }
+    return array();
+}
+
+function wicm_disable_emojis_dns_prefetch( $urls, $relation_type ) {
+    if ( 'dns-prefetch' === $relation_type ) {
+        $urls = array_filter( $urls, function( $url ) {
+            return false === strpos( $url, 'https://s.w.org/images/core/emoji/' );
+        });
+    }
+    return $urls;
+}
+
+/**
+ * Clear footer programs transient when programs are created/updated/deleted.
+ */
+function wicm_clear_programs_cache( $post_id ) {
+    if ( 'wicm_program' === get_post_type( $post_id ) ) {
+        delete_transient( 'wicm_footer_programs_en' );
+        delete_transient( 'wicm_footer_programs_fr' );
+    }
+}
+add_action( 'save_post', 'wicm_clear_programs_cache' );
+add_action( 'delete_post', 'wicm_clear_programs_cache' );
+
+/**
+ * Conditionally load Contact Form 7 assets only on pages that use forms.
+ * Prevents loading ~30KB of unused JS/CSS on every page.
+ */
+function wicm_conditional_cf7_assets() {
+    $cf7_pages = array( 'contact', 'book-a-trial', 'contactez-nous', 'reserver-un-essai' );
+    if ( is_page( $cf7_pages ) ) {
+        return;
+    }
+    add_filter( 'wpcf7_load_js', '__return_false' );
+    add_filter( 'wpcf7_load_css', '__return_false' );
+}
+add_action( 'wp', 'wicm_conditional_cf7_assets' );
 
 /**
  * Register additional nav menus for footer.

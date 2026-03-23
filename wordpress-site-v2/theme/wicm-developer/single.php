@@ -6,7 +6,7 @@
     </div>
 </section>
 
-<div class="page-content single-post">
+<main id="main-content" class="page-content single-post">
     <div class="wicm-container">
         <?php while ( have_posts() ) : the_post(); ?>
             <div class="entry-meta">
@@ -17,6 +17,6 @@
             </div>
         <?php endwhile; ?>
     </div>
-</div>
+</main>
 
 <?php get_footer(); ?>

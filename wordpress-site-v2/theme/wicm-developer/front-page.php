@@ -2,9 +2,9 @@
 
 <?php while ( have_posts() ) : the_post(); ?>
 
-    <div class="entry-content front-page-content alignfull-container">
+    <main id="main-content" class="entry-content front-page-content alignfull-container">
         <?php the_content(); ?>
-    </div>
+    </main>
 
 <?php endwhile; ?>
 

@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 
-<div class="page-content">
+<main id="main-content" class="page-content">
     <div class="wicm-container">
         <?php while ( have_posts() ) : the_post(); ?>
             <div class="entry-content">
@@ -8,6 +8,6 @@
             </div>
         <?php endwhile; ?>
     </div>
-</div>
+</main>
 
 <?php get_footer(); ?>

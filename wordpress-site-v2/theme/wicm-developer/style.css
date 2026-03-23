@@ -11,7 +11,7 @@ Text Domain: wicm-developer
 /* ============================================
    1. DESIGN TOKENS / CSS VARIABLES
    ============================================ */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+/* Google Fonts loaded via functions.php with preconnect — no @import needed */
 
 :root {
     --color-red-50: #fef2f2;
@@ -98,6 +98,26 @@ a:hover {
 
 ul, ol {
     list-style: none;
+}
+
+/* Skip to content link — accessibility */
+.skip-link {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    z-index: 10000;
+    padding: 0.75rem 1.5rem;
+    background: var(--color-red-600);
+    color: var(--color-white);
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 0 0 var(--radius) 0;
+}
+
+.skip-link:focus {
+    top: 0;
+    outline: 2px solid var(--color-red-700);
+    outline-offset: 2px;
 }
 
 h1, h2, h3, h4, h5, h6 {

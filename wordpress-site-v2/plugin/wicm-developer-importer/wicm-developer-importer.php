@@ -942,10 +942,15 @@ class WICM_Developer_Importer {
 
             $html .= '<div class="program-card">';
             if ( $thumb ) {
-                $html .= '<img src="' . esc_url( $thumb ) . '" alt="' . esc_attr( $prog->post_title ) . '" class="program-card-image" loading="lazy">';
+                $html .= '<img src="' . esc_url( $thumb ) . '" alt="' . esc_attr( $prog->post_title ) . '" class="program-card-image" loading="lazy" width="800" height="500" decoding="async">';
             }
             $html .= '<div class="program-card-body">';
-            $html .= '<div class="program-card-icon">' . esc_html( $icon ) . '</div>';
+            $icon_label = str_replace(
+                array( "\xF0\x9F\x8E\xB9", "\xF0\x9F\x8E\xB8", "\xF0\x9F\xA5\x81", "\xF0\x9F\x8E\xA4", "\xF0\x9F\x8E\xBB" ),
+                array( 'Piano', 'Guitar', 'Drums', 'Microphone', 'Violin' ),
+                $icon
+            );
+            $html .= '<div class="program-card-icon" role="img" aria-label="' . esc_attr( $icon_label ) . '">' . esc_html( $icon ) . '</div>';
             $html .= '<h3>' . esc_html( $prog->post_title ) . '</h3>';
             $html .= '<p>' . esc_html( wp_strip_all_tags( $prog->post_content ) ) . '</p>';
             if ( is_array( $features ) ) {

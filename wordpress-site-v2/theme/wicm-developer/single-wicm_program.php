@@ -8,13 +8,13 @@
 <section class="page-hero">
     <div class="wicm-container">
         <?php if ( $icon ) : ?>
-            <div class="program-page-icon"><?php echo esc_html( $icon ); ?></div>
+            <div class="program-page-icon" role="img" aria-label="<?php echo esc_attr( get_the_title() ); ?>"><?php echo esc_html( $icon ); ?></div>
         <?php endif; ?>
         <h1><?php the_title(); ?></h1>
     </div>
 </section>
 
-<div class="page-content program-single">
+<main id="main-content" class="page-content program-single">
     <div class="wicm-container">
         <div class="program-single-grid">
             <div class="program-single-content">
@@ -62,7 +62,7 @@
             </div>
         </div>
     </div>
-</div>
+</main>
 
 <?php endwhile; ?>
 

@@ -8,6 +8,8 @@
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 
+<a class="skip-link screen-reader-text" href="#main-content"><?php esc_html_e( 'Skip to content', 'wicm-developer' ); ?></a>
+
 <header class="site-header" id="site-header">
     <div class="header-inner">
         <!-- Logo -->
