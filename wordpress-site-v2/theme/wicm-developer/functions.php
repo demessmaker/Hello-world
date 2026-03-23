@@ -647,3 +647,18 @@ if ( get_theme_mod( 'wicm_smtp_enabled', false ) ) {
     add_filter( 'wp_mail_from', 'wicm_mail_from' );
     add_filter( 'wp_mail_from_name', 'wicm_mail_from_name' );
 }
+
+/**
+ * Prevent WordPress from adding loading="lazy" to the hero image.
+ *
+ * WP core automatically adds lazy-loading to all content images, but the
+ * above-the-fold hero image is the LCP element and must load eagerly.
+ * This filter removes loading="lazy" from any img with class "hero-bg".
+ */
+function wicm_disable_lazy_load_hero( $value, $image, $context ) {
+    if ( 'the_content' === $context && false !== strpos( $image, 'hero-bg' ) ) {
+        return false;
+    }
+    return $value;
+}
+add_filter( 'wp_img_tag_add_loading_attr', 'wicm_disable_lazy_load_hero', 10, 3 );
