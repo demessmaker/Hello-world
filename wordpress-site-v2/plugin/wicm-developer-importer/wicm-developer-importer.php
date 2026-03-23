@@ -1091,10 +1091,21 @@ class WICM_Developer_Importer {
         }
 
         // If the content contains <section> tags, it's a full-page layout.
-        // Wrap it in a single Classic block so the visual editor shows it
-        // as rendered HTML rather than raw code.
+        // Split into individual wp:html blocks per section so WordPress
+        // does not run wpautop (which breaks absolute-positioned elements
+        // like the hero background image).
         if ( false !== strpos( $html, '<section' ) ) {
-            return "<!-- wp:freeform -->\n" . $html . "\n<!-- /wp:freeform -->";
+            // Split on section boundaries, preserving the tags
+            $parts = preg_split( '/(<section[\s\S]*?<\/section>)/i', $html, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY );
+            $blocks = array();
+            foreach ( $parts as $part ) {
+                $part = trim( $part );
+                if ( empty( $part ) ) {
+                    continue;
+                }
+                $blocks[] = "<!-- wp:html -->\n" . $part . "\n<!-- /wp:html -->";
+            }
+            return implode( "\n\n", $blocks );
         }
 
         // For simpler content (e.g. inner pages without sections),
