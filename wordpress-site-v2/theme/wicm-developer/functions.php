@@ -75,6 +75,13 @@ function wicm_resource_hints() {
     echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' . "\n";
     echo '<link rel="dns-prefetch" href="//fonts.googleapis.com">' . "\n";
     echo '<link rel="dns-prefetch" href="//fonts.gstatic.com">' . "\n";
+
+    // Preload hero image on front page — critical for LCP on mobile
+    if ( is_front_page() || is_page( array( 'home', 'accueil' ) ) ) {
+        echo '<link rel="preload" as="image" href="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=768&q=75&fit=crop" media="(max-width: 768px)">' . "\n";
+        echo '<link rel="preload" as="image" href="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1280&q=80&fit=crop" media="(min-width: 769px) and (max-width: 1280px)">' . "\n";
+        echo '<link rel="preload" as="image" href="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1920&q=80&fit=crop" media="(min-width: 1281px)">' . "\n";
+    }
 }
 add_action( 'wp_head', 'wicm_resource_hints', 1 );
 
@@ -105,6 +112,52 @@ function wicm_enqueue_assets() {
     );
 }
 add_action( 'wp_enqueue_scripts', 'wicm_enqueue_assets' );
+
+/**
+ * Remove WordPress default bloat on the frontend.
+ * Block library CSS (~15KB), global styles (~20KB), and classic theme styles
+ * are unused since this theme has its own complete design system.
+ */
+function wicm_remove_wp_bloat() {
+    // Remove Gutenberg block library CSS (not used on frontend)
+    wp_dequeue_style( 'wp-block-library' );
+    wp_dequeue_style( 'wp-block-library-theme' );
+
+    // Remove global styles (CSS variables/presets for blocks)
+    wp_dequeue_style( 'global-styles' );
+
+    // Remove classic theme styles
+    wp_dequeue_style( 'classic-theme-styles' );
+
+    // Remove WP embed script (oEmbed)
+    wp_dequeue_script( 'wp-embed' );
+}
+add_action( 'wp_enqueue_scripts', 'wicm_remove_wp_bloat', 100 );
+
+/**
+ * Remove Google Site Kit and Jetpack frontend scripts on non-admin pages.
+ * These add ~30-50KB of tracking JS that slows down mobile performance.
+ */
+function wicm_remove_tracking_bloat() {
+    // Remove Jetpack stats/tracking
+    wp_dequeue_script( 'jetpack-stats' );
+    wp_dequeue_script( 'jetpack_tracks' );
+
+    // Remove Google Site Kit frontend scripts
+    wp_dequeue_script( 'google_gtagjs' );
+    wp_dequeue_script( 'googlesitekit-gtag-data' );
+}
+add_action( 'wp_enqueue_scripts', 'wicm_remove_tracking_bloat', 100 );
+
+/**
+ * Remove inline global styles from wp_head.
+ */
+function wicm_remove_global_styles_inline() {
+    remove_action( 'wp_enqueue_scripts', 'wp_enqueue_global_styles' );
+    remove_action( 'wp_body_open', 'wp_global_styles_render_svg_filters' );
+    remove_action( 'wp_footer', 'wp_enqueue_global_styles', 1 );
+}
+add_action( 'init', 'wicm_remove_global_styles_inline' );
 
 /**
  * Disable WordPress emoji scripts and styles.
@@ -156,8 +209,9 @@ add_action( 'delete_post', 'wicm_clear_programs_cache' );
  * Prevents loading ~30KB of unused JS/CSS on every page.
  */
 function wicm_conditional_cf7_assets() {
-    $cf7_pages = array( 'contact', 'book-a-trial', 'contactez-nous', 'reserver-un-essai' );
-    if ( is_page( $cf7_pages ) ) {
+    // Pages that contain [contact-form-7] shortcode
+    $cf7_pages = array( 'home', 'accueil', 'contact', 'book-a-trial', 'contactez-nous', 'reserver-un-essai' );
+    if ( is_front_page() || is_page( $cf7_pages ) ) {
         return;
     }
     add_filter( 'wpcf7_load_js', '__return_false' );
