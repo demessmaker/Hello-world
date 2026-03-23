@@ -354,15 +354,20 @@ class WICM_Developer_Importer {
             }
         }
 
-        // Create a Blog page
-        $blog_id = wp_insert_post( array(
-            'post_title'     => 'Blog',
-            'post_name'      => 'blog',
-            'post_content'   => '',
-            'post_status'    => 'publish',
-            'post_type'      => 'page',
-            'comment_status' => 'closed',
-        ) );
+        // Create or update Blog page
+        $existing_blog = get_page_by_path( 'blog', OBJECT, 'page' );
+        if ( $existing_blog ) {
+            $blog_id = $existing_blog->ID;
+        } else {
+            $blog_id = wp_insert_post( array(
+                'post_title'     => 'Blog',
+                'post_name'      => 'blog',
+                'post_content'   => '',
+                'post_status'    => 'publish',
+                'post_type'      => 'page',
+                'comment_status' => 'closed',
+            ) );
+        }
         if ( ! is_wp_error( $blog_id ) ) {
             $page_ids['blog'] = $blog_id;
         }
@@ -418,20 +423,32 @@ class WICM_Developer_Importer {
         );
 
         foreach ( $programs as $prog ) {
-            $post_id = wp_insert_post( array(
-                'post_title'   => $prog['name'],
-                'post_name'    => $prog['slug'],
-                'post_content' => '<p>' . $prog['desc'] . '</p>',
-                'post_status'  => 'publish',
-                'post_type'    => 'wicm_program',
-            ) );
+            $existing = get_page_by_path( $prog['slug'], OBJECT, 'wicm_program' );
+            if ( $existing ) {
+                $post_id = wp_update_post( array(
+                    'ID'           => $existing->ID,
+                    'post_title'   => $prog['name'],
+                    'post_content' => '<p>' . $prog['desc'] . '</p>',
+                    'post_status'  => 'publish',
+                ) );
+                $action = 'Updated';
+            } else {
+                $post_id = wp_insert_post( array(
+                    'post_title'   => $prog['name'],
+                    'post_name'    => $prog['slug'],
+                    'post_content' => '<p>' . $prog['desc'] . '</p>',
+                    'post_status'  => 'publish',
+                    'post_type'    => 'wicm_program',
+                ) );
+                $action = 'Created';
+            }
 
             if ( ! is_wp_error( $post_id ) ) {
                 update_post_meta( $post_id, '_wicm_icon', $prog['icon'] );
                 update_post_meta( $post_id, '_wicm_features', $prog['features'] );
                 update_post_meta( $post_id, '_wicm_image_url', $prog['image_url'] );
                 $ids[ $prog['slug'] ] = $post_id;
-                $results[] = array( 'success' => true, 'message' => "Created program: {$prog['name']}" );
+                $results[] = array( 'success' => true, 'message' => "{$action} program: {$prog['name']}" );
             }
         }
 
@@ -449,11 +466,24 @@ class WICM_Developer_Importer {
 
         $count = 0;
         foreach ( $testimonials as $t ) {
-            $post_id = wp_insert_post( array(
-                'post_title'  => $t['name'],
-                'post_status' => 'publish',
+            // Check for existing testimonial by title and post type
+            $existing = get_posts( array(
                 'post_type'   => 'wicm_testimonial',
+                'title'       => $t['name'],
+                'numberposts' => 1,
+                'fields'      => 'ids',
             ) );
+            if ( ! empty( $existing ) ) {
+                $post_id = $existing[0];
+                $action  = 'Updated';
+            } else {
+                $post_id = wp_insert_post( array(
+                    'post_title'  => $t['name'],
+                    'post_status' => 'publish',
+                    'post_type'   => 'wicm_testimonial',
+                ) );
+                $action = 'Created';
+            }
             if ( ! is_wp_error( $post_id ) ) {
                 update_post_meta( $post_id, '_wicm_quote', $t['quote'] );
                 update_post_meta( $post_id, '_wicm_role', $t['role'] );
@@ -462,7 +492,7 @@ class WICM_Developer_Importer {
             }
         }
 
-        $results[] = array( 'success' => $count > 0, 'message' => "Created {$count} testimonials" );
+        $results[] = array( 'success' => $count > 0, 'message' => "Imported {$count} testimonials" );
         return $results;
     }
 
@@ -541,7 +571,21 @@ class WICM_Developer_Importer {
 [submit "Send Message"]
 </div>';
 
-        $form = WPCF7_ContactForm::get_template();
+        // Check for existing CF7 form by title
+        $existing_forms = get_posts( array(
+            'post_type'  => 'wpcf7_contact_form',
+            'title'      => 'WICM Contact Form',
+            'numberposts' => 1,
+        ) );
+
+        if ( ! empty( $existing_forms ) ) {
+            $form = WPCF7_ContactForm::get_instance( $existing_forms[0]->ID );
+            $action = 'Updated';
+        } else {
+            $form = WPCF7_ContactForm::get_template();
+            $action = 'Created';
+        }
+
         $form->set_properties( array(
             'form' => $form_template,
             'mail' => array_merge( $form->prop( 'mail' ), array(
@@ -553,11 +597,12 @@ class WICM_Developer_Importer {
         $form->set_title( 'WICM Contact Form' );
         $form->save();
 
-        $results[] = array( 'success' => true, 'message' => "Created Contact Form 7 (ID: {$form->id()})" );
+        $results[] = array( 'success' => true, 'message' => "{$action} Contact Form 7 (ID: {$form->id()})" );
 
         if ( $contact_page_id ) {
             $page = get_post( $contact_page_id );
-            if ( $page ) {
+            // Only embed the shortcode if not already present
+            if ( $page && false === strpos( $page->post_content, '[contact-form-7' ) ) {
                 wp_update_post( array(
                     'ID'           => $contact_page_id,
                     'post_content' => $page->post_content . "\n\n" . '[contact-form-7 id="' . $form->id() . '" title="WICM Contact Form"]',
@@ -724,14 +769,19 @@ class WICM_Developer_Importer {
         }
 
         // FR Blog page
-        $fr_blog_id = wp_insert_post( array(
-            'post_title'     => 'Blogue',
-            'post_name'      => 'blogue',
-            'post_content'   => '',
-            'post_status'    => 'publish',
-            'post_type'      => 'page',
-            'comment_status' => 'closed',
-        ) );
+        $existing_fr_blog = get_page_by_path( 'blogue', OBJECT, 'page' );
+        if ( $existing_fr_blog ) {
+            $fr_blog_id = $existing_fr_blog->ID;
+        } else {
+            $fr_blog_id = wp_insert_post( array(
+                'post_title'     => 'Blogue',
+                'post_name'      => 'blogue',
+                'post_content'   => '',
+                'post_status'    => 'publish',
+                'post_type'      => 'page',
+                'comment_status' => 'closed',
+            ) );
+        }
         if ( ! is_wp_error( $fr_blog_id ) ) {
             $fr_page_ids['blog'] = $fr_blog_id;
             if ( $has_polylang ) {
@@ -791,13 +841,23 @@ class WICM_Developer_Importer {
         );
 
         foreach ( $fr_programs as $prog ) {
-            $post_id = wp_insert_post( array(
-                'post_title'   => $prog['name'],
-                'post_name'    => $prog['slug'],
-                'post_content' => '<p>' . $prog['desc'] . '</p>',
-                'post_status'  => 'publish',
-                'post_type'    => 'wicm_program',
-            ) );
+            $existing = get_page_by_path( $prog['slug'], OBJECT, 'wicm_program' );
+            if ( $existing ) {
+                $post_id = wp_update_post( array(
+                    'ID'           => $existing->ID,
+                    'post_title'   => $prog['name'],
+                    'post_content' => '<p>' . $prog['desc'] . '</p>',
+                    'post_status'  => 'publish',
+                ) );
+            } else {
+                $post_id = wp_insert_post( array(
+                    'post_title'   => $prog['name'],
+                    'post_name'    => $prog['slug'],
+                    'post_content' => '<p>' . $prog['desc'] . '</p>',
+                    'post_status'  => 'publish',
+                    'post_type'    => 'wicm_program',
+                ) );
+            }
 
             if ( ! is_wp_error( $post_id ) ) {
                 update_post_meta( $post_id, '_wicm_icon', $prog['icon'] );
@@ -848,11 +908,24 @@ class WICM_Developer_Importer {
 
         $fr_test_count = 0;
         foreach ( $fr_testimonials as $t ) {
-            $post_id = wp_insert_post( array(
-                'post_title'  => $t['name'],
-                'post_status' => 'publish',
+            // Look for existing FR testimonial by title + role meta (to distinguish from EN)
+            $existing = get_posts( array(
                 'post_type'   => 'wicm_testimonial',
+                'title'       => $t['name'],
+                'numberposts' => -1,
+                'fields'      => 'ids',
+                'meta_key'    => '_wicm_role',
+                'meta_value'  => $t['role'],
             ) );
+            if ( ! empty( $existing ) ) {
+                $post_id = $existing[0];
+            } else {
+                $post_id = wp_insert_post( array(
+                    'post_title'  => $t['name'],
+                    'post_status' => 'publish',
+                    'post_type'   => 'wicm_testimonial',
+                ) );
+            }
             if ( ! is_wp_error( $post_id ) ) {
                 update_post_meta( $post_id, '_wicm_quote', $t['quote'] );
                 update_post_meta( $post_id, '_wicm_role', $t['role'] );
