@@ -28,10 +28,11 @@
   <path d="M78 32 Q86 50, 78 68" stroke="url(#accentGradW)" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7"/>
 
   <!-- Text: WEST ISLAND (white for dark bg) -->
-  <text x="105" y="42" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="3" fill="#ffffff">WEST ISLAND</text>
+  <text x="105" y="35" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="3" fill="#ffffff">WEST ISLAND</text>
 
-  <!-- Text: MUSIC SCHOOL -->
-  <text x="105" y="72" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="22" font-weight="300" letter-spacing="5" fill="#ef4444">MUSIC SCHOOL</text>
+  <!-- Text: CONSERVATORY OF MUSIC -->
+  <text x="105" y="60" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="15" font-weight="300" letter-spacing="3" fill="#ffffff">CONSERVATORY</text>
+  <text x="105" y="80" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="15" font-weight="300" letter-spacing="5" fill="#ef4444">OF MUSIC</text>
 
   <!-- Accent line -->
   <line x1="105" y1="48" x2="280" y2="48" stroke="url(#accentGradW)" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
