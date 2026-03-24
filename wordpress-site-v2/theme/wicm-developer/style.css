@@ -1117,6 +1117,26 @@ nav ul, nav ol, nav li {
     padding: 5rem 0;
     text-align: center;
     color: var(--color-white);
+    background-size: cover;
+    background-position: center;
+}
+
+.page-hero--has-bg {
+    position: relative;
+    padding: 6rem 0;
+}
+
+.page-hero--has-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 1;
+}
+
+.page-hero--has-bg .wicm-container {
+    position: relative;
+    z-index: 2;
 }
 
 .page-hero h1 {
