@@ -10,9 +10,8 @@
 
 <a class="skip-link screen-reader-text" href="#main-content"><?php esc_html_e( 'Skip to content', 'wicm-developer' ); ?></a>
 
-<style>.site-header li,.site-header ul,.site-header ol,.primary-nav li,.primary-nav ul{list-style:none!important;list-style-type:none!important;margin:0;padding:0}.primary-nav ul,.primary-nav>ul{display:flex!important;align-items:center;gap:.25rem;flex-direction:row!important}.header-inner{display:flex!important;align-items:center;justify-content:space-between}</style>
 <header class="site-header" id="site-header">
-    <div class="header-inner">
+    <div class="header-inner" style="display:flex;align-items:center;justify-content:space-between">
         <!-- Logo -->
         <div class="header-logo">
             <?php if ( has_custom_logo() ) : ?>
@@ -37,6 +36,7 @@
                 'container'      => false,
                 'fallback_cb'    => 'wicm_fallback_menu',
                 'depth'          => 1,
+                'items_wrap'     => '<ul id="%1$s" class="%2$s" style="display:flex;flex-direction:row;align-items:center;gap:.25rem;list-style:none;margin:0;padding:0">%3$s</ul>',
             ) );
             ?>
         </nav>
