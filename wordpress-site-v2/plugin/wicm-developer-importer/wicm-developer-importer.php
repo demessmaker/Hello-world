@@ -287,6 +287,7 @@ class WICM_Developer_Importer {
             'contact' => 'pages/contact.json',
             'programs'=> 'pages/programs.json',
             'trial'   => 'pages/book-trial.json',
+            'store'   => 'pages/our-store.json',
         );
 
         foreach ( $pages as $key => $file ) {
@@ -667,6 +668,7 @@ class WICM_Developer_Importer {
             array( 'key' => 'home', 'title' => 'Home', 'order' => 1 ),
             array( 'key' => 'programs', 'title' => 'Programs', 'order' => 2 ),
             array( 'key' => 'about', 'title' => 'About Us', 'order' => 3 ),
+            array( 'key' => 'store', 'title' => 'Our Store', 'order' => 4 ),
         );
 
         $added = 0;
@@ -726,6 +728,7 @@ class WICM_Developer_Importer {
             'contact' => 'pages/fr/contact.json',
             'programs'=> 'pages/fr/programs.json',
             'trial'   => 'pages/fr/book-trial.json',
+            'store'   => 'pages/fr/our-store.json',
         );
 
         foreach ( $fr_pages as $key => $file ) {
@@ -1025,6 +1028,7 @@ class WICM_Developer_Importer {
                 array( 'key' => 'home', 'title' => 'Accueil', 'order' => 1 ),
                 array( 'key' => 'programs', 'title' => 'Programmes', 'order' => 2 ),
                 array( 'key' => 'about', 'title' => 'À propos', 'order' => 3 ),
+                array( 'key' => 'store', 'title' => 'Notre boutique', 'order' => 4 ),
             );
 
             $fr_added = 0;

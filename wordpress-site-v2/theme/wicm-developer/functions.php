@@ -237,6 +237,7 @@ function wicm_fallback_menu() {
     echo '<a href="' . $base . '">' . esc_html__( 'Home', 'wicm-developer' ) . '</a>';
     echo '<a href="' . $base . '#programs">' . esc_html__( 'Programs', 'wicm-developer' ) . '</a>';
     echo '<a href="' . $base . '#about">' . esc_html__( 'About Us', 'wicm-developer' ) . '</a>';
+    echo '<a href="' . $base . 'our-store/">' . esc_html__( 'Our Store', 'wicm-developer' ) . '</a>';
     echo '<a href="' . $base . '#testimonials">' . esc_html__( 'Testimonials', 'wicm-developer' ) . '</a>';
     echo '<a href="' . $base . '#contact">' . esc_html__( 'Contact', 'wicm-developer' ) . '</a>';
 }
