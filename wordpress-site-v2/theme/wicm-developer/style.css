@@ -245,6 +245,11 @@ p { margin-bottom: 1rem; }
     }
 }
 
+.primary-nav li,
+.mobile-menu li {
+    list-style: none;
+}
+
 .primary-nav a {
     display: block;
     padding: 0.5rem 1rem;
