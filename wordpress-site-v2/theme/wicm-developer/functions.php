@@ -239,12 +239,14 @@ add_action( 'after_setup_theme', 'wicm_register_footer_menus', 20 );
  */
 function wicm_fallback_menu() {
     $base = esc_url( home_url( '/' ) );
-    echo '<a href="' . $base . '">' . esc_html__( 'Home', 'wicm-developer' ) . '</a>';
-    echo '<a href="' . $base . '#programs">' . esc_html__( 'Programs', 'wicm-developer' ) . '</a>';
-    echo '<a href="' . $base . '#about">' . esc_html__( 'About Us', 'wicm-developer' ) . '</a>';
-    echo '<a href="' . $base . 'our-store/">' . esc_html__( 'Our Store', 'wicm-developer' ) . '</a>';
-    echo '<a href="' . $base . '#testimonials">' . esc_html__( 'Testimonials', 'wicm-developer' ) . '</a>';
-    echo '<a href="' . $base . '#contact">' . esc_html__( 'Contact', 'wicm-developer' ) . '</a>';
+    echo '<ul style="display:flex;flex-direction:row;align-items:center;gap:.25rem;list-style:none;margin:0;padding:0">';
+    echo '<li><a href="' . $base . '">' . esc_html__( 'Home', 'wicm-developer' ) . '</a></li>';
+    echo '<li><a href="' . $base . '#programs">' . esc_html__( 'Programs', 'wicm-developer' ) . '</a></li>';
+    echo '<li><a href="' . $base . '#about">' . esc_html__( 'About Us', 'wicm-developer' ) . '</a></li>';
+    echo '<li><a href="' . $base . 'our-store/">' . esc_html__( 'Our Store', 'wicm-developer' ) . '</a></li>';
+    echo '<li><a href="' . $base . '#testimonials">' . esc_html__( 'Testimonials', 'wicm-developer' ) . '</a></li>';
+    echo '<li><a href="' . $base . '#contact">' . esc_html__( 'Contact', 'wicm-developer' ) . '</a></li>';
+    echo '</ul>';
 }
 
 /**
