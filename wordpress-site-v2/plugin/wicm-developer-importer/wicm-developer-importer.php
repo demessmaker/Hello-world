@@ -695,6 +695,24 @@ class WICM_Developer_Importer {
             return array( array( 'success' => false, 'message' => 'Failed to create menu' ) );
         }
 
+        // Map of menu keys to page slugs for fallback lookup
+        $slug_map = array(
+            'home'     => 'home',
+            'programs' => 'programs',
+            'about'    => 'about',
+            'store'    => 'our-store',
+        );
+
+        // If page_ids weren't passed, look them up by slug
+        foreach ( $slug_map as $key => $slug ) {
+            if ( empty( $page_ids[ $key ] ) ) {
+                $page = get_page_by_path( $slug, OBJECT, 'page' );
+                if ( $page ) {
+                    $page_ids[ $key ] = $page->ID;
+                }
+            }
+        }
+
         $items = array(
             array( 'key' => 'home', 'title' => 'Home', 'order' => 1 ),
             array( 'key' => 'programs', 'title' => 'Programs', 'order' => 2 ),
@@ -703,8 +721,12 @@ class WICM_Developer_Importer {
         );
 
         $added = 0;
+        $skipped = array();
         foreach ( $items as $item ) {
-            if ( empty( $page_ids[ $item['key'] ] ) ) continue;
+            if ( empty( $page_ids[ $item['key'] ] ) ) {
+                $skipped[] = $item['title'];
+                continue;
+            }
             $r = wp_update_nav_menu_item( $menu_id, 0, array(
                 'menu-item-title'     => $item['title'],
                 'menu-item-object'    => 'page',
@@ -721,7 +743,11 @@ class WICM_Developer_Importer {
         $locations['primary'] = $menu_id;
         set_theme_mod( 'nav_menu_locations', $locations );
 
-        $results[] = array( 'success' => true, 'message' => "Created menu with {$added} items (assigned to primary)" );
+        $msg = "Created menu with {$added} items (assigned to primary)";
+        if ( ! empty( $skipped ) ) {
+            $msg .= '. Skipped (page not found): ' . implode( ', ', $skipped );
+        }
+        $results[] = array( 'success' => true, 'message' => $msg );
         return $results;
     }
 
@@ -1062,6 +1088,22 @@ class WICM_Developer_Importer {
                 array( 'key' => 'about', 'title' => 'À propos', 'order' => 3 ),
                 array( 'key' => 'store', 'title' => 'Notre boutique', 'order' => 4 ),
             );
+
+            // Fallback: look up FR pages by slug if IDs weren't passed
+            $fr_slug_map = array(
+                'home'     => 'accueil',
+                'programs' => 'programmes',
+                'about'    => 'a-propos',
+                'store'    => 'notre-boutique',
+            );
+            foreach ( $fr_slug_map as $fkey => $fslug ) {
+                if ( empty( $fr_page_ids[ $fkey ] ) ) {
+                    $fp = get_page_by_path( $fslug, OBJECT, 'page' );
+                    if ( $fp ) {
+                        $fr_page_ids[ $fkey ] = $fp->ID;
+                    }
+                }
+            }
 
             $fr_added = 0;
             foreach ( $fr_menu_items as $item ) {
