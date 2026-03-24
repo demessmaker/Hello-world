@@ -497,13 +497,18 @@ class WICM_Developer_Importer {
             array( 'name' => 'John McGuinness', 'role' => 'Parent', 'quote' => 'My son was selected for the Montreal Jazz Festival Blues Camp thanks to the exceptional training he received here.', 'rating' => 5 ),
         );
 
-        // Build map of existing testimonials by title for reliable duplicate detection
+        // Build map of existing EN testimonials by title for reliable duplicate detection
+        // Only match testimonials already tagged as English (or untagged) — not French ones
         $existing_posts = get_posts( array(
             'post_type'   => 'wicm_testimonial',
             'numberposts' => 50,
         ) );
         $existing_map = array();
         foreach ( $existing_posts as $ep ) {
+            if ( function_exists( 'pll_get_post_language' ) ) {
+                $lang = pll_get_post_language( $ep->ID );
+                if ( $lang && $lang !== 'en' ) continue; // skip French testimonials
+            }
             $existing_map[ $ep->post_title ] = $ep->ID;
         }
 
