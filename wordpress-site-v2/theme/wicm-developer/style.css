@@ -3,7 +3,7 @@ Theme Name: WICM Developer
 Theme URI: https://westislandmusicschool.com
 Author: West Island Music School
 Description: A modern, responsive WordPress theme for West Island Music School. Clean design with red/gray color scheme matching the React SPA.
-Version: 2.0.0
+Version: 2.2.0
 License: GPL v2 or later
 Text Domain: wicm-developer
 */
@@ -1805,7 +1805,105 @@ ol.wp-block-list li {
 }
 
 /* ============================================
-   23. PRINT
+   23. STORE PAGE
+   ============================================ */
+.store-category {
+    margin: 3rem 0;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--color-gray-200);
+}
+
+.store-category:last-child {
+    border-bottom: none;
+}
+
+.store-category-img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    margin-bottom: 1.5rem;
+}
+
+@media (min-width: 640px) {
+    .store-category-img {
+        height: 360px;
+    }
+}
+
+.store-brands {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: var(--color-gray-50);
+    border-radius: var(--radius-lg);
+}
+
+.store-brands h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-gray-900);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.brands-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+@media (min-width: 640px) {
+    .brands-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .brands-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.brand-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 0.75rem;
+    background: var(--color-white);
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius);
+    text-decoration: none;
+    transition: box-shadow var(--transition), border-color var(--transition);
+}
+
+.brand-card:hover {
+    border-color: var(--color-red-600);
+    box-shadow: var(--shadow);
+}
+
+.brand-card .brand-logo {
+    height: 40px;
+    width: auto;
+    max-width: 120px;
+    object-fit: contain;
+    margin: 0;
+    border-radius: 0;
+}
+
+.brand-card span {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-gray-700);
+}
+
+.brand-card:hover span {
+    color: var(--color-red-600);
+}
+
+/* ============================================
+   24. PRINT
    ============================================ */
 @media print {
     .site-header, .site-footer, .back-to-top, .cta-section { display: none; }

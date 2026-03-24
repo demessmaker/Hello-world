@@ -100,7 +100,7 @@ function wicm_enqueue_assets() {
         'wicm-style',
         get_stylesheet_uri(),
         array( 'wicm-fonts' ),
-        '2.1.0'
+        '2.2.0'
     );
 
     // Inline nav bullet fix — cannot be cached/stripped by Autoptimize
@@ -112,7 +112,7 @@ function wicm_enqueue_assets() {
         'wicm-theme-js',
         get_template_directory_uri() . '/assets/js/theme.js',
         array(),
-        '2.1.0',
+        '2.2.0',
         true
     );
 }
