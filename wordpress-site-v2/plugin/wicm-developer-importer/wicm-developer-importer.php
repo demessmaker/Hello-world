@@ -497,43 +497,66 @@ class WICM_Developer_Importer {
             array( 'name' => 'John McGuinness', 'slug' => 'testimonial-john-mcguinness', 'role' => 'Parent', 'quote' => 'My son was selected for the Montreal Jazz Festival Blues Camp thanks to the exceptional training he received here.', 'rating' => 5 ),
         );
 
+        // Temporarily unhook Polylang filters that interfere with bulk post creation
+        global $wpdb;
+
         $created = 0;
         $updated = 0;
+        $post_ids = array();
+
+        // Step 1: Create all posts via direct DB insert to bypass Polylang hooks
         foreach ( $testimonials as $t ) {
-            // Check for existing EN testimonial by slug
-            $existing = get_posts( array(
-                'post_type'   => 'wicm_testimonial',
-                'name'        => $t['slug'],
-                'numberposts' => 1,
-                'post_status' => 'any',
+            // Check for existing by slug
+            $existing_id = $wpdb->get_var( $wpdb->prepare(
+                "SELECT ID FROM {$wpdb->posts} WHERE post_name = %s AND post_type = %s LIMIT 1",
+                $t['slug'], 'wicm_testimonial'
             ) );
 
-            if ( ! empty( $existing ) ) {
-                $post_id = $existing[0]->ID;
+            if ( $existing_id ) {
+                $post_id = (int) $existing_id;
                 $updated++;
             } else {
-                $post_id = wp_insert_post( array(
-                    'post_title'  => $t['name'],
-                    'post_name'   => $t['slug'],
-                    'post_status' => 'publish',
-                    'post_type'   => 'wicm_testimonial',
+                $wpdb->insert( $wpdb->posts, array(
+                    'post_title'   => $t['name'],
+                    'post_name'    => $t['slug'],
+                    'post_status'  => 'publish',
+                    'post_type'    => 'wicm_testimonial',
+                    'post_date'    => current_time( 'mysql' ),
+                    'post_date_gmt'=> current_time( 'mysql', 1 ),
+                    'post_modified'    => current_time( 'mysql' ),
+                    'post_modified_gmt'=> current_time( 'mysql', 1 ),
+                    'post_content' => '',
+                    'post_excerpt' => '',
+                    'to_ping'      => '',
+                    'pinged'       => '',
+                    'post_content_filtered' => '',
+                    'guid'         => '',
                 ) );
-                if ( is_wp_error( $post_id ) || $post_id === 0 ) {
-                    $results[] = array( 'success' => false, 'message' => "Failed to create testimonial: {$t['name']}" );
+                $post_id = (int) $wpdb->insert_id;
+                if ( ! $post_id ) {
+                    $results[] = array( 'success' => false, 'message' => "DB insert failed for: {$t['name']}" );
                     continue;
                 }
+                // Set the GUID
+                $wpdb->update( $wpdb->posts, array( 'guid' => home_url( "?p={$post_id}" ) ), array( 'ID' => $post_id ) );
+                clean_post_cache( $post_id );
                 $created++;
             }
+
             update_post_meta( $post_id, '_wicm_quote', $t['quote'] );
             update_post_meta( $post_id, '_wicm_role', $t['role'] );
             update_post_meta( $post_id, '_wicm_rating', $t['rating'] );
-            // Tag as English so Polylang shows them on the EN site
-            if ( function_exists( 'pll_set_post_language' ) ) {
-                pll_set_post_language( $post_id, 'en' );
+            $post_ids[] = $post_id;
+        }
+
+        // Step 2: Set Polylang language on all posts AFTER creation
+        if ( function_exists( 'pll_set_post_language' ) ) {
+            foreach ( $post_ids as $pid ) {
+                pll_set_post_language( $pid, 'en' );
             }
         }
 
-        $results[] = array( 'success' => ( $created + $updated ) > 0, 'message' => "Testimonials: created {$created}, updated {$updated}" );
+        $results[] = array( 'success' => ( $created + $updated ) > 0, 'message' => "EN Testimonials: created {$created}, updated {$updated} (IDs: " . implode( ', ', $post_ids ) . ")" );
         return $results;
     }
 
