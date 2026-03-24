@@ -34,7 +34,6 @@
             wp_nav_menu( array(
                 'theme_location' => 'primary',
                 'container'      => false,
-                'items_wrap'     => '%3$s',
                 'fallback_cb'    => 'wicm_fallback_menu',
                 'depth'          => 1,
             ) );
@@ -75,7 +74,6 @@
         wp_nav_menu( array(
             'theme_location' => 'primary',
             'container'      => false,
-            'items_wrap'     => '%3$s',
             'fallback_cb'    => 'wicm_fallback_menu',
             'depth'          => 1,
         ) );
