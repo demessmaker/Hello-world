@@ -10,6 +10,7 @@
 
 <a class="skip-link screen-reader-text" href="#main-content"><?php esc_html_e( 'Skip to content', 'wicm-developer' ); ?></a>
 
+<style>.site-header li,.site-header ul,.site-header ol{list-style:none!important;list-style-type:none!important;margin:0;padding:0}</style>
 <header class="site-header" id="site-header">
     <div class="header-inner">
         <!-- Logo -->
