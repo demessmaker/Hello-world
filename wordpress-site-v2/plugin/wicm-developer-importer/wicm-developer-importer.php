@@ -497,17 +497,20 @@ class WICM_Developer_Importer {
             array( 'name' => 'John McGuinness', 'role' => 'Parent', 'quote' => 'My son was selected for the Montreal Jazz Festival Blues Camp thanks to the exceptional training he received here.', 'rating' => 5 ),
         );
 
+        // Build map of existing testimonials by title for reliable duplicate detection
+        $existing_posts = get_posts( array(
+            'post_type'   => 'wicm_testimonial',
+            'numberposts' => 50,
+        ) );
+        $existing_map = array();
+        foreach ( $existing_posts as $ep ) {
+            $existing_map[ $ep->post_title ] = $ep->ID;
+        }
+
         $count = 0;
         foreach ( $testimonials as $t ) {
-            // Check for existing testimonial by title and post type
-            $existing = get_posts( array(
-                'post_type'   => 'wicm_testimonial',
-                'title'       => $t['name'],
-                'numberposts' => 1,
-                'fields'      => 'ids',
-            ) );
-            if ( ! empty( $existing ) ) {
-                $post_id = $existing[0];
+            if ( isset( $existing_map[ $t['name'] ] ) ) {
+                $post_id = $existing_map[ $t['name'] ];
                 $action  = 'Updated';
             } else {
                 $post_id = wp_insert_post( array(
@@ -977,19 +980,22 @@ class WICM_Developer_Importer {
             $en_test_map[ $et->post_title ] = $et->ID;
         }
 
+        // Build map of existing FR testimonials by title+role for reliable duplicate detection
+        $existing_fr_posts = get_posts( array(
+            'post_type'   => 'wicm_testimonial',
+            'numberposts' => 50,
+        ) );
+        $existing_fr_map = array();
+        foreach ( $existing_fr_posts as $efp ) {
+            $efp_role = get_post_meta( $efp->ID, '_wicm_role', true );
+            $existing_fr_map[ $efp->post_title . '|' . $efp_role ] = $efp->ID;
+        }
+
         $fr_test_count = 0;
         foreach ( $fr_testimonials as $t ) {
-            // Look for existing FR testimonial by title + role meta (to distinguish from EN)
-            $existing = get_posts( array(
-                'post_type'   => 'wicm_testimonial',
-                'title'       => $t['name'],
-                'numberposts' => -1,
-                'fields'      => 'ids',
-                'meta_key'    => '_wicm_role',
-                'meta_value'  => $t['role'],
-            ) );
-            if ( ! empty( $existing ) ) {
-                $post_id = $existing[0];
+            $lookup_key = $t['name'] . '|' . $t['role'];
+            if ( isset( $existing_fr_map[ $lookup_key ] ) ) {
+                $post_id = $existing_fr_map[ $lookup_key ];
             } else {
                 $post_id = wp_insert_post( array(
                     'post_title'  => $t['name'],
