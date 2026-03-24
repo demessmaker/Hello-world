@@ -491,53 +491,49 @@ class WICM_Developer_Importer {
     private function import_testimonials() {
         $results = array();
         $testimonials = array(
-            array( 'name' => 'Amanda Walsh', 'role' => 'Voice Student', 'quote' => 'The warm environment and supportive teachers helped me build confidence I never knew I had. My vocal range has expanded tremendously!', 'rating' => 5 ),
-            array( 'name' => 'Donna Burgess', 'role' => 'Parent', 'quote' => "Top notch instruction quality. We've been customers for 15 years and both my children have flourished under their guidance.", 'rating' => 5 ),
-            array( 'name' => 'Damien Holtz', 'role' => 'Parent', 'quote' => 'The skills and lasting joy my daughter has developed through her piano lessons here are priceless. Highly recommended!', 'rating' => 5 ),
-            array( 'name' => 'John McGuinness', 'role' => 'Parent', 'quote' => 'My son was selected for the Montreal Jazz Festival Blues Camp thanks to the exceptional training he received here.', 'rating' => 5 ),
+            array( 'name' => 'Amanda Walsh', 'slug' => 'testimonial-amanda-walsh', 'role' => 'Voice Student', 'quote' => 'The warm environment and supportive teachers helped me build confidence I never knew I had. My vocal range has expanded tremendously!', 'rating' => 5 ),
+            array( 'name' => 'Donna Burgess', 'slug' => 'testimonial-donna-burgess', 'role' => 'Parent', 'quote' => "Top notch instruction quality. We've been customers for 15 years and both my children have flourished under their guidance.", 'rating' => 5 ),
+            array( 'name' => 'Damien Holtz', 'slug' => 'testimonial-damien-holtz', 'role' => 'Parent', 'quote' => 'The skills and lasting joy my daughter has developed through her piano lessons here are priceless. Highly recommended!', 'rating' => 5 ),
+            array( 'name' => 'John McGuinness', 'slug' => 'testimonial-john-mcguinness', 'role' => 'Parent', 'quote' => 'My son was selected for the Montreal Jazz Festival Blues Camp thanks to the exceptional training he received here.', 'rating' => 5 ),
         );
 
-        // Build map of existing EN testimonials by title for reliable duplicate detection
-        // Only match testimonials already tagged as English (or untagged) — not French ones
-        $existing_posts = get_posts( array(
-            'post_type'   => 'wicm_testimonial',
-            'numberposts' => 50,
-        ) );
-        $existing_map = array();
-        foreach ( $existing_posts as $ep ) {
-            if ( function_exists( 'pll_get_post_language' ) ) {
-                $lang = pll_get_post_language( $ep->ID );
-                if ( $lang && $lang !== 'en' ) continue; // skip French testimonials
-            }
-            $existing_map[ $ep->post_title ] = $ep->ID;
-        }
-
-        $count = 0;
+        $created = 0;
+        $updated = 0;
         foreach ( $testimonials as $t ) {
-            if ( isset( $existing_map[ $t['name'] ] ) ) {
-                $post_id = $existing_map[ $t['name'] ];
-                $action  = 'Updated';
+            // Check for existing EN testimonial by slug
+            $existing = get_posts( array(
+                'post_type'   => 'wicm_testimonial',
+                'name'        => $t['slug'],
+                'numberposts' => 1,
+                'post_status' => 'any',
+            ) );
+
+            if ( ! empty( $existing ) ) {
+                $post_id = $existing[0]->ID;
+                $updated++;
             } else {
                 $post_id = wp_insert_post( array(
                     'post_title'  => $t['name'],
+                    'post_name'   => $t['slug'],
                     'post_status' => 'publish',
                     'post_type'   => 'wicm_testimonial',
                 ) );
-                $action = 'Created';
-            }
-            if ( ! is_wp_error( $post_id ) ) {
-                update_post_meta( $post_id, '_wicm_quote', $t['quote'] );
-                update_post_meta( $post_id, '_wicm_role', $t['role'] );
-                update_post_meta( $post_id, '_wicm_rating', $t['rating'] );
-                // Tag as English so Polylang shows them on the EN site
-                if ( function_exists( 'pll_set_post_language' ) ) {
-                    pll_set_post_language( $post_id, 'en' );
+                if ( is_wp_error( $post_id ) || $post_id === 0 ) {
+                    $results[] = array( 'success' => false, 'message' => "Failed to create testimonial: {$t['name']}" );
+                    continue;
                 }
-                $count++;
+                $created++;
+            }
+            update_post_meta( $post_id, '_wicm_quote', $t['quote'] );
+            update_post_meta( $post_id, '_wicm_role', $t['role'] );
+            update_post_meta( $post_id, '_wicm_rating', $t['rating'] );
+            // Tag as English so Polylang shows them on the EN site
+            if ( function_exists( 'pll_set_post_language' ) ) {
+                pll_set_post_language( $post_id, 'en' );
             }
         }
 
-        $results[] = array( 'success' => $count > 0, 'message' => "Imported {$count} testimonials" );
+        $results[] = array( 'success' => ( $created + $updated ) > 0, 'message' => "Testimonials: created {$created}, updated {$updated}" );
         return $results;
     }
 
@@ -971,65 +967,63 @@ class WICM_Developer_Importer {
 
         // --- French Testimonials ---
         $fr_testimonials = array(
-            array( 'name' => 'Amanda Walsh', 'role' => 'Étudiante en chant', 'quote' => "L'environnement chaleureux et les professeurs bienveillants m'ont aidée à développer une confiance que je ne savais pas avoir. Ma tessiture vocale s'est énormément élargie!" ),
-            array( 'name' => 'Donna Burgess', 'role' => 'Parent', 'quote' => "Qualité d'enseignement de premier ordre. Nous sommes clients depuis 15 ans et mes deux enfants ont épanoui sous leur guidance." ),
-            array( 'name' => 'Damien Holtz', 'role' => 'Parent', 'quote' => "Les compétences et la joie durable que ma fille a développées grâce à ses cours de piano ici sont inestimables. Hautement recommandé!" ),
-            array( 'name' => 'John McGuinness', 'role' => 'Parent', 'quote' => "Mon fils a été sélectionné pour le Blues Camp du Festival de Jazz de Montréal grâce à la formation exceptionnelle qu'il a reçue ici." ),
+            array( 'name' => 'Amanda Walsh', 'slug' => 'temoignage-amanda-walsh', 'en_slug' => 'testimonial-amanda-walsh', 'role' => 'Étudiante en chant', 'quote' => "L'environnement chaleureux et les professeurs bienveillants m'ont aidée à développer une confiance que je ne savais pas avoir. Ma tessiture vocale s'est énormément élargie!" ),
+            array( 'name' => 'Donna Burgess', 'slug' => 'temoignage-donna-burgess', 'en_slug' => 'testimonial-donna-burgess', 'role' => 'Parent', 'quote' => "Qualité d'enseignement de premier ordre. Nous sommes clients depuis 15 ans et mes deux enfants ont épanoui sous leur guidance." ),
+            array( 'name' => 'Damien Holtz', 'slug' => 'temoignage-damien-holtz', 'en_slug' => 'testimonial-damien-holtz', 'role' => 'Parent', 'quote' => "Les compétences et la joie durable que ma fille a développées grâce à ses cours de piano ici sont inestimables. Hautement recommandé!" ),
+            array( 'name' => 'John McGuinness', 'slug' => 'temoignage-john-mcguinness', 'en_slug' => 'testimonial-john-mcguinness', 'role' => 'Parent', 'quote' => "Mon fils a été sélectionné pour le Blues Camp du Festival de Jazz de Montréal grâce à la formation exceptionnelle qu'il a reçue ici." ),
         );
 
-        $en_testimonials = get_posts( array(
-            'post_type'   => 'wicm_testimonial',
-            'numberposts' => 20,
-            'orderby'     => 'date',
-            'order'       => 'ASC',
-        ) );
-        // Map EN testimonials by name for linking
+        // Map EN testimonials by slug for translation linking
         $en_test_map = array();
-        foreach ( $en_testimonials as $et ) {
-            $en_test_map[ $et->post_title ] = $et->ID;
-        }
-
-        // Build map of existing FR testimonials by title+role for reliable duplicate detection
-        $existing_fr_posts = get_posts( array(
-            'post_type'   => 'wicm_testimonial',
-            'numberposts' => 50,
-        ) );
-        $existing_fr_map = array();
-        foreach ( $existing_fr_posts as $efp ) {
-            $efp_role = get_post_meta( $efp->ID, '_wicm_role', true );
-            $existing_fr_map[ $efp->post_title . '|' . $efp_role ] = $efp->ID;
+        foreach ( $fr_testimonials as $t ) {
+            $en_posts = get_posts( array(
+                'post_type'   => 'wicm_testimonial',
+                'name'        => $t['en_slug'],
+                'numberposts' => 1,
+                'post_status' => 'any',
+            ) );
+            if ( ! empty( $en_posts ) ) {
+                $en_test_map[ $t['name'] ] = $en_posts[0]->ID;
+            }
         }
 
         $fr_test_count = 0;
         foreach ( $fr_testimonials as $t ) {
-            $lookup_key = $t['name'] . '|' . $t['role'];
-            if ( isset( $existing_fr_map[ $lookup_key ] ) ) {
-                $post_id = $existing_fr_map[ $lookup_key ];
+            // Check for existing FR testimonial by slug
+            $existing = get_posts( array(
+                'post_type'   => 'wicm_testimonial',
+                'name'        => $t['slug'],
+                'numberposts' => 1,
+                'post_status' => 'any',
+            ) );
+
+            if ( ! empty( $existing ) ) {
+                $post_id = $existing[0]->ID;
             } else {
                 $post_id = wp_insert_post( array(
                     'post_title'  => $t['name'],
+                    'post_name'   => $t['slug'],
                     'post_status' => 'publish',
                     'post_type'   => 'wicm_testimonial',
                 ) );
+                if ( is_wp_error( $post_id ) || $post_id === 0 ) continue;
             }
-            if ( ! is_wp_error( $post_id ) ) {
-                update_post_meta( $post_id, '_wicm_quote', $t['quote'] );
-                update_post_meta( $post_id, '_wicm_role', $t['role'] );
-                update_post_meta( $post_id, '_wicm_rating', 5 );
-                $fr_test_count++;
+            update_post_meta( $post_id, '_wicm_quote', $t['quote'] );
+            update_post_meta( $post_id, '_wicm_role', $t['role'] );
+            update_post_meta( $post_id, '_wicm_rating', 5 );
+            $fr_test_count++;
 
-                if ( $has_polylang ) {
-                    pll_set_post_language( $post_id, 'fr' );
-                    if ( ! empty( $en_test_map[ $t['name'] ] ) ) {
-                        pll_save_post_translations( array(
-                            'en' => $en_test_map[ $t['name'] ],
-                            'fr' => $post_id,
-                        ) );
-                    }
+            if ( $has_polylang ) {
+                pll_set_post_language( $post_id, 'fr' );
+                if ( ! empty( $en_test_map[ $t['name'] ] ) ) {
+                    pll_save_post_translations( array(
+                        'en' => $en_test_map[ $t['name'] ],
+                        'fr' => $post_id,
+                    ) );
                 }
             }
         }
-        $results[] = array( 'success' => $fr_test_count > 0, 'message' => "Created {$fr_test_count} FR testimonials" );
+        $results[] = array( 'success' => $fr_test_count > 0, 'message' => "FR testimonials: created/updated {$fr_test_count}" );
 
         // --- French Navigation Menu ---
         $existing_fr_menu = wp_get_nav_menu_object( 'Menu principal' );
