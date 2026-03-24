@@ -29,6 +29,9 @@ class WICM_Developer_Importer {
         // Register custom post types
         add_action( 'init', array( $this, 'register_post_types' ) );
 
+        // Fix nav bullet points (theme CSS may be cached by Autoptimize)
+        add_action( 'wp_head', array( $this, 'fix_nav_bullets' ), 999 );
+
         // Register CPTs as translatable with Polylang
         add_filter( 'pll_get_post_types', array( $this, 'add_cpt_to_polylang' ), 10, 2 );
 
@@ -66,6 +69,10 @@ class WICM_Developer_Importer {
     /**
      * Register Custom Post Types.
      */
+    public function fix_nav_bullets() {
+        echo '<style id="wicm-nav-fix">.site-header li,.site-header ul,.site-header ol,.primary-nav li,.primary-nav ul,.mobile-menu li,.mobile-menu ul,nav.primary-nav>li,nav.mobile-menu>li{list-style:none!important;list-style-type:none!important;margin:0!important;padding:0!important}</style>' . "\n";
+    }
+
     public function register_post_types() {
         register_post_type( 'wicm_program', array(
             'labels'       => array(
