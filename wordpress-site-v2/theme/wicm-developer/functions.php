@@ -100,19 +100,19 @@ function wicm_enqueue_assets() {
         'wicm-style',
         get_stylesheet_uri(),
         array( 'wicm-fonts' ),
-        '2.2.0'
+        '2.3.0'
     );
 
     // Inline nav bullet fix — cannot be cached/stripped by Autoptimize
     wp_add_inline_style( 'wicm-style',
-        '.site-header li,.site-header ul,.site-header ol,.primary-nav li,.primary-nav ul,.mobile-menu li,.mobile-menu ul{list-style:none!important;list-style-type:none!important;margin:0;padding:0}'
+        '.site-header li,.site-header ul,.site-header ol,.primary-nav li,.primary-nav ul,.mobile-menu li,.mobile-menu ul{list-style:none!important;list-style-type:none!important;margin:0;padding:0}.primary-nav ul,.primary-nav>ul{display:flex!important;align-items:center;gap:.25rem;flex-direction:row!important}.header-inner{display:flex!important;align-items:center;justify-content:space-between}'
     );
 
     wp_enqueue_script(
         'wicm-theme-js',
         get_template_directory_uri() . '/assets/js/theme.js',
         array(),
-        '2.2.0',
+        '2.3.0',
         true
     );
 }

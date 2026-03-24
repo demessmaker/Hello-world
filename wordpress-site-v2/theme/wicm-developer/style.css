@@ -3,7 +3,7 @@ Theme Name: WICM Developer
 Theme URI: https://westislandmusicschool.com
 Author: West Island Music School
 Description: A modern, responsive WordPress theme for West Island Music School. Clean design with red/gray color scheme matching the React SPA.
-Version: 2.2.0
+Version: 2.3.0
 License: GPL v2 or later
 Text Domain: wicm-developer
 */
@@ -1867,39 +1867,33 @@ ol.wp-block-list li {
 
 .brand-card {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
+    justify-content: center;
     padding: 1rem 0.75rem;
     background: var(--color-white);
     border: 1px solid var(--color-gray-200);
     border-radius: var(--radius);
     text-decoration: none;
-    transition: box-shadow var(--transition), border-color var(--transition);
+    transition: box-shadow var(--transition), border-color var(--transition), background var(--transition);
+    min-height: 3.5rem;
 }
 
 .brand-card:hover {
     border-color: var(--color-red-600);
     box-shadow: var(--shadow);
+    background: var(--color-red-600);
 }
 
-.brand-card .brand-logo {
-    height: 40px;
-    width: auto;
-    max-width: 120px;
-    object-fit: contain;
-    margin: 0;
-    border-radius: 0;
+.brand-card .brand-name {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--color-gray-800);
+    letter-spacing: 0.02em;
+    text-align: center;
 }
 
-.brand-card span {
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: var(--color-gray-700);
-}
-
-.brand-card:hover span {
-    color: var(--color-red-600);
+.brand-card:hover .brand-name {
+    color: var(--color-white);
 }
 
 /* ============================================

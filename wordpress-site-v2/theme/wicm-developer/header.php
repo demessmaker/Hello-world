@@ -10,7 +10,7 @@
 
 <a class="skip-link screen-reader-text" href="#main-content"><?php esc_html_e( 'Skip to content', 'wicm-developer' ); ?></a>
 
-<style>.site-header li,.site-header ul,.site-header ol{list-style:none!important;list-style-type:none!important;margin:0;padding:0}</style>
+<style>.site-header li,.site-header ul,.site-header ol,.primary-nav li,.primary-nav ul{list-style:none!important;list-style-type:none!important;margin:0;padding:0}.primary-nav ul,.primary-nav>ul{display:flex!important;align-items:center;gap:.25rem;flex-direction:row!important}.header-inner{display:flex!important;align-items:center;justify-content:space-between}</style>
 <header class="site-header" id="site-header">
     <div class="header-inner">
         <!-- Logo -->
