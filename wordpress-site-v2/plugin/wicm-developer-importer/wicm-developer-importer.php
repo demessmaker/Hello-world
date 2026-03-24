@@ -524,6 +524,10 @@ class WICM_Developer_Importer {
                 update_post_meta( $post_id, '_wicm_quote', $t['quote'] );
                 update_post_meta( $post_id, '_wicm_role', $t['role'] );
                 update_post_meta( $post_id, '_wicm_rating', $t['rating'] );
+                // Tag as English so Polylang shows them on the EN site
+                if ( function_exists( 'pll_set_post_language' ) ) {
+                    pll_set_post_language( $post_id, 'en' );
+                }
                 $count++;
             }
         }
