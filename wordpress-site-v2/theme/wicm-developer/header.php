@@ -17,7 +17,7 @@
             <?php if ( has_custom_logo() ) : ?>
                 <?php the_custom_logo(); ?>
             <?php else :
-                $logo_text   = get_theme_mod( 'wicm_logo_text', 'West Island Music School' );
+                $logo_text   = get_theme_mod( 'wicm_logo_text', 'West Island Conservatory of Music' );
                 $logo_accent = get_theme_mod( 'wicm_logo_accent', 'West Island' );
                 // Split text: accent part in red, remainder in normal color
                 $remainder   = trim( str_replace( $logo_accent, '', $logo_text ) );

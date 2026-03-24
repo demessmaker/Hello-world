@@ -1091,7 +1091,7 @@ class WICM_Developer_Importer {
             '@context'    => 'https://schema.org',
             '@type'       => 'MusicSchool',
             'name'        => $s['site_title'],
-            'description' => 'Professional music lessons in West Island, Montreal. Piano, guitar, voice, drums and violin for all ages and skill levels.',
+            'description' => 'Professional music lessons in West Island, Montreal. Piano, guitar, bass, ukulele, voice, drums, violin and more for all ages and skill levels.',
             'url'         => home_url( '/' ),
             'email'       => $s['contact']['email'],
             'address'     => array(

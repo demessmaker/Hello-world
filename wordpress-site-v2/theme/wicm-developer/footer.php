@@ -9,8 +9,8 @@ $wicm_is_fr = ( 'fr' === $wicm_lang );
 // --- Translated footer strings ---
 $wicm_footer_strings = array(
     'en' => array(
-        'tagline'     => get_theme_mod( 'wicm_footer_tagline', 'Making music magical since 1997' ),
-        'description' => get_theme_mod( 'wicm_footer_description', 'Professional music education for all ages in West Island, Montreal. Piano, guitar, voice, drums, violin and more.' ),
+        'tagline'     => get_theme_mod( 'wicm_footer_tagline', 'Making music magical for over 50 years' ),
+        'description' => get_theme_mod( 'wicm_footer_description', 'Professional music education for all ages, levels and styles in Montreal\'s West Island. Piano, guitar, bass, ukulele, voice, drums, violin and more.' ),
         'quick_links' => 'Quick Links',
         'programs'    => 'Programs',
         'contact'     => 'Contact',
@@ -26,8 +26,8 @@ $wicm_footer_strings = array(
         ),
     ),
     'fr' => array(
-        'tagline'     => get_theme_mod( 'wicm_footer_tagline_fr', 'La magie de la musique depuis 1997' ),
-        'description' => get_theme_mod( 'wicm_footer_description_fr', 'Éducation musicale professionnelle pour tous les âges dans l\'Ouest-de-l\'Île de Montréal. Piano, guitare, chant, batterie, violon et plus.' ),
+        'tagline'     => get_theme_mod( 'wicm_footer_tagline_fr', 'La magie de la musique depuis 50 ans' ),
+        'description' => get_theme_mod( 'wicm_footer_description_fr', 'Éducation musicale professionnelle pour tous les âges, styles et niveaux dans l\'Ouest-de-l\'Île de Montréal. Piano, guitare, basse, ukulélé, chant, batterie, violon et plus.' ),
         'quick_links' => 'Liens rapides',
         'programs'    => 'Programmes',
         'contact'     => 'Contact',
