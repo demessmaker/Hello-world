@@ -159,7 +159,7 @@ class WICM_Developer_Importer {
                     <table class="form-table">
                         <tr><th>Site Settings</th><td><label><input type="checkbox" name="import_settings" value="1" checked> Title, tagline, timezone, permalinks</label></td></tr>
                         <tr><th>Pages</th><td><label><input type="checkbox" name="import_pages" value="1" checked> Home, About, Contact, Programs, Book a Trial</label></td></tr>
-                        <tr><th>Programs</th><td><label><input type="checkbox" name="import_programs" value="1" checked> Piano, Guitar, Drums, Voice, Violin</label></td></tr>
+                        <tr><th>Programs</th><td><label><input type="checkbox" name="import_programs" value="1" checked> Piano, Guitar, Drums, Voice, Violin, Bass, Saxophone, Ukulele, Maracas</label></td></tr>
                         <tr><th>Testimonials</th><td><label><input type="checkbox" name="import_testimonials" value="1" checked> 4 testimonials with ratings</label></td></tr>
                         <tr><th>Images</th><td><label><input type="checkbox" name="import_images" value="1" checked> Download Unsplash images for programs</label></td></tr>
                         <tr><th>Contact Form</th><td><label><input type="checkbox" name="import_cf7" value="1" checked> Create CF7 form + embed in Contact page</label></td></tr>
@@ -420,6 +420,38 @@ class WICM_Developer_Importer {
                 'features' => array( 'Classical Training', 'Proper Technique', 'Orchestra Prep', 'Solo Performance' ),
                 'image_url'=> 'https://images.unsplash.com/photo-1612225330812-01a9c6b355ec?w=800&h=500&fit=crop',
             ),
+            array(
+                'name'     => 'Bass Lessons',
+                'slug'     => 'bass-lessons',
+                'icon'     => '🎸',
+                'desc'     => 'Lay down the groove with electric or acoustic bass lessons that build solid technique, timing, and musicality.',
+                'features' => array( 'Electric & Acoustic Bass', 'Groove & Timing', 'Music Theory', 'Band Ready Skills' ),
+                'image_url'=> 'https://images.unsplash.com/photo-1564186763535-ebb21ef5277f?w=800&h=500&fit=crop',
+            ),
+            array(
+                'name'     => 'Saxophone Lessons',
+                'slug'     => 'saxophone-lessons',
+                'icon'     => '🎷',
+                'desc'     => 'From smooth jazz to classical, develop your saxophone skills with expert instruction in tone, technique, and improvisation.',
+                'features' => array( 'Tone Development', 'Jazz & Classical Styles', 'Improvisation', 'Ensemble Playing' ),
+                'image_url'=> 'https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=800&h=500&fit=crop',
+            ),
+            array(
+                'name'     => 'Ukulele Lessons',
+                'slug'     => 'ukulele-lessons',
+                'icon'     => '🎸',
+                'desc'     => 'Pick up the ukulele and start playing your favorite songs in no time with fun, beginner-friendly lessons for all ages.',
+                'features' => array( 'Strumming Patterns', 'Chord Progressions', 'Fingerpicking', 'Song Repertoire' ),
+                'image_url'=> 'https://images.unsplash.com/photo-1556449895-a33c9dba33dd?w=800&h=500&fit=crop',
+            ),
+            array(
+                'name'     => 'Maracas Lessons',
+                'slug'     => 'maracas-lessons',
+                'icon'     => '🪇',
+                'desc'     => 'Explore rhythm and percussion with maracas lessons that teach technique, timing, and Latin and world music styles.',
+                'features' => array( 'Rhythm Fundamentals', 'Latin Styles', 'World Music', 'Ensemble Integration' ),
+                'image_url'=> 'https://images.unsplash.com/photo-1461784121038-f088ca1e7714?w=800&h=500&fit=crop',
+            ),
         );
 
         foreach ( $programs as $prog ) {
@@ -511,6 +543,10 @@ class WICM_Developer_Importer {
             'drum-lessons'   => array( 'url' => 'https://images.unsplash.com/photo-1519892300165-cb5542fb47c7?w=800&h=500&fit=crop', 'alt' => 'Drum lessons at West Island Music School' ),
             'voice-lessons'  => array( 'url' => 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=800&h=500&fit=crop', 'alt' => 'Voice lessons at West Island Music School' ),
             'violin-lessons' => array( 'url' => 'https://images.unsplash.com/photo-1612225330812-01a9c6b355ec?w=800&h=500&fit=crop', 'alt' => 'Violin lessons at West Island Music School' ),
+            'bass-lessons'   => array( 'url' => 'https://images.unsplash.com/photo-1564186763535-ebb21ef5277f?w=800&h=500&fit=crop', 'alt' => 'Bass lessons at West Island Music School' ),
+            'saxophone-lessons' => array( 'url' => 'https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=800&h=500&fit=crop', 'alt' => 'Saxophone lessons at West Island Music School' ),
+            'ukulele-lessons' => array( 'url' => 'https://images.unsplash.com/photo-1556449895-a33c9dba33dd?w=800&h=500&fit=crop', 'alt' => 'Ukulele lessons at West Island Music School' ),
+            'maracas-lessons' => array( 'url' => 'https://images.unsplash.com/photo-1461784121038-f088ca1e7714?w=800&h=500&fit=crop', 'alt' => 'Maracas lessons at West Island Music School' ),
         );
 
         $count = 0;
@@ -838,6 +874,38 @@ class WICM_Developer_Importer {
                 'desc'     => 'Embrassez l\'élégance de la musique à cordes avec un enseignement patient et progressif du violon, pour débutants à avancés.',
                 'features' => array( 'Formation classique', 'Technique appropriée', 'Préparation orchestrale', 'Performance solo' ),
             ),
+            array(
+                'name'     => 'Cours de basse',
+                'slug'     => 'cours-de-basse',
+                'en_slug'  => 'bass-lessons',
+                'icon'     => "\xF0\x9F\x8E\xB8",
+                'desc'     => 'Posez le groove avec des cours de basse électrique ou acoustique qui développent une technique solide, le sens du rythme et la musicalité.',
+                'features' => array( 'Basse électrique et acoustique', 'Groove et rythme', 'Théorie musicale', 'Compétences de groupe' ),
+            ),
+            array(
+                'name'     => 'Cours de saxophone',
+                'slug'     => 'cours-de-saxophone',
+                'en_slug'  => 'saxophone-lessons',
+                'icon'     => "\xF0\x9F\x8E\xB7",
+                'desc'     => 'Du jazz au classique, développez vos compétences au saxophone avec un enseignement expert en sonorité, technique et improvisation.',
+                'features' => array( 'Développement du son', 'Styles jazz et classique', 'Improvisation', 'Jeu d\'ensemble' ),
+            ),
+            array(
+                'name'     => 'Cours de ukulélé',
+                'slug'     => 'cours-de-ukulele',
+                'en_slug'  => 'ukulele-lessons',
+                'icon'     => "\xF0\x9F\x8E\xB8",
+                'desc'     => 'Prenez le ukulélé et commencez à jouer vos chansons préférées en un rien de temps avec des cours amusants et accessibles pour tous les âges.',
+                'features' => array( 'Motifs de grattage', 'Progressions d\'accords', 'Fingerpicking', 'Répertoire de chansons' ),
+            ),
+            array(
+                'name'     => 'Cours de maracas',
+                'slug'     => 'cours-de-maracas',
+                'en_slug'  => 'maracas-lessons',
+                'icon'     => "\xF0\x9F\xAA\x87",
+                'desc'     => 'Explorez le rythme et les percussions avec des cours de maracas qui enseignent la technique, le timing et les styles de musique latine et du monde.',
+                'features' => array( 'Fondamentaux du rythme', 'Styles latins', 'Musique du monde', 'Intégration en ensemble' ),
+            ),
         );
 
         foreach ( $fr_programs as $prog ) {
@@ -1019,8 +1087,8 @@ class WICM_Developer_Importer {
             }
             $html .= '<div class="program-card-body">';
             $icon_label = str_replace(
-                array( "\xF0\x9F\x8E\xB9", "\xF0\x9F\x8E\xB8", "\xF0\x9F\xA5\x81", "\xF0\x9F\x8E\xA4", "\xF0\x9F\x8E\xBB" ),
-                array( 'Piano', 'Guitar', 'Drums', 'Microphone', 'Violin' ),
+                array( "\xF0\x9F\x8E\xB9", "\xF0\x9F\x8E\xB8", "\xF0\x9F\xA5\x81", "\xF0\x9F\x8E\xA4", "\xF0\x9F\x8E\xBB", "\xF0\x9F\x8E\xB7", "\xF0\x9F\xAA\x87" ),
+                array( 'Piano', 'Guitar', 'Drums', 'Microphone', 'Violin', 'Saxophone', 'Maracas' ),
                 $icon
             );
             $html .= '<div class="program-card-icon" role="img" aria-label="' . esc_attr( $icon_label ) . '">' . esc_html( $icon ) . '</div>';
