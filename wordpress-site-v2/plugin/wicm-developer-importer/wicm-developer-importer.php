@@ -34,6 +34,7 @@ class WICM_Developer_Importer {
 
         // Register CPTs as translatable with Polylang
         add_filter( 'pll_get_post_types', array( $this, 'add_cpt_to_polylang' ), 10, 2 );
+        add_filter( 'pll_get_taxonomies', array( $this, 'add_tax_to_polylang' ), 10, 2 );
 
         // Frontend SEO hooks
         if ( ! is_admin() ) {
@@ -47,6 +48,7 @@ class WICM_Developer_Importer {
         // Shortcodes
         add_shortcode( 'wicm_programs', array( $this, 'programs_shortcode' ) );
         add_shortcode( 'wicm_testimonials', array( $this, 'testimonials_shortcode' ) );
+        add_shortcode( 'wicm_brands', array( $this, 'brands_shortcode' ) );
 
         // Disable wpautop on pages to prevent HTML mangling
         add_action( 'init', array( $this, 'disable_wpautop_pages' ) );
@@ -98,6 +100,32 @@ class WICM_Developer_Importer {
             'supports'     => array( 'title', 'custom-fields' ),
             'show_in_rest' => true,
         ) );
+
+        // Instrument Type taxonomy (for brands)
+        register_taxonomy( 'wicm_instrument_type', 'wicm_brand', array(
+            'labels'       => array(
+                'name'          => 'Instrument Types',
+                'singular_name' => 'Instrument Type',
+            ),
+            'public'       => true,
+            'hierarchical' => true,
+            'rewrite'      => array( 'slug' => 'instrument-type', 'with_front' => false ),
+            'show_in_rest' => true,
+        ) );
+
+        register_post_type( 'wicm_brand', array(
+            'labels'       => array(
+                'name'          => 'Brands',
+                'singular_name' => 'Brand',
+            ),
+            'public'       => true,
+            'has_archive'  => false,
+            'rewrite'      => array( 'slug' => 'brand', 'with_front' => false ),
+            'menu_icon'    => 'dashicons-tag',
+            'supports'     => array( 'title', 'thumbnail', 'custom-fields' ),
+            'show_in_rest' => true,
+            'taxonomies'   => array( 'wicm_instrument_type' ),
+        ) );
     }
 
     /**
@@ -106,7 +134,13 @@ class WICM_Developer_Importer {
     public function add_cpt_to_polylang( $post_types, $is_settings ) {
         $post_types['wicm_program']     = 'wicm_program';
         $post_types['wicm_testimonial'] = 'wicm_testimonial';
+        $post_types['wicm_brand']       = 'wicm_brand';
         return $post_types;
+    }
+
+    public function add_tax_to_polylang( $taxonomies, $is_settings ) {
+        $taxonomies['wicm_instrument_type'] = 'wicm_instrument_type';
+        return $taxonomies;
     }
 
     /**
@@ -168,6 +202,7 @@ class WICM_Developer_Importer {
                         <tr><th>Pages</th><td><label><input type="checkbox" name="import_pages" value="1" checked> Home, About, Contact, Programs, Book a Trial</label></td></tr>
                         <tr><th>Programs</th><td><label><input type="checkbox" name="import_programs" value="1" checked> Piano, Guitar, Drums, Voice, Violin, Bass, Saxophone, Ukulele, Maracas</label></td></tr>
                         <tr><th>Testimonials</th><td><label><input type="checkbox" name="import_testimonials" value="1" checked> 4 testimonials with ratings</label></td></tr>
+                        <tr><th>Store Brands</th><td><label><input type="checkbox" name="import_brands" value="1" checked> Instrument brands with categories (Guitars, Drums, Keyboards, Amps, Books)</label></td></tr>
                         <tr><th>Images</th><td><label><input type="checkbox" name="import_images" value="1" checked> Download Unsplash images for programs</label></td></tr>
                         <tr><th>Contact Form</th><td><label><input type="checkbox" name="import_cf7" value="1" checked> Create CF7 form + embed in Contact page</label></td></tr>
                         <tr><th>Menu</th><td><label><input type="checkbox" name="import_menu" value="1" checked> Primary navigation menu</label></td></tr>
@@ -231,6 +266,13 @@ class WICM_Developer_Importer {
             $results = array_merge( $results, $this->import_testimonials() );
         }
 
+        $brand_ids = array();
+        if ( ! empty( $_POST['import_brands'] ) ) {
+            $br          = $this->import_brands();
+            $results     = array_merge( $results, $br['results'] );
+            $brand_ids   = $br['ids'];
+        }
+
         if ( ! empty( $_POST['import_images'] ) ) {
             $results = array_merge( $results, $this->import_images( $program_ids ) );
         }
@@ -254,7 +296,7 @@ class WICM_Developer_Importer {
 
         // French content (Polylang)
         if ( ! empty( $_POST['import_french'] ) ) {
-            $fr = $this->import_french_content( $page_ids, $program_ids );
+            $fr = $this->import_french_content( $page_ids, $program_ids, $brand_ids );
             $results = array_merge( $results, $fr );
         }
 
@@ -591,6 +633,112 @@ class WICM_Developer_Importer {
         return $results;
     }
 
+    private function import_brands() {
+        $results  = array();
+        $brand_ids = array(); // keyed by slug
+
+        // Define instrument type terms
+        $types = array(
+            'guitars'     => 'Guitars',
+            'drums'       => 'Drums & Percussion',
+            'keyboards'   => 'Keyboards & Pianos',
+            'amplifiers'  => 'Amplifiers',
+            'books'       => 'Books & Manuals',
+        );
+
+        // Create/get taxonomy terms
+        $term_ids = array();
+        foreach ( $types as $slug => $name ) {
+            $existing = get_term_by( 'slug', $slug, 'wicm_instrument_type' );
+            if ( $existing ) {
+                $term_ids[ $slug ] = $existing->term_id;
+            } else {
+                $term = wp_insert_term( $name, 'wicm_instrument_type', array( 'slug' => $slug ) );
+                if ( ! is_wp_error( $term ) ) {
+                    $term_ids[ $slug ] = $term['term_id'];
+                }
+            }
+        }
+
+        // Set EN language on terms
+        if ( function_exists( 'pll_set_term_language' ) ) {
+            foreach ( $term_ids as $tid ) {
+                pll_set_term_language( $tid, 'en' );
+            }
+        }
+
+        // Brand data: slug => [ name, url, types[] ]
+        $brands = array(
+            'fender'    => array( 'name' => 'Fender',    'url' => 'https://www.fender.com',         'types' => array( 'guitars', 'amplifiers' ) ),
+            'gibson'    => array( 'name' => 'Gibson',    'url' => 'https://www.gibson.com',          'types' => array( 'guitars' ) ),
+            'yamaha'    => array( 'name' => 'Yamaha',    'url' => 'https://www.yamaha.com',          'types' => array( 'guitars', 'keyboards' ) ),
+            'ibanez'    => array( 'name' => 'Ibanez',    'url' => 'https://www.ibanez.com',          'types' => array( 'guitars' ) ),
+            'taylor'    => array( 'name' => 'Taylor',    'url' => 'https://www.taylorguitars.com',   'types' => array( 'guitars' ) ),
+            'epiphone'  => array( 'name' => 'Epiphone',  'url' => 'https://www.epiphone.com',        'types' => array( 'guitars' ) ),
+            'pearl'     => array( 'name' => 'Pearl',     'url' => 'https://www.pearldrum.com',       'types' => array( 'drums' ) ),
+            'tama'      => array( 'name' => 'Tama',      'url' => 'https://www.tama.com',            'types' => array( 'drums' ) ),
+            'zildjian'  => array( 'name' => 'Zildjian',  'url' => 'https://www.zildjian.com',        'types' => array( 'drums' ) ),
+            'roland'    => array( 'name' => 'Roland',    'url' => 'https://www.roland.com',          'types' => array( 'drums', 'keyboards' ) ),
+            'mapex'     => array( 'name' => 'Mapex',     'url' => 'https://www.mapexdrums.com',      'types' => array( 'drums' ) ),
+            'casio'     => array( 'name' => 'Casio',     'url' => 'https://www.casio.com',           'types' => array( 'keyboards' ) ),
+            'nord'      => array( 'name' => 'Nord',      'url' => 'https://www.nordkeyboards.com',   'types' => array( 'keyboards' ) ),
+            'korg'      => array( 'name' => 'Korg',      'url' => 'https://www.korg.com',            'types' => array( 'keyboards' ) ),
+            'marshall'  => array( 'name' => 'Marshall',  'url' => 'https://www.marshall.com',        'types' => array( 'amplifiers' ) ),
+            'boss'      => array( 'name' => 'Boss',      'url' => 'https://www.boss.info',           'types' => array( 'amplifiers' ) ),
+            'vox'       => array( 'name' => 'Vox',       'url' => 'https://www.voxamps.com',         'types' => array( 'amplifiers' ) ),
+            'orange'    => array( 'name' => 'Orange',    'url' => 'https://www.orangeamps.com',      'types' => array( 'amplifiers' ) ),
+            'hal-leonard'      => array( 'name' => 'Hal Leonard',      'url' => 'https://www.halleonard.com', 'types' => array( 'books' ) ),
+            'alfred-music'     => array( 'name' => 'Alfred Music',     'url' => 'https://www.alfred.com',     'types' => array( 'books' ) ),
+            'henle-verlag'     => array( 'name' => 'Henle Verlag',     'url' => 'https://www.henle.de',       'types' => array( 'books' ) ),
+            'royal-conservatory' => array( 'name' => 'Royal Conservatory', 'url' => 'https://www.rcmusic.com', 'types' => array( 'books' ) ),
+        );
+
+        $created = 0;
+        $updated = 0;
+        foreach ( $brands as $slug => $data ) {
+            $existing = get_page_by_path( $slug, OBJECT, 'wicm_brand' );
+            if ( $existing ) {
+                $post_id = wp_update_post( array(
+                    'ID'          => $existing->ID,
+                    'post_title'  => $data['name'],
+                    'post_status' => 'publish',
+                ) );
+                $updated++;
+            } else {
+                $post_id = wp_insert_post( array(
+                    'post_title'  => $data['name'],
+                    'post_name'   => $slug,
+                    'post_status' => 'publish',
+                    'post_type'   => 'wicm_brand',
+                ) );
+                $created++;
+            }
+
+            if ( ! is_wp_error( $post_id ) ) {
+                update_post_meta( $post_id, '_wicm_brand_url', $data['url'] );
+                // Assign instrument type terms
+                $type_ids = array();
+                foreach ( $data['types'] as $type_slug ) {
+                    if ( isset( $term_ids[ $type_slug ] ) ) {
+                        $type_ids[] = (int) $term_ids[ $type_slug ];
+                    }
+                }
+                wp_set_object_terms( $post_id, $type_ids, 'wicm_instrument_type' );
+                $brand_ids[ $slug ] = $post_id;
+            }
+        }
+
+        // Set EN language on all brand posts
+        if ( function_exists( 'pll_set_post_language' ) ) {
+            foreach ( $brand_ids as $pid ) {
+                pll_set_post_language( $pid, 'en' );
+            }
+        }
+
+        $results[] = array( 'success' => ( $created + $updated ) > 0, 'message' => "EN Brands: created {$created}, updated {$updated}" );
+        return array( 'results' => $results, 'ids' => $brand_ids );
+    }
+
     private function import_images( $program_ids ) {
         $results = array();
 
@@ -792,7 +940,7 @@ class WICM_Developer_Importer {
     /**
      * Import all French content and link translations via Polylang.
      */
-    private function import_french_content( $en_page_ids, $en_program_ids ) {
+    private function import_french_content( $en_page_ids, $en_program_ids, $en_brand_ids = array() ) {
         $results      = array();
         $has_polylang = function_exists( 'pll_set_post_language' );
 
@@ -1132,6 +1280,125 @@ class WICM_Developer_Importer {
         }
         $results[] = array( 'success' => $fr_test_count > 0, 'message' => "FR testimonials: created/updated {$fr_test_count}" );
 
+        // --- French Brands ---
+        if ( ! empty( $en_brand_ids ) ) {
+            // Create FR instrument type terms
+            $fr_types = array(
+                'guitars'     => 'Guitares',
+                'drums'       => 'Batteries et percussion',
+                'keyboards'   => 'Claviers et pianos',
+                'amplifiers'  => 'Amplificateurs',
+                'books'       => 'Livres et manuels',
+            );
+
+            $fr_term_ids = array();
+            foreach ( $fr_types as $en_slug => $fr_name ) {
+                $fr_slug = sanitize_title( $fr_name );
+                $existing_term = get_term_by( 'slug', $fr_slug, 'wicm_instrument_type' );
+                if ( $existing_term ) {
+                    $fr_term_ids[ $en_slug ] = $existing_term->term_id;
+                } else {
+                    $term = wp_insert_term( $fr_name, 'wicm_instrument_type', array( 'slug' => $fr_slug ) );
+                    if ( ! is_wp_error( $term ) ) {
+                        $fr_term_ids[ $en_slug ] = $term['term_id'];
+                    }
+                }
+                // Link FR term to EN term as translation
+                if ( $has_polylang && isset( $fr_term_ids[ $en_slug ] ) ) {
+                    pll_set_term_language( $fr_term_ids[ $en_slug ], 'fr' );
+                    $en_term = get_term_by( 'slug', $en_slug, 'wicm_instrument_type' );
+                    if ( $en_term ) {
+                        pll_save_term_translations( array(
+                            'en' => $en_term->term_id,
+                            'fr' => $fr_term_ids[ $en_slug ],
+                        ) );
+                    }
+                }
+            }
+
+            // Brand type mapping (same as EN import)
+            $brand_types = array(
+                'fender'    => array( 'guitars', 'amplifiers' ),
+                'gibson'    => array( 'guitars' ),
+                'yamaha'    => array( 'guitars', 'keyboards' ),
+                'ibanez'    => array( 'guitars' ),
+                'taylor'    => array( 'guitars' ),
+                'epiphone'  => array( 'guitars' ),
+                'pearl'     => array( 'drums' ),
+                'tama'      => array( 'drums' ),
+                'zildjian'  => array( 'drums' ),
+                'roland'    => array( 'drums', 'keyboards' ),
+                'mapex'     => array( 'drums' ),
+                'casio'     => array( 'keyboards' ),
+                'nord'      => array( 'keyboards' ),
+                'korg'      => array( 'keyboards' ),
+                'marshall'  => array( 'amplifiers' ),
+                'boss'      => array( 'amplifiers' ),
+                'vox'       => array( 'amplifiers' ),
+                'orange'    => array( 'amplifiers' ),
+                'hal-leonard'        => array( 'books' ),
+                'alfred-music'       => array( 'books' ),
+                'henle-verlag'       => array( 'books' ),
+                'royal-conservatory' => array( 'books' ),
+            );
+
+            $fr_brand_count = 0;
+            foreach ( $en_brand_ids as $en_slug => $en_id ) {
+                $en_post = get_post( $en_id );
+                if ( ! $en_post ) continue;
+
+                $fr_slug = $en_slug . '-fr';
+                $existing = get_page_by_path( $fr_slug, OBJECT, 'wicm_brand' );
+                if ( $existing ) {
+                    $post_id = wp_update_post( array(
+                        'ID'          => $existing->ID,
+                        'post_title'  => $en_post->post_title,
+                        'post_status' => 'publish',
+                    ) );
+                } else {
+                    $post_id = wp_insert_post( array(
+                        'post_title'  => $en_post->post_title,
+                        'post_name'   => $fr_slug,
+                        'post_status' => 'publish',
+                        'post_type'   => 'wicm_brand',
+                    ) );
+                }
+
+                if ( ! is_wp_error( $post_id ) ) {
+                    // Copy meta from EN brand
+                    $url = get_post_meta( $en_id, '_wicm_brand_url', true );
+                    update_post_meta( $post_id, '_wicm_brand_url', $url );
+
+                    // Share featured image from EN version
+                    $thumb_id = get_post_thumbnail_id( $en_id );
+                    if ( $thumb_id ) {
+                        set_post_thumbnail( $post_id, $thumb_id );
+                    }
+
+                    // Assign FR instrument type terms
+                    if ( isset( $brand_types[ $en_slug ] ) ) {
+                        $type_ids = array();
+                        foreach ( $brand_types[ $en_slug ] as $type_key ) {
+                            if ( isset( $fr_term_ids[ $type_key ] ) ) {
+                                $type_ids[] = (int) $fr_term_ids[ $type_key ];
+                            }
+                        }
+                        wp_set_object_terms( $post_id, $type_ids, 'wicm_instrument_type' );
+                    }
+
+                    if ( $has_polylang ) {
+                        pll_set_post_language( $post_id, 'fr' );
+                        pll_save_post_translations( array(
+                            'en' => $en_id,
+                            'fr' => $post_id,
+                        ) );
+                    }
+                    $fr_brand_count++;
+                }
+            }
+            $results[] = array( 'success' => $fr_brand_count > 0, 'message' => "FR Brands: created/updated {$fr_brand_count}" );
+        }
+
         // --- French Navigation Menu ---
         $existing_fr_menu = wp_get_nav_menu_object( 'Menu principal' );
         if ( $existing_fr_menu ) {
@@ -1271,6 +1538,65 @@ class WICM_Developer_Importer {
             $html .= '</div>';
         }
         $html .= '</div>';
+        return $html;
+    }
+
+    public function brands_shortcode( $atts ) {
+        $atts = shortcode_atts( array(
+            'type'  => '',
+            'title' => '',
+        ), $atts, 'wicm_brands' );
+
+        $args = array(
+            'post_type'      => 'wicm_brand',
+            'numberposts'    => 50,
+            'orderby'        => 'title',
+            'order'          => 'ASC',
+            'suppress_filters' => false,
+        );
+
+        if ( function_exists( 'pll_current_language' ) ) {
+            $args['lang'] = pll_current_language();
+        }
+
+        if ( ! empty( $atts['type'] ) ) {
+            $args['tax_query'] = array(
+                array(
+                    'taxonomy' => 'wicm_instrument_type',
+                    'field'    => 'slug',
+                    'terms'    => sanitize_title( $atts['type'] ),
+                ),
+            );
+        }
+
+        $brands = get_posts( $args );
+        if ( empty( $brands ) ) {
+            return '';
+        }
+
+        $heading = '';
+        if ( ! empty( $atts['title'] ) ) {
+            $heading = '<h4>' . esc_html( $atts['title'] ) . '</h4>';
+        }
+
+        $html = '<div class="store-brands">' . $heading . '<div class="brands-grid">';
+        foreach ( $brands as $brand ) {
+            $url   = get_post_meta( $brand->ID, '_wicm_brand_url', true );
+            $logo  = get_the_post_thumbnail_url( $brand->ID, 'medium' );
+            $name  = esc_html( $brand->post_title );
+
+            $tag   = $url ? 'a' : 'span';
+            $attrs = $url ? ' href="' . esc_url( $url ) . '" target="_blank" rel="noopener"' : '';
+
+            $html .= '<' . $tag . $attrs . ' class="brand-card">';
+            if ( $logo ) {
+                $html .= '<img src="' . esc_url( $logo ) . '" alt="' . esc_attr( $brand->post_title ) . '" class="brand-logo" loading="lazy">';
+            }
+            $html .= '<span class="brand-name">' . $name . '</span>';
+            $html .= '</' . $tag . '>';
+        }
+        $html .= '</div></div>';
+
         return $html;
     }
 
