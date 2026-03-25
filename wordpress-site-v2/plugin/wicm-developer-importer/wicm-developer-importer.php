@@ -439,7 +439,6 @@ class WICM_Developer_Importer {
                 'icon'     => '🎹',
                 'desc'     => 'From classical to contemporary, learn piano at your own pace with personalized instruction for all skill levels.',
                 'features' => array( 'Classical & Contemporary', 'Music Theory', 'Sight Reading', 'Performance Skills' ),
-                'image_url'=> 'https://images.unsplash.com/photo-1552422535-c45813c61732?w=800&h=500&fit=crop',
             ),
             array(
                 'name'     => 'Guitar Lessons',
@@ -447,7 +446,6 @@ class WICM_Developer_Importer {
                 'icon'     => '🎸',
                 'desc'     => 'Electric, acoustic, or classical - master the guitar with customized lessons tailored to your musical goals.',
                 'features' => array( 'Electric & Acoustic', 'Chord Progressions', 'Fingerpicking', 'Song Writing' ),
-                'image_url'=> 'https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=800&h=500&fit=crop',
             ),
             array(
                 'name'     => 'Drum Lessons',
@@ -455,7 +453,6 @@ class WICM_Developer_Importer {
                 'icon'     => '🥁',
                 'desc'     => 'Build rhythm, coordination, and technique with dynamic drum lessons that get you playing your favorite songs.',
                 'features' => array( 'Rhythm Fundamentals', 'Hand Coordination', 'Multiple Styles', 'Band Integration' ),
-                'image_url'=> 'https://images.unsplash.com/photo-1519892300165-cb5542fb47c7?w=800&h=500&fit=crop',
             ),
             array(
                 'name'     => 'Voice Lessons',
@@ -463,7 +460,6 @@ class WICM_Developer_Importer {
                 'icon'     => '🎤',
                 'desc'     => 'Unlock your vocal potential with training in breath control, range expansion, and performance techniques.',
                 'features' => array( 'Breath Control', 'Range Expansion', 'Performance Coaching', 'Multiple Genres' ),
-                'image_url'=> 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=800&h=500&fit=crop',
             ),
             array(
                 'name'     => 'Violin Lessons',
@@ -471,7 +467,6 @@ class WICM_Developer_Importer {
                 'icon'     => '🎻',
                 'desc'     => 'Embrace the elegance of string music with patient, step-by-step violin instruction for beginners to advanced.',
                 'features' => array( 'Classical Training', 'Proper Technique', 'Orchestra Prep', 'Solo Performance' ),
-                'image_url'=> 'https://images.unsplash.com/photo-1612225330812-01a9c6b355ec?w=800&h=500&fit=crop',
             ),
             array(
                 'name'     => 'Bass Lessons',
@@ -479,7 +474,6 @@ class WICM_Developer_Importer {
                 'icon'     => '🎸',
                 'desc'     => 'Lay down the groove with electric or acoustic bass lessons that build solid technique, timing, and musicality.',
                 'features' => array( 'Electric & Acoustic Bass', 'Groove & Timing', 'Music Theory', 'Band Ready Skills' ),
-                'image_url'=> 'https://images.unsplash.com/photo-1564186763535-ebb21ef5277f?w=800&h=500&fit=crop',
             ),
             array(
                 'name'     => 'Saxophone Lessons',
@@ -487,7 +481,6 @@ class WICM_Developer_Importer {
                 'icon'     => '🎷',
                 'desc'     => 'From smooth jazz to classical, develop your saxophone skills with expert instruction in tone, technique, and improvisation.',
                 'features' => array( 'Tone Development', 'Jazz & Classical Styles', 'Improvisation', 'Ensemble Playing' ),
-                'image_url'=> 'https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=800&h=500&fit=crop',
             ),
             array(
                 'name'     => 'Ukulele Lessons',
@@ -495,7 +488,6 @@ class WICM_Developer_Importer {
                 'icon'     => '🎸',
                 'desc'     => 'Pick up the ukulele and start playing your favorite songs in no time with fun, beginner-friendly lessons for all ages.',
                 'features' => array( 'Strumming Patterns', 'Chord Progressions', 'Fingerpicking', 'Song Repertoire' ),
-                'image_url'=> 'https://images.unsplash.com/photo-1556449895-a33c9dba33dd?w=800&h=500&fit=crop',
             ),
             array(
                 'name'     => 'Cello Lessons',
@@ -503,7 +495,6 @@ class WICM_Developer_Importer {
                 'icon'     => '🎻',
                 'desc'     => 'Discover the rich, warm sound of the cello with personalized lessons covering classical technique, bowing, and expressive performance.',
                 'features' => array( 'Classical Technique', 'Bowing & Posture', 'Orchestra Prep', 'Solo Repertoire' ),
-                'image_url'=> 'https://images.unsplash.com/photo-1605731560131-e9fc5de9032d?w=800&h=500&fit=crop',
             ),
             array(
                 'name'     => 'Flute Lessons',
@@ -511,7 +502,6 @@ class WICM_Developer_Importer {
                 'icon'     => '🎵',
                 'desc'     => 'Develop beautiful tone and fluid technique on the flute with expert instruction in classical, jazz, and contemporary styles.',
                 'features' => array( 'Tone Production', 'Breath Control', 'Classical & Jazz', 'Ensemble Skills' ),
-                'image_url'=> 'https://images.unsplash.com/photo-1524069290683-0457abbd6588?w=800&h=500&fit=crop',
             ),
             array(
                 'name'     => 'Clarinet Lessons',
@@ -519,7 +509,6 @@ class WICM_Developer_Importer {
                 'icon'     => '🎵',
                 'desc'     => 'Master the clarinet with lessons that build solid embouchure, finger technique, and musical expression across classical and jazz repertoire.',
                 'features' => array( 'Embouchure Training', 'Classical & Jazz', 'Sight Reading', 'Band & Orchestra Prep' ),
-                'image_url'=> 'https://images.unsplash.com/photo-1619458495022-5d975e3daa48?w=800&h=500&fit=crop',
             ),
             array(
                 'name'     => 'Trumpet Lessons',
@@ -527,7 +516,6 @@ class WICM_Developer_Importer {
                 'icon'     => '🎺',
                 'desc'     => 'Build powerful tone and range on the trumpet with instruction in classical, jazz, and popular music styles for all levels.',
                 'features' => array( 'Tone & Range Building', 'Jazz Improvisation', 'Classical Training', 'Ensemble Playing' ),
-                'image_url'=> 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=800&h=500&fit=crop',
             ),
         );
 
@@ -555,7 +543,7 @@ class WICM_Developer_Importer {
             if ( ! is_wp_error( $post_id ) ) {
                 update_post_meta( $post_id, '_wicm_icon', $prog['icon'] );
                 update_post_meta( $post_id, '_wicm_features', $prog['features'] );
-                update_post_meta( $post_id, '_wicm_image_url', $prog['image_url'] );
+                update_post_meta( $post_id, '_wicm_image_url', plugins_url( 'assets/images/' . $prog['slug'] . '.jpg', __FILE__ ) );
                 $ids[ $prog['slug'] ] = $post_id;
                 $results[] = array( 'success' => true, 'message' => "{$action} program: {$prog['name']}" );
             }
@@ -763,26 +751,30 @@ class WICM_Developer_Importer {
         }
 
         $images = array(
-            'piano-lessons'  => array( 'url' => 'https://images.unsplash.com/photo-1552422535-c45813c61732?w=800&h=500&fit=crop', 'alt' => 'Piano lessons at West Island Music School' ),
-            'guitar-lessons' => array( 'url' => 'https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=800&h=500&fit=crop', 'alt' => 'Guitar lessons at West Island Music School' ),
-            'drum-lessons'   => array( 'url' => 'https://images.unsplash.com/photo-1519892300165-cb5542fb47c7?w=800&h=500&fit=crop', 'alt' => 'Drum lessons at West Island Music School' ),
-            'voice-lessons'  => array( 'url' => 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=800&h=500&fit=crop', 'alt' => 'Voice lessons at West Island Music School' ),
-            'violin-lessons' => array( 'url' => 'https://images.unsplash.com/photo-1612225330812-01a9c6b355ec?w=800&h=500&fit=crop', 'alt' => 'Violin lessons at West Island Music School' ),
-            'bass-lessons'   => array( 'url' => 'https://images.unsplash.com/photo-1564186763535-ebb21ef5277f?w=800&h=500&fit=crop', 'alt' => 'Bass lessons at West Island Music School' ),
-            'saxophone-lessons' => array( 'url' => 'https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=800&h=500&fit=crop', 'alt' => 'Saxophone lessons at West Island Music School' ),
-            'ukulele-lessons' => array( 'url' => 'https://images.unsplash.com/photo-1556449895-a33c9dba33dd?w=800&h=500&fit=crop', 'alt' => 'Ukulele lessons at West Island Music School' ),
-            'cello-lessons'    => array( 'url' => 'https://images.unsplash.com/photo-1603584915335-d612257071b0?w=800&h=500&fit=crop', 'alt' => 'Cello lessons at West Island Music School' ),
-            'flute-lessons'    => array( 'url' => 'https://images.unsplash.com/photo-1690181439367-a6876b9f7846?w=800&h=500&fit=crop', 'alt' => 'Flute lessons at West Island Music School' ),
-            'clarinet-lessons' => array( 'url' => 'https://images.unsplash.com/photo-1630754157855-0f2e4b650ab3?w=800&h=500&fit=crop', 'alt' => 'Clarinet lessons at West Island Music School' ),
-            'trumpet-lessons'  => array( 'url' => 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=800&h=500&fit=crop', 'alt' => 'Trumpet lessons at West Island Music School' ),
+            'piano-lessons'    => 'Piano lessons at West Island Music School',
+            'guitar-lessons'   => 'Guitar lessons at West Island Music School',
+            'drum-lessons'     => 'Drum lessons at West Island Music School',
+            'voice-lessons'    => 'Voice lessons at West Island Music School',
+            'violin-lessons'   => 'Violin lessons at West Island Music School',
+            'bass-lessons'     => 'Bass lessons at West Island Music School',
+            'saxophone-lessons'=> 'Saxophone lessons at West Island Music School',
+            'ukulele-lessons'  => 'Ukulele lessons at West Island Music School',
+            'cello-lessons'    => 'Cello lessons at West Island Music School',
+            'flute-lessons'    => 'Flute lessons at West Island Music School',
+            'clarinet-lessons' => 'Clarinet lessons at West Island Music School',
+            'trumpet-lessons'  => 'Trumpet lessons at West Island Music School',
         );
 
         $count = 0;
-        foreach ( $images as $slug => $img ) {
+        foreach ( $images as $slug => $alt ) {
             $post_id = isset( $program_ids[ $slug ] ) ? $program_ids[ $slug ] : 0;
 
-            $tmp = download_url( $img['url'] );
-            if ( is_wp_error( $tmp ) ) continue;
+            // Use bundled image from plugin assets
+            $local_file = $this->plugin_dir . 'assets/images/' . $slug . '.jpg';
+            if ( ! file_exists( $local_file ) ) continue;
+
+            $tmp = wp_tempnam( $slug . '.jpg' );
+            copy( $local_file, $tmp );
 
             $file_array = array(
                 'name'     => sanitize_file_name( $slug . '.jpg' ),
@@ -795,7 +787,7 @@ class WICM_Developer_Importer {
                 continue;
             }
 
-            update_post_meta( $attachment_id, '_wp_attachment_image_alt', sanitize_text_field( $img['alt'] ) );
+            update_post_meta( $attachment_id, '_wp_attachment_image_alt', sanitize_text_field( $alt ) );
 
             if ( $post_id ) {
                 set_post_thumbnail( $post_id, $attachment_id );
