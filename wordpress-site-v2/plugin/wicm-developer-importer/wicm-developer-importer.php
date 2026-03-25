@@ -728,11 +728,8 @@ class WICM_Developer_Importer {
             if ( ! is_wp_error( $post_id ) ) {
                 update_post_meta( $post_id, '_wicm_brand_url', $data['url'] );
                 // Set logo URL from bundled SVG
-                $logo_file = $this->plugin_dir . 'assets/logos/' . $slug . '.svg';
-                if ( file_exists( $logo_file ) ) {
-                    $logo_url = plugins_url( 'assets/logos/' . $slug . '.svg', __FILE__ );
-                    update_post_meta( $post_id, '_wicm_brand_logo_url', $logo_url );
-                }
+                $logo_url = plugins_url( 'assets/logos/' . $slug . '.svg', __FILE__ );
+                update_post_meta( $post_id, '_wicm_brand_logo_url', $logo_url );
                 // Assign instrument type terms
                 $type_ids = array();
                 foreach ( $data['types'] as $type_slug ) {
@@ -776,7 +773,7 @@ class WICM_Developer_Importer {
             'ukulele-lessons' => array( 'url' => 'https://images.unsplash.com/photo-1556449895-a33c9dba33dd?w=800&h=500&fit=crop', 'alt' => 'Ukulele lessons at West Island Music School' ),
             'cello-lessons'    => array( 'url' => 'https://images.unsplash.com/photo-1603584915335-d612257071b0?w=800&h=500&fit=crop', 'alt' => 'Cello lessons at West Island Music School' ),
             'flute-lessons'    => array( 'url' => 'https://images.unsplash.com/photo-1690181439367-a6876b9f7846?w=800&h=500&fit=crop', 'alt' => 'Flute lessons at West Island Music School' ),
-            'clarinet-lessons' => array( 'url' => 'https://images.unsplash.com/photo-1619458495022-5d975e3daa48?w=800&h=500&fit=crop', 'alt' => 'Clarinet lessons at West Island Music School' ),
+            'clarinet-lessons' => array( 'url' => 'https://images.unsplash.com/photo-1630754157855-0f2e4b650ab3?w=800&h=500&fit=crop', 'alt' => 'Clarinet lessons at West Island Music School' ),
             'trumpet-lessons'  => array( 'url' => 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=800&h=500&fit=crop', 'alt' => 'Trumpet lessons at West Island Music School' ),
         );
 
