@@ -671,6 +671,7 @@ class WICM_Developer_Importer {
         }
 
         // Brand data: slug => [ name, url, types[] ]
+        // Logos are bundled as SVGs in assets/logos/{slug}.svg
         $brands = array(
             'fender'    => array( 'name' => 'Fender',    'url' => 'https://www.fender.com',         'types' => array( 'guitars', 'amplifiers' ) ),
             'gibson'    => array( 'name' => 'Gibson',    'url' => 'https://www.gibson.com',          'types' => array( 'guitars' ) ),
@@ -726,6 +727,12 @@ class WICM_Developer_Importer {
 
             if ( ! is_wp_error( $post_id ) ) {
                 update_post_meta( $post_id, '_wicm_brand_url', $data['url'] );
+                // Set logo URL from bundled SVG
+                $logo_file = $this->plugin_dir . 'assets/logos/' . $slug . '.svg';
+                if ( file_exists( $logo_file ) ) {
+                    $logo_url = plugins_url( 'assets/logos/' . $slug . '.svg', __FILE__ );
+                    update_post_meta( $post_id, '_wicm_brand_logo_url', $logo_url );
+                }
                 // Assign instrument type terms
                 $type_ids = array();
                 foreach ( $data['types'] as $type_slug ) {
@@ -1460,6 +1467,10 @@ class WICM_Developer_Importer {
                     // Copy meta from EN brand
                     $url = get_post_meta( $en_id, '_wicm_brand_url', true );
                     update_post_meta( $post_id, '_wicm_brand_url', $url );
+                    $logo_url = get_post_meta( $en_id, '_wicm_brand_logo_url', true );
+                    if ( $logo_url ) {
+                        update_post_meta( $post_id, '_wicm_brand_logo_url', $logo_url );
+                    }
 
                     // Share featured image from EN version
                     $thumb_id = get_post_thumbnail_id( $en_id );
@@ -1673,25 +1684,17 @@ class WICM_Developer_Importer {
 
         $html = '<div class="store-brands">' . $heading . '<div class="brands-grid">';
         foreach ( $brands as $brand ) {
-            $url   = get_post_meta( $brand->ID, '_wicm_brand_url', true );
-            $logo  = get_the_post_thumbnail_url( $brand->ID, 'medium' );
-            $name  = esc_html( $brand->post_title );
+            $url      = get_post_meta( $brand->ID, '_wicm_brand_url', true );
+            $logo_url = get_post_meta( $brand->ID, '_wicm_brand_logo_url', true );
+            $logo     = $logo_url ? $logo_url : get_the_post_thumbnail_url( $brand->ID, 'medium' );
+            $name     = esc_html( $brand->post_title );
 
             $tag   = $url ? 'a' : 'span';
             $attrs = $url ? ' href="' . esc_url( $url ) . '" target="_blank" rel="noopener"' : '';
 
             $html .= '<' . $tag . $attrs . ' class="brand-card">';
             if ( $logo ) {
-                $html .= '<img src="' . esc_url( $logo ) . '" alt="' . esc_attr( $brand->post_title ) . '" class="brand-logo" loading="lazy">';
-            } else {
-                // Generate inline SVG logo with brand initial
-                $initial = mb_strtoupper( mb_substr( $brand->post_title, 0, 1 ) );
-                $colors  = array( '#dc2626', '#1d4ed8', '#059669', '#7c3aed', '#d97706', '#0891b2', '#be185d', '#4f46e5' );
-                $color   = $colors[ crc32( $brand->post_title ) % count( $colors ) ];
-                $html   .= '<svg class="brand-logo-svg" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
-                         . '<rect width="40" height="40" rx="6" fill="' . esc_attr( $color ) . '"/>'
-                         . '<text x="20" y="27" text-anchor="middle" fill="#fff" font-family="system-ui,sans-serif" font-size="20" font-weight="700">' . esc_html( $initial ) . '</text>'
-                         . '</svg>';
+                $html .= '<img src="' . esc_url( $logo ) . '" alt="' . esc_attr( $brand->post_title ) . ' logo" class="brand-logo" loading="lazy">';
             }
             $html .= '<span class="brand-name">' . $name . '</span>';
             $html .= '</' . $tag . '>';

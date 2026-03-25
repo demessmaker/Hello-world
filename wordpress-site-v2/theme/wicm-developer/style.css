@@ -1918,21 +1918,16 @@ ol.wp-block-list li {
     color: var(--color-white);
 }
 
-.brand-card .brand-logo,
-.brand-card .brand-logo-svg {
-    margin-right: 0.5rem;
-    flex-shrink: 0;
+.brand-card {
+    gap: 0.5rem;
 }
 
 .brand-card .brand-logo {
-    max-height: 2rem;
-    max-width: 5rem;
+    height: 1.75rem;
+    width: auto;
+    max-width: 6rem;
     object-fit: contain;
-}
-
-.brand-card .brand-logo-svg {
-    width: 2rem;
-    height: 2rem;
+    flex-shrink: 0;
 }
 
 /* ============================================
