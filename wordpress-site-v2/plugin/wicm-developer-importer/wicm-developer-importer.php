@@ -774,8 +774,8 @@ class WICM_Developer_Importer {
             'bass-lessons'   => array( 'url' => 'https://images.unsplash.com/photo-1564186763535-ebb21ef5277f?w=800&h=500&fit=crop', 'alt' => 'Bass lessons at West Island Music School' ),
             'saxophone-lessons' => array( 'url' => 'https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=800&h=500&fit=crop', 'alt' => 'Saxophone lessons at West Island Music School' ),
             'ukulele-lessons' => array( 'url' => 'https://images.unsplash.com/photo-1556449895-a33c9dba33dd?w=800&h=500&fit=crop', 'alt' => 'Ukulele lessons at West Island Music School' ),
-            'cello-lessons'    => array( 'url' => 'https://images.unsplash.com/photo-1605731560131-e9fc5de9032d?w=800&h=500&fit=crop', 'alt' => 'Cello lessons at West Island Music School' ),
-            'flute-lessons'    => array( 'url' => 'https://images.unsplash.com/photo-1524069290683-0457abbd6588?w=800&h=500&fit=crop', 'alt' => 'Flute lessons at West Island Music School' ),
+            'cello-lessons'    => array( 'url' => 'https://images.unsplash.com/photo-1603584915335-d612257071b0?w=800&h=500&fit=crop', 'alt' => 'Cello lessons at West Island Music School' ),
+            'flute-lessons'    => array( 'url' => 'https://images.unsplash.com/photo-1690181439367-a6876b9f7846?w=800&h=500&fit=crop', 'alt' => 'Flute lessons at West Island Music School' ),
             'clarinet-lessons' => array( 'url' => 'https://images.unsplash.com/photo-1619458495022-5d975e3daa48?w=800&h=500&fit=crop', 'alt' => 'Clarinet lessons at West Island Music School' ),
             'trumpet-lessons'  => array( 'url' => 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=800&h=500&fit=crop', 'alt' => 'Trumpet lessons at West Island Music School' ),
         );
