@@ -699,7 +699,14 @@ class WICM_Developer_Importer {
         $created = 0;
         $updated = 0;
         foreach ( $brands as $slug => $data ) {
-            $existing = get_page_by_path( $slug, OBJECT, 'wicm_brand' );
+            $existing_posts = get_posts( array(
+                'post_type'        => 'wicm_brand',
+                'name'             => $slug,
+                'numberposts'      => 1,
+                'post_status'      => 'any',
+                'suppress_filters' => true,
+            ) );
+            $existing = ! empty( $existing_posts ) ? $existing_posts[0] : null;
             if ( $existing ) {
                 $post_id = wp_update_post( array(
                     'ID'          => $existing->ID,
@@ -1426,7 +1433,14 @@ class WICM_Developer_Importer {
                 if ( ! $en_post ) continue;
 
                 $fr_slug = $en_slug . '-fr';
-                $existing = get_page_by_path( $fr_slug, OBJECT, 'wicm_brand' );
+                $existing_posts = get_posts( array(
+                    'post_type'        => 'wicm_brand',
+                    'name'             => $fr_slug,
+                    'numberposts'      => 1,
+                    'post_status'      => 'any',
+                    'suppress_filters' => true,
+                ) );
+                $existing = ! empty( $existing_posts ) ? $existing_posts[0] : null;
                 if ( $existing ) {
                     $post_id = wp_update_post( array(
                         'ID'          => $existing->ID,
