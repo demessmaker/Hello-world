@@ -1669,6 +1669,15 @@ class WICM_Developer_Importer {
             $html .= '<' . $tag . $attrs . ' class="brand-card">';
             if ( $logo ) {
                 $html .= '<img src="' . esc_url( $logo ) . '" alt="' . esc_attr( $brand->post_title ) . '" class="brand-logo" loading="lazy">';
+            } else {
+                // Generate inline SVG logo with brand initial
+                $initial = mb_strtoupper( mb_substr( $brand->post_title, 0, 1 ) );
+                $colors  = array( '#dc2626', '#1d4ed8', '#059669', '#7c3aed', '#d97706', '#0891b2', '#be185d', '#4f46e5' );
+                $color   = $colors[ crc32( $brand->post_title ) % count( $colors ) ];
+                $html   .= '<svg class="brand-logo-svg" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
+                         . '<rect width="40" height="40" rx="6" fill="' . esc_attr( $color ) . '"/>'
+                         . '<text x="20" y="27" text-anchor="middle" fill="#fff" font-family="system-ui,sans-serif" font-size="20" font-weight="700">' . esc_html( $initial ) . '</text>'
+                         . '</svg>';
             }
             $html .= '<span class="brand-name">' . $name . '</span>';
             $html .= '</' . $tag . '>';

@@ -1917,22 +1917,21 @@ ol.wp-block-list li {
     color: var(--color-white);
 }
 
+.brand-card .brand-logo,
+.brand-card .brand-logo-svg {
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+}
+
 .brand-card .brand-logo {
     max-height: 2rem;
     max-width: 5rem;
     object-fit: contain;
-    margin-right: 0.5rem;
 }
 
-.brand-card:has(.brand-logo) {
-    flex-direction: column;
-    gap: 0.25rem;
-    padding: 0.75rem;
-}
-
-.brand-card:has(.brand-logo) .brand-logo {
-    margin-right: 0;
-    max-height: 2.5rem;
+.brand-card .brand-logo-svg {
+    width: 2rem;
+    height: 2rem;
 }
 
 /* ============================================
