@@ -203,7 +203,7 @@ class WICM_Developer_Importer {
                         <tr><th>Programs</th><td><label><input type="checkbox" name="import_programs" value="1" checked> Piano, Guitar, Drums, Voice, Violin, Bass, Saxophone, Ukulele, Maracas</label></td></tr>
                         <tr><th>Testimonials</th><td><label><input type="checkbox" name="import_testimonials" value="1" checked> 4 testimonials with ratings</label></td></tr>
                         <tr><th>Store Brands</th><td><label><input type="checkbox" name="import_brands" value="1" checked> Instrument brands with categories (Guitars, Drums, Keyboards, Amps, Books)</label></td></tr>
-                        <tr><th>Images</th><td><label><input type="checkbox" name="import_images" value="1" checked> Download Unsplash images for programs</label></td></tr>
+                        <tr><th>Images</th><td><label><input type="checkbox" name="import_images" value="1" checked> Download images for programs &amp; brand logos</label></td></tr>
                         <tr><th>Contact Form</th><td><label><input type="checkbox" name="import_cf7" value="1" checked> Create CF7 form + embed in Contact page</label></td></tr>
                         <tr><th>Menu</th><td><label><input type="checkbox" name="import_menu" value="1" checked> Primary navigation menu</label></td></tr>
                         <tr><th>Front Page</th><td><label><input type="checkbox" name="set_front_page" value="1" checked> Set Home as static front page</label></td></tr>
@@ -275,6 +275,9 @@ class WICM_Developer_Importer {
 
         if ( ! empty( $_POST['import_images'] ) ) {
             $results = array_merge( $results, $this->import_images( $program_ids ) );
+            if ( ! empty( $brand_ids ) ) {
+                $results = array_merge( $results, $this->import_brand_logos( $brand_ids ) );
+            }
         }
 
         if ( ! empty( $_POST['import_cf7'] ) ) {
@@ -791,6 +794,81 @@ class WICM_Developer_Importer {
         }
 
         $results[] = array( 'success' => $count > 0, 'message' => "Imported {$count} program images" );
+        return $results;
+    }
+
+    private function import_brand_logos( $brand_ids ) {
+        $results = array();
+
+        if ( ! function_exists( 'media_handle_sideload' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/media.php';
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+            require_once ABSPATH . 'wp-admin/includes/image.php';
+        }
+
+        // Map brand slugs to their domain for logo fetching via Clearbit Logo API
+        $brand_domains = array(
+            'fender'             => 'fender.com',
+            'gibson'             => 'gibson.com',
+            'yamaha'             => 'yamaha.com',
+            'ibanez'             => 'ibanez.com',
+            'taylor'             => 'taylorguitars.com',
+            'epiphone'           => 'epiphone.com',
+            'pearl'              => 'pearldrum.com',
+            'tama'               => 'tama.com',
+            'zildjian'           => 'zildjian.com',
+            'roland'             => 'roland.com',
+            'mapex'              => 'mapexdrums.com',
+            'casio'              => 'casio.com',
+            'nord'               => 'nordkeyboards.com',
+            'korg'               => 'korg.com',
+            'marshall'           => 'marshall.com',
+            'boss'               => 'boss.info',
+            'vox'                => 'voxamps.com',
+            'orange'             => 'orangeamps.com',
+            'hal-leonard'        => 'halleonard.com',
+            'alfred-music'       => 'alfred.com',
+            'henle-verlag'       => 'henle.de',
+            'royal-conservatory' => 'rcmusic.com',
+        );
+
+        $count = 0;
+        foreach ( $brand_ids as $slug => $post_id ) {
+            // Skip if already has a featured image
+            if ( get_post_thumbnail_id( $post_id ) ) {
+                $count++;
+                continue;
+            }
+
+            if ( ! isset( $brand_domains[ $slug ] ) ) {
+                continue;
+            }
+
+            $logo_url = 'https://logo.clearbit.com/' . $brand_domains[ $slug ] . '?size=200';
+
+            $tmp = download_url( $logo_url );
+            if ( is_wp_error( $tmp ) ) {
+                continue;
+            }
+
+            $file_array = array(
+                'name'     => sanitize_file_name( $slug . '-logo.png' ),
+                'tmp_name' => $tmp,
+            );
+
+            $attachment_id = media_handle_sideload( $file_array, $post_id );
+            if ( is_wp_error( $attachment_id ) ) {
+                @unlink( $tmp );
+                continue;
+            }
+
+            $brand_name = get_the_title( $post_id );
+            update_post_meta( $attachment_id, '_wp_attachment_image_alt', sanitize_text_field( $brand_name . ' logo' ) );
+            set_post_thumbnail( $post_id, $attachment_id );
+            $count++;
+        }
+
+        $results[] = array( 'success' => $count > 0, 'message' => "Imported {$count} brand logos" );
         return $results;
     }
 
