@@ -657,6 +657,129 @@ if ( get_theme_mod( 'wicm_smtp_enabled', false ) ) {
 }
 
 /**
+ * ---------------------------------------------------------------------------
+ * Contact-form submission storage (works without a mail server).
+ *
+ * Every CF7 submission is saved as a private 'wicm_inquiry' CPT entry so
+ * nothing is lost even when SMTP is unavailable.  An admin menu page under
+ * "Inquiries" lets the site owner view all submissions.
+ * ---------------------------------------------------------------------------
+ */
+
+/* Register the CPT (hidden from the front-end, visible in admin). */
+function wicm_register_inquiry_cpt() {
+    register_post_type( 'wicm_inquiry', array(
+        'labels'       => array(
+            'name'          => 'Inquiries',
+            'singular_name' => 'Inquiry',
+            'menu_name'     => 'Inquiries',
+        ),
+        'public'       => false,
+        'show_ui'      => true,
+        'show_in_menu' => true,
+        'menu_icon'    => 'dashicons-email-alt',
+        'supports'     => array( 'title' ),
+        'capabilities' => array(
+            'create_posts' => 'do_not_allow',
+        ),
+        'map_meta_cap' => true,
+    ) );
+}
+add_action( 'init', 'wicm_register_inquiry_cpt' );
+
+/* Save every CF7 submission to the database. */
+function wicm_store_cf7_submission( $contact_form ) {
+    $submission = WPCF7_Submission::get_instance();
+    if ( ! $submission ) {
+        return;
+    }
+
+    $data = $submission->get_posted_data();
+    $name       = isset( $data['your-name'] )  ? sanitize_text_field( $data['your-name'] )  : '';
+    $email      = isset( $data['your-email'] ) ? sanitize_email( $data['your-email'] )      : '';
+    $phone      = isset( $data['your-phone'] ) ? sanitize_text_field( $data['your-phone'] ) : '';
+    $instrument = isset( $data['instrument'] ) ? sanitize_text_field( $data['instrument'] ) : '';
+    $message    = isset( $data['your-message'] ) ? sanitize_textarea_field( $data['your-message'] ) : '';
+
+    $post_id = wp_insert_post( array(
+        'post_type'   => 'wicm_inquiry',
+        'post_title'  => $name . ' — ' . $instrument,
+        'post_status' => 'publish',
+        'post_content' => $message,
+    ) );
+
+    if ( ! is_wp_error( $post_id ) ) {
+        update_post_meta( $post_id, '_inquiry_name',       $name );
+        update_post_meta( $post_id, '_inquiry_email',      $email );
+        update_post_meta( $post_id, '_inquiry_phone',      $phone );
+        update_post_meta( $post_id, '_inquiry_instrument', $instrument );
+    }
+}
+add_action( 'wpcf7_before_send_mail', 'wicm_store_cf7_submission' );
+
+/* Tell CF7 to skip sending email when SMTP is not configured. */
+function wicm_cf7_skip_mail( $skip, $contact_form ) {
+    if ( get_theme_mod( 'wicm_smtp_enabled', false ) ) {
+        return $skip; // SMTP is on — let CF7 try to send.
+    }
+    return true; // No mail server — skip email, rely on DB storage.
+}
+add_filter( 'wpcf7_skip_mail', 'wicm_cf7_skip_mail', 10, 2 );
+
+/* Show inquiry details in the admin edit screen. */
+function wicm_inquiry_meta_boxes() {
+    add_meta_box( 'wicm-inquiry-details', 'Inquiry Details', 'wicm_render_inquiry_meta', 'wicm_inquiry', 'normal', 'high' );
+}
+add_action( 'add_meta_boxes', 'wicm_inquiry_meta_boxes' );
+
+function wicm_render_inquiry_meta( $post ) {
+    $fields = array(
+        'Name'       => get_post_meta( $post->ID, '_inquiry_name', true ),
+        'Email'      => get_post_meta( $post->ID, '_inquiry_email', true ),
+        'Phone'      => get_post_meta( $post->ID, '_inquiry_phone', true ),
+        'Instrument' => get_post_meta( $post->ID, '_inquiry_instrument', true ),
+    );
+    echo '<table class="form-table"><tbody>';
+    foreach ( $fields as $label => $value ) {
+        $value = esc_html( $value );
+        if ( 'Email' === $label && $value ) {
+            $value = '<a href="mailto:' . $value . '">' . $value . '</a>';
+        }
+        echo '<tr><th>' . esc_html( $label ) . '</th><td>' . $value . '</td></tr>';
+    }
+    echo '<tr><th>Message</th><td>' . nl2br( esc_html( $post->post_content ) ) . '</td></tr>';
+    echo '</tbody></table>';
+}
+
+/* Add columns to the Inquiries list table. */
+function wicm_inquiry_columns( $columns ) {
+    return array(
+        'cb'         => $columns['cb'],
+        'title'      => 'Inquiry',
+        'email'      => 'Email',
+        'phone'      => 'Phone',
+        'instrument' => 'Instrument',
+        'date'       => 'Date',
+    );
+}
+add_filter( 'manage_wicm_inquiry_posts_columns', 'wicm_inquiry_columns' );
+
+function wicm_inquiry_column_data( $column, $post_id ) {
+    switch ( $column ) {
+        case 'email':
+            echo esc_html( get_post_meta( $post_id, '_inquiry_email', true ) );
+            break;
+        case 'phone':
+            echo esc_html( get_post_meta( $post_id, '_inquiry_phone', true ) );
+            break;
+        case 'instrument':
+            echo esc_html( get_post_meta( $post_id, '_inquiry_instrument', true ) );
+            break;
+    }
+}
+add_action( 'manage_wicm_inquiry_posts_custom_column', 'wicm_inquiry_column_data', 10, 2 );
+
+/**
  * Prevent WordPress from adding loading="lazy" to the hero image.
  *
  * WP core automatically adds lazy-loading to all content images, but the
