@@ -522,7 +522,7 @@ function wicm_customize_register( $wp_customize ) {
     ) );
 
     $wp_customize->add_setting( 'wicm_smtp_host', array(
-        'default'           => 'mail.westisland.music',
+        'default'           => 'localhost',
         'sanitize_callback' => 'sanitize_text_field',
     ) );
     $wp_customize->add_control( 'wicm_smtp_host', array(
@@ -532,7 +532,7 @@ function wicm_customize_register( $wp_customize ) {
     ) );
 
     $wp_customize->add_setting( 'wicm_smtp_port', array(
-        'default'           => '465',
+        'default'           => '25',
         'sanitize_callback' => 'absint',
     ) );
     $wp_customize->add_control( 'wicm_smtp_port', array(
@@ -542,7 +542,7 @@ function wicm_customize_register( $wp_customize ) {
     ) );
 
     $wp_customize->add_setting( 'wicm_smtp_encryption', array(
-        'default'           => 'ssl',
+        'default'           => 'none',
         'sanitize_callback' => 'sanitize_text_field',
     ) );
     $wp_customize->add_control( 'wicm_smtp_encryption', array(
@@ -614,13 +614,18 @@ function wicm_sanitize_checkbox( $value ) {
  * SMTP instead, ensuring Contact Form 7 emails are delivered.
  */
 function wicm_smtp_setup( $phpmailer ) {
+    // Defer to WP Mail SMTP plugin when it is active to avoid conflicts.
+    if ( class_exists( 'WPMailSMTP\\WPMailSMTP', false ) || function_exists( 'wp_mail_smtp' ) ) {
+        return;
+    }
+
     if ( ! get_theme_mod( 'wicm_smtp_enabled', false ) ) {
         return;
     }
 
-    $host     = get_theme_mod( 'wicm_smtp_host', 'mail.westisland.music' );
-    $port     = (int) get_theme_mod( 'wicm_smtp_port', 465 );
-    $encrypt  = get_theme_mod( 'wicm_smtp_encryption', 'ssl' );
+    $host     = get_theme_mod( 'wicm_smtp_host', 'localhost' );
+    $port     = (int) get_theme_mod( 'wicm_smtp_port', 25 );
+    $encrypt  = get_theme_mod( 'wicm_smtp_encryption', 'none' );
     $username = get_theme_mod( 'wicm_smtp_username', '' );
     $password = get_theme_mod( 'wicm_smtp_password', '' );
 
@@ -635,6 +640,7 @@ function wicm_smtp_setup( $phpmailer ) {
     $phpmailer->SMTPAuth   = true;
     $phpmailer->Username   = $username;
     $phpmailer->Password   = $password;
+    $phpmailer->Timeout    = 15; // Fail fast instead of hanging for 110s.
 }
 add_action( 'phpmailer_init', 'wicm_smtp_setup' );
 
