@@ -800,51 +800,54 @@ function wicm_disable_lazy_load_hero( $value, $image, $context ) {
 }
 add_filter( 'wp_img_tag_add_loading_attr', 'wicm_disable_lazy_load_hero', 10, 3 );
 
-/* WP Store Locator – Contact info shortcodes */
+/* WP Store Locator – Replace contact info on the front page with WPSL data. */
 
-function wicm_get_wpsl_store() {
-    if ( ! post_type_exists( 'wpsl_stores' ) ) {
-        return false;
+function wicm_wpsl_contact_filter( $content ) {
+    if ( ! is_front_page() || ! post_type_exists( 'wpsl_stores' ) ) {
+        return $content;
     }
+
     $stores = get_posts( array(
         'post_type'      => 'wpsl_stores',
         'posts_per_page' => 1,
         'post_status'    => 'publish',
     ) );
-    return $stores ? $stores[0] : false;
-}
-
-function wicm_wpsl_address_shortcode() {
-    $store = wicm_get_wpsl_store();
-    if ( ! $store ) {
-        return esc_html( get_theme_mod( 'wicm_contact_address', 'Bb-245 Blvd St-Jean, Pointe-Claire, QC, H9R-3J1' ) );
+    if ( empty( $stores ) ) {
+        return $content;
     }
+    $store = $stores[0];
+
+    // Address
     $parts = array_filter( array(
         get_post_meta( $store->ID, 'wpsl_address', true ),
         get_post_meta( $store->ID, 'wpsl_city', true ),
         get_post_meta( $store->ID, 'wpsl_state', true ),
         get_post_meta( $store->ID, 'wpsl_zip', true ),
     ) );
-    return esc_html( implode( ', ', $parts ) );
-}
-add_shortcode( 'wicm_wpsl_address', 'wicm_wpsl_address_shortcode' );
-
-function wicm_wpsl_email_shortcode() {
-    $store = wicm_get_wpsl_store();
-    $email = $store ? get_post_meta( $store->ID, 'wpsl_email', true ) : '';
-    if ( ! $email ) {
-        $email = get_theme_mod( 'wicm_contact_email', 'info@westisland.music' );
+    if ( $parts ) {
+        $address = esc_html( implode( ', ', $parts ) );
+        $content = str_replace(
+            'Bb-245 Blvd St-Jean, Pointe-Claire, QC, H9R-3J1',
+            $address,
+            $content
+        );
     }
-    $email = sanitize_email( $email );
-    return '<a href="mailto:' . esc_attr( $email ) . '">' . esc_html( $email ) . '</a>';
-}
-add_shortcode( 'wicm_wpsl_email', 'wicm_wpsl_email_shortcode' );
 
-function wicm_wpsl_hours_shortcode() {
-    $store = wicm_get_wpsl_store();
-    $hours = $store ? get_post_meta( $store->ID, 'wpsl_hours', true ) : '';
-    if ( $hours ) {
-        $hours_data = json_decode( $hours, true );
+    // Email
+    $email = get_post_meta( $store->ID, 'wpsl_email', true );
+    if ( $email ) {
+        $email = sanitize_email( $email );
+        $content = str_replace(
+            '<a href="mailto:info@westisland.music">info@westisland.music</a>',
+            '<a href="mailto:' . esc_attr( $email ) . '">' . esc_html( $email ) . '</a>',
+            $content
+        );
+    }
+
+    // Hours
+    $hours_raw = get_post_meta( $store->ID, 'wpsl_hours', true );
+    if ( $hours_raw ) {
+        $hours_data = json_decode( $hours_raw, true );
         if ( is_array( $hours_data ) ) {
             $lines = array();
             foreach ( $hours_data as $entry ) {
@@ -856,13 +859,15 @@ function wicm_wpsl_hours_shortcode() {
                 }
             }
             if ( $lines ) {
-                return implode( "\n", $lines );
+                $content = str_replace(
+                    "<p>Tue-Fri: 12:00 PM - 6:00 PM</p>\n<p>Saturday: 10:00 AM - 4:00 PM</p>",
+                    implode( "\n", $lines ),
+                    $content
+                );
             }
         }
-        return wp_kses_post( $hours );
     }
-    $weekday = esc_html( get_theme_mod( 'wicm_hours_weekday', 'Tue-Fri: 12:00 PM - 6:00 PM' ) );
-    $weekend = esc_html( get_theme_mod( 'wicm_hours_weekend', 'Saturday: 10:00 AM - 4:00 PM' ) );
-    return '<p>' . $weekday . '</p>' . "\n" . '<p>' . $weekend . '</p>';
+
+    return $content;
 }
-add_shortcode( 'wicm_wpsl_hours', 'wicm_wpsl_hours_shortcode' );
+add_filter( 'the_content', 'wicm_wpsl_contact_filter', 8 );
