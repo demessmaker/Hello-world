@@ -808,83 +808,67 @@ add_filter( 'wp_img_tag_add_loading_attr', 'wicm_disable_lazy_load_hero', 10, 3 
  * Store Locator data instead of being hardcoded.
  *--------------------------------------------------------------*/
 
-function wicm_register_wpsl_shortcodes() {
-
-    /**
-     * Helper: get the first published wpsl_stores post.
-     */
-    function wicm_get_wpsl_store() {
-        if ( ! post_type_exists( 'wpsl_stores' ) ) {
-            return false;
-        }
-        $stores = get_posts( array(
-            'post_type'      => 'wpsl_stores',
-            'posts_per_page' => 1,
-            'post_status'    => 'publish',
-        ) );
-        return $stores ? $stores[0] : false;
+function wicm_get_wpsl_store() {
+    if ( ! post_type_exists( 'wpsl_stores' ) ) {
+        return false;
     }
+    $stores = get_posts( array(
+        'post_type'      => 'wpsl_stores',
+        'posts_per_page' => 1,
+        'post_status'    => 'publish',
+    ) );
+    return $stores ? $stores[0] : false;
+}
 
-    /**
-     * [wicm_wpsl_address] – Full formatted address from WPSL.
-     */
-    function wicm_wpsl_address_shortcode() {
-        $store = wicm_get_wpsl_store();
-        if ( ! $store ) {
-            return esc_html( get_theme_mod( 'wicm_contact_address', 'Bb-245 Blvd St-Jean, Pointe-Claire, QC, H9R-3J1' ) );
-        }
-        $parts = array_filter( array(
-            get_post_meta( $store->ID, 'wpsl_address', true ),
-            get_post_meta( $store->ID, 'wpsl_city', true ),
-            get_post_meta( $store->ID, 'wpsl_state', true ),
-            get_post_meta( $store->ID, 'wpsl_zip', true ),
-        ) );
-        return esc_html( implode( ', ', $parts ) );
+function wicm_wpsl_address_shortcode() {
+    $store = wicm_get_wpsl_store();
+    if ( ! $store ) {
+        return esc_html( get_theme_mod( 'wicm_contact_address', 'Bb-245 Blvd St-Jean, Pointe-Claire, QC, H9R-3J1' ) );
     }
-    add_shortcode( 'wicm_wpsl_address', 'wicm_wpsl_address_shortcode' );
+    $parts = array_filter( array(
+        get_post_meta( $store->ID, 'wpsl_address', true ),
+        get_post_meta( $store->ID, 'wpsl_city', true ),
+        get_post_meta( $store->ID, 'wpsl_state', true ),
+        get_post_meta( $store->ID, 'wpsl_zip', true ),
+    ) );
+    return esc_html( implode( ', ', $parts ) );
+}
+add_shortcode( 'wicm_wpsl_address', 'wicm_wpsl_address_shortcode' );
 
-    /**
-     * [wicm_wpsl_email] – Email from WPSL (returns a mailto link).
-     */
-    function wicm_wpsl_email_shortcode() {
-        $store = wicm_get_wpsl_store();
-        $email = $store ? get_post_meta( $store->ID, 'wpsl_email', true ) : '';
-        if ( ! $email ) {
-            $email = get_theme_mod( 'wicm_contact_email', 'info@westisland.music' );
-        }
-        $email = sanitize_email( $email );
-        return '<a href="mailto:' . esc_attr( $email ) . '">' . esc_html( $email ) . '</a>';
+function wicm_wpsl_email_shortcode() {
+    $store = wicm_get_wpsl_store();
+    $email = $store ? get_post_meta( $store->ID, 'wpsl_email', true ) : '';
+    if ( ! $email ) {
+        $email = get_theme_mod( 'wicm_contact_email', 'info@westisland.music' );
     }
-    add_shortcode( 'wicm_wpsl_email', 'wicm_wpsl_email_shortcode' );
+    $email = sanitize_email( $email );
+    return '<a href="mailto:' . esc_attr( $email ) . '">' . esc_html( $email ) . '</a>';
+}
+add_shortcode( 'wicm_wpsl_email', 'wicm_wpsl_email_shortcode' );
 
-    /**
-     * [wicm_wpsl_hours] – Opening hours from WPSL.
-     */
-    function wicm_wpsl_hours_shortcode() {
-        $store = wicm_get_wpsl_store();
-        $hours = $store ? get_post_meta( $store->ID, 'wpsl_hours', true ) : '';
-        if ( $hours ) {
-            $hours_data = json_decode( $hours, true );
-            if ( is_array( $hours_data ) ) {
-                $lines = array();
-                foreach ( $hours_data as $entry ) {
-                    $day   = isset( $entry['days'] )  ? $entry['days']  : '';
-                    $open  = isset( $entry['open'] )  ? $entry['open']  : '';
-                    $close = isset( $entry['close'] ) ? $entry['close'] : '';
-                    if ( $day ) {
-                        $lines[] = '<p>' . esc_html( $day . ': ' . $open . ' - ' . $close ) . '</p>';
-                    }
-                }
-                if ( $lines ) {
-                    return implode( "\n", $lines );
+function wicm_wpsl_hours_shortcode() {
+    $store = wicm_get_wpsl_store();
+    $hours = $store ? get_post_meta( $store->ID, 'wpsl_hours', true ) : '';
+    if ( $hours ) {
+        $hours_data = json_decode( $hours, true );
+        if ( is_array( $hours_data ) ) {
+            $lines = array();
+            foreach ( $hours_data as $entry ) {
+                $day   = isset( $entry['days'] )  ? $entry['days']  : '';
+                $open  = isset( $entry['open'] )  ? $entry['open']  : '';
+                $close = isset( $entry['close'] ) ? $entry['close'] : '';
+                if ( $day ) {
+                    $lines[] = '<p>' . esc_html( $day . ': ' . $open . ' - ' . $close ) . '</p>';
                 }
             }
-            return wp_kses_post( $hours );
+            if ( $lines ) {
+                return implode( "\n", $lines );
+            }
         }
-        $weekday = esc_html( get_theme_mod( 'wicm_hours_weekday', 'Tue-Fri: 12:00 PM - 6:00 PM' ) );
-        $weekend = esc_html( get_theme_mod( 'wicm_hours_weekend', 'Saturday: 10:00 AM - 4:00 PM' ) );
-        return '<p>' . $weekday . '</p>' . "\n" . '<p>' . $weekend . '</p>';
+        return wp_kses_post( $hours );
     }
-    add_shortcode( 'wicm_wpsl_hours', 'wicm_wpsl_hours_shortcode' );
+    $weekday = esc_html( get_theme_mod( 'wicm_hours_weekday', 'Tue-Fri: 12:00 PM - 6:00 PM' ) );
+    $weekend = esc_html( get_theme_mod( 'wicm_hours_weekend', 'Saturday: 10:00 AM - 4:00 PM' ) );
+    return '<p>' . $weekday . '</p>' . "\n" . '<p>' . $weekend . '</p>';
 }
-add_action( 'init', 'wicm_register_wpsl_shortcodes' );
+add_shortcode( 'wicm_wpsl_hours', 'wicm_wpsl_hours_shortcode' );
