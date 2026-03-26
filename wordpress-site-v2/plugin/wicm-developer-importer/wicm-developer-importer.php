@@ -1674,9 +1674,13 @@ class WICM_Developer_Importer {
         $html = '<div class="store-brands">' . $heading . '<div class="brands-grid">';
         foreach ( $brands as $brand ) {
             $url      = get_post_meta( $brand->ID, '_wicm_brand_url', true );
-            $logo_url = get_post_meta( $brand->ID, '_wicm_brand_logo_url', true );
-            $logo     = $logo_url ? $logo_url : get_the_post_thumbnail_url( $brand->ID, 'medium' );
             $name     = esc_html( $brand->post_title );
+
+            // Prefer the post thumbnail (real image from Clearbit) over the
+            // bundled SVG placeholder which is just styled text.
+            $thumb    = get_the_post_thumbnail_url( $brand->ID, 'medium' );
+            $svg_url  = get_post_meta( $brand->ID, '_wicm_brand_logo_url', true );
+            $logo     = $thumb ? $thumb : null;
 
             $tag   = $url ? 'a' : 'span';
             $attrs = $url ? ' href="' . esc_url( $url ) . '" target="_blank" rel="noopener"' : '';
