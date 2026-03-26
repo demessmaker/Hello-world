@@ -847,7 +847,11 @@ function wicm_wpsl_contact_filter( $content ) {
     // Hours
     $hours_raw = get_post_meta( $store->ID, 'wpsl_hours', true );
     if ( $hours_raw ) {
-        $hours_data = json_decode( $hours_raw, true );
+        if ( is_string( $hours_raw ) ) {
+            $hours_data = json_decode( $hours_raw, true );
+        } else {
+            $hours_data = $hours_raw;
+        }
         if ( is_array( $hours_data ) ) {
             $lines = array();
             foreach ( $hours_data as $entry ) {
