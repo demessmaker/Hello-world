@@ -915,6 +915,19 @@ nav ul, nav ol, nav li {
     overflow: hidden;
 }
 
+/* Hide WPSL search bar and results list on front page — show map only */
+.contact-map #wpsl-search,
+.contact-map #wpsl-result-list,
+.contact-map .wpsl-direction-before,
+.contact-map .wpsl-store-below {
+    display: none !important;
+}
+
+.contact-map #wpsl-gmap {
+    width: 100% !important;
+    height: 300px !important;
+}
+
 /* Contact Form */
 .contact-form {
     background: var(--color-white);

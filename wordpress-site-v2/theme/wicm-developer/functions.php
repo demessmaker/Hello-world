@@ -800,6 +800,15 @@ function wicm_disable_lazy_load_hero( $value, $image, $context ) {
 }
 add_filter( 'wp_img_tag_add_loading_attr', 'wicm_disable_lazy_load_hero', 10, 3 );
 
+function wicm_hero_loading_optimization( $attrs, $tag_name, $attr, $context ) {
+    if ( 'img' === $tag_name && isset( $attr['class'] ) && false !== strpos( $attr['class'], 'hero-bg' ) ) {
+        unset( $attrs['loading'] );
+        $attrs['fetchpriority'] = 'high';
+    }
+    return $attrs;
+}
+add_filter( 'wp_get_loading_optimization_attributes', 'wicm_hero_loading_optimization', 10, 4 );
+
 /* WP Store Locator – Replace contact info on the front page with WPSL data. */
 
 function wicm_wpsl_contact_filter( $content ) {
