@@ -1684,8 +1684,9 @@ class WICM_Developer_Importer {
             $html .= '<' . $tag . $attrs . ' class="brand-card">';
             if ( $logo ) {
                 $html .= '<img src="' . esc_url( $logo ) . '" alt="' . esc_attr( $brand->post_title ) . ' logo" class="brand-logo" loading="lazy">';
+            } else {
+                $html .= '<span class="brand-name">' . $name . '</span>';
             }
-            $html .= '<span class="brand-name">' . $name . '</span>';
             $html .= '</' . $tag . '>';
         }
         $html .= '</div></div>';
