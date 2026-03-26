@@ -908,6 +908,13 @@ nav ul, nav ol, nav li {
     color: var(--color-red-600);
 }
 
+/* Contact Map */
+.contact-map {
+    margin-top: 1.5rem;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
 /* Contact Form */
 .contact-form {
     background: var(--color-white);

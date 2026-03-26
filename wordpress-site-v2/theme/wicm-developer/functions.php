@@ -868,6 +868,16 @@ function wicm_wpsl_contact_filter( $content ) {
         }
     }
 
+    // Store locator map
+    if ( shortcode_exists( 'wpsl' ) ) {
+        $map_html = do_shortcode( '[wpsl]' );
+        $content = str_replace(
+            '<div class="contact-map fade-in"></div>',
+            '<div class="contact-map fade-in">' . $map_html . '</div>',
+            $content
+        );
+    }
+
     return $content;
 }
 add_filter( 'the_content', 'wicm_wpsl_contact_filter', 8 );
