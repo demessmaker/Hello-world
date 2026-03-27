@@ -1,13 +1,9 @@
 <?php get_header(); ?>
 
-<main id="main-content" class="page-content">
-    <div class="wicm-container">
-        <?php while ( have_posts() ) : the_post(); ?>
-            <div class="entry-content">
-                <?php the_content(); ?>
-            </div>
-        <?php endwhile; ?>
-    </div>
+<main id="main-content" class="entry-content alignfull-container">
+    <?php while ( have_posts() ) : the_post(); ?>
+        <?php the_content(); ?>
+    <?php endwhile; ?>
 </main>
 
 <?php get_footer(); ?>
