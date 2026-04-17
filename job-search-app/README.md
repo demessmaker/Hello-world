@@ -60,9 +60,29 @@ python main.py --status
 python main.py --applied 42
 ```
 
-## Schedule (cron)
+## Schedule
 
-Add to your crontab for 7 AM ET, Mon–Fri:
+### Option A — GitHub Actions (recommended, free)
+
+Workflow: `.github/workflows/daily-job-search.yml`. Runs 11:00 UTC (07:00 EDT)
+Mon–Fri and also on-demand via **Run workflow** in the Actions tab.
+
+Setup:
+
+1. Push this repo to GitHub.
+2. Settings → Secrets and variables → Actions → **New repository secret**:
+   - `SMTP_PASSWORD` = your SMTP app password.
+3. Edit `job-search-app/config.yaml` and commit:
+   - `email.smtp_host`, `smtp_port`, `smtp_user`, `from_address`, `to_address`.
+   - `candidate.email`.
+4. The SQLite DB is persisted between runs via `actions/cache` and also
+   uploaded as an artifact (30-day retention) so nothing is lost if the cache
+   is evicted.
+
+Trigger a one-off run from the Actions tab; use the `dry_run` input to test
+without sending email.
+
+### Option B — Local cron
 
 ```
 0 7 * * 1-5 cd /path/to/job-search-app && /usr/bin/python3 main.py --run-now >> logs/cron.log 2>&1
