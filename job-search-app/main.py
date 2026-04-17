@@ -20,6 +20,7 @@ from database import (
     get_session,
     init_db,
 )
+from dashboard import generate as generate_dashboard
 from emailer import compose, send
 from processing import mark_closed_postings, normalize, score_posting, upsert_posting
 from sources import (
@@ -181,6 +182,13 @@ def run_pipeline(cfg: dict, dry_run: bool = False):
 
     subject, html, text = compose(context)
 
+    dashboard_path = Path(cfg.get("dashboard", {}).get("output_path", "docs/index.html"))
+    try:
+        generate_dashboard(cfg, dashboard_path)
+        log.info("dashboard written to %s", dashboard_path)
+    except Exception:
+        log.exception("failed to generate dashboard")
+
     if dry_run:
         print(f"--- SUBJECT ---\n{subject}\n\n--- TEXT ---\n{text}")
         return
@@ -249,6 +257,7 @@ def main():
     parser.add_argument("--dry-run", action="store_true", help="Run but print email instead of sending")
     parser.add_argument("--status", action="store_true", help="Show current pipeline")
     parser.add_argument("--applied", type=int, metavar="ID", help="Mark posting ID as applied")
+    parser.add_argument("--dashboard", action="store_true", help="Regenerate the static HTML dashboard")
     args = parser.parse_args()
 
     cfg = load_config(Path(args.config))
@@ -263,6 +272,11 @@ def main():
         return
     if args.applied:
         mark_applied(cfg, args.applied)
+        return
+    if args.dashboard:
+        out = Path(cfg.get("dashboard", {}).get("output_path", "docs/index.html"))
+        generate_dashboard(cfg, out)
+        print(f"dashboard written to {out}")
         return
     if args.run_now or args.dry_run:
         run_pipeline(cfg, dry_run=args.dry_run)

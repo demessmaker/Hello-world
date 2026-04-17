@@ -20,6 +20,9 @@ Montreal, QC.
   company/title/location).
 - Closed-posting detection (3-day absence).
 - HTML + plain-text email via SMTP.
+- Static HTML dashboard (`docs/index.html`) auto-generated each run with
+  sortable table, live search, filter chips, and drill-down to full
+  description + apply link. Deployed to GitHub Pages from the workflow.
 
 ## Install
 
@@ -61,7 +64,22 @@ python main.py --status
 
 # Mark a posting as applied
 python main.py --applied 42
+
+# Regenerate the dashboard only (reads from existing DB)
+python main.py --dashboard
+# then open docs/index.html
 ```
+
+## Dashboard
+
+Each pipeline run writes `docs/index.html` — a self-contained static
+dashboard with filters, search, and drill-down (click any row to expand the
+full description with an "Open posting" link).
+
+The workflow deploys it to **GitHub Pages**. To enable:
+
+1. Repo Settings → **Pages** → Build and deployment → Source: **GitHub Actions**.
+2. Next scheduled or manual run will publish to `https://<user>.github.io/<repo>/`.
 
 ## Schedule
 

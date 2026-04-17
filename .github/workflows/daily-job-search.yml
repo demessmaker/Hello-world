@@ -3,7 +3,6 @@ name: Daily Job Search
 on:
   schedule:
     # 11:00 UTC = 07:00 EDT (Apr-Oct) / 06:00 EST (Nov-Mar).
-    # Add the winter cron if you want strict 07:00 ET year-round.
     - cron: "0 11 * * 1-5"
     # - cron: "0 12 * * 1-5"   # uncomment for 07:00 EST in winter
   workflow_dispatch:
@@ -13,14 +12,26 @@ on:
         type: boolean
         default: false
 
-defaults:
-  run:
-    working-directory: job-search-app
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   run:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+
+    defaults:
+      run:
+        working-directory: job-search-app
 
     steps:
       - uses: actions/checkout@v4
@@ -61,6 +72,9 @@ jobs:
             python main.py --run-now
           fi
 
+      - name: Regenerate dashboard (defensive)
+        run: python main.py --dashboard
+
       - name: Save job_search.db to cache
         if: always()
         uses: actions/cache/save@v4
@@ -84,3 +98,15 @@ jobs:
           path: job-search-app/logs/
           retention-days: 14
           if-no-files-found: ignore
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: job-search-app/docs
+
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4

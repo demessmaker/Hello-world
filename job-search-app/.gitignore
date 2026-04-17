@@ -8,5 +8,6 @@ __pycache__/
 venv/
 logs/
 *.log
+docs/
 .pytest_cache/
 .DS_Store

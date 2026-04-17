@@ -157,6 +157,9 @@ filters:
     - Québec
     - Quebec
 
+dashboard:
+  output_path: "./docs/index.html"
+
 database:
   path: "./job_search.db"
   retention_days: 90

@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Job Search Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  .score-top { background: linear-gradient(90deg, #86efac, #4ade80); color: #14532d; }
+  .score-strong { background: #bfdbfe; color: #1e3a8a; }
+  .score-ok { background: #e5e7eb; color: #374151; }
+  details[open] > summary .chev { transform: rotate(90deg); }
+  .chev { transition: transform .15s; display: inline-block; }
+</style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+<header class="bg-white border-b border-slate-200">
+  <div class="max-w-7xl mx-auto px-4 py-4 flex items-baseline justify-between">
+    <h1 class="text-xl font-semibold">Job Search Dashboard</h1>
+    <div class="text-xs text-slate-500">Generated {{ generated_at }}</div>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
+
+  <section class="grid grid-cols-2 md:grid-cols-5 gap-3">
+    <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-4">
+      <div class="text-xs uppercase text-slate-500">Total tracked</div>
+      <div class="text-2xl font-semibold">{{ stats.total }}</div>
+    </div>
+    <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-4">
+      <div class="text-xs uppercase text-slate-500">Relevant (&ge;{{ min_score }})</div>
+      <div class="text-2xl font-semibold text-blue-700">{{ stats.relevant }}</div>
+    </div>
+    <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-4">
+      <div class="text-xs uppercase text-slate-500">Top matches (&ge;{{ top_threshold }})</div>
+      <div class="text-2xl font-semibold text-green-700">{{ stats.top }}</div>
+    </div>
+    <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-4">
+      <div class="text-xs uppercase text-slate-500">Companies</div>
+      <div class="text-2xl font-semibold">{{ stats.companies }}</div>
+    </div>
+    <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-4">
+      <div class="text-xs uppercase text-slate-500">Sources</div>
+      <div class="text-2xl font-semibold">{{ stats.sources }}</div>
+    </div>
+  </section>
+
+  <section class="grid md:grid-cols-3 gap-4">
+    <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-4">
+      <h2 class="text-sm font-semibold text-slate-700 mb-2">Top companies</h2>
+      <ul class="space-y-1 text-sm">
+        {% for name, n in companies %}
+        <li class="flex justify-between"><button class="hover:text-blue-700" data-filter-company="{{ name }}">{{ name }}</button><span class="text-slate-500">{{ n }}</span></li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-4">
+      <h2 class="text-sm font-semibold text-slate-700 mb-2">Locations</h2>
+      <ul class="space-y-1 text-sm">
+        {% for name, n in locations %}
+        <li class="flex justify-between"><button class="hover:text-blue-700" data-filter-location="{{ name }}">{{ name }}</button><span class="text-slate-500">{{ n }}</span></li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-4">
+      <h2 class="text-sm font-semibold text-slate-700 mb-2">Sources</h2>
+      <ul class="space-y-1 text-sm">
+        {% for name, n in sources %}
+        <li class="flex justify-between"><button class="hover:text-blue-700" data-filter-source="{{ name }}">{{ name }}</button><span class="text-slate-500">{{ n }}</span></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+
+  <section class="bg-white rounded-lg shadow-sm border border-slate-200 p-4">
+    <div class="flex flex-wrap items-center gap-3">
+      <label class="text-sm flex items-center gap-2">
+        <span class="text-slate-600">Min score</span>
+        <input id="minScore" type="range" min="0" max="100" value="{{ min_score }}" class="align-middle">
+        <span id="minScoreVal" class="font-mono">{{ min_score }}</span>
+      </label>
+      <input id="search" type="search" placeholder="Search title, company, location, description…" class="flex-1 min-w-[200px] border border-slate-300 rounded px-3 py-1.5 text-sm">
+      <button id="clear" class="text-sm text-blue-700 hover:underline">Clear filters</button>
+      <span id="count" class="text-sm text-slate-500 ml-auto"></span>
+    </div>
+  </section>
+
+  <section class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+    <table class="w-full text-sm">
+      <thead class="bg-slate-100 text-slate-600">
+        <tr>
+          <th class="text-left px-3 py-2 w-16 cursor-pointer" data-sort="score">Score</th>
+          <th class="text-left px-3 py-2 cursor-pointer" data-sort="company">Company</th>
+          <th class="text-left px-3 py-2 cursor-pointer" data-sort="title">Title</th>
+          <th class="text-left px-3 py-2 cursor-pointer" data-sort="location">Location</th>
+          <th class="text-left px-3 py-2">Comp</th>
+          <th class="text-left px-3 py-2">Source</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </section>
+
+  <footer class="text-xs text-slate-500 text-center py-4">
+    Data refreshed daily by GitHub Actions · sorting &amp; filtering happen client-side · click a row to expand
+  </footer>
+</main>
+
+<script>
+const POSTINGS = {{ postings_json|safe }};
+const MIN_SCORE_DEFAULT = {{ min_score }};
+const TOP_THRESHOLD = {{ top_threshold }};
+
+let state = { minScore: MIN_SCORE_DEFAULT, search: "", company: "", location: "", source: "", sort: "score", dir: -1 };
+
+function matchesLocationBucket(loc, bucket) {
+  const l = (loc || "").toLowerCase();
+  switch (bucket) {
+    case "Montreal / QC": return l.includes("montr") || l.includes("québec") || l.includes("quebec") || l.includes(", qc");
+    case "Ontario": return l.includes("toronto") || l.includes("ottawa") || l.includes(", on");
+    case "BC": return l.includes("vancouver") || l.includes(", bc");
+    case "Canada (other)": return l.includes("canada") && !l.includes("montr") && !l.includes("toronto") && !l.includes("vancouver");
+    case "US Remote":
+      return l.includes("remote") && (l.includes("us") || l.includes("united states") || ["- california","- texas","- new york","- washington","- oregon","- colorado","- illinois","- georgia","- ohio","- arizona","- massachusetts"].some(s => l.includes(s)));
+    case "Remote (other)": return l.includes("remote");
+    default: return true;
+  }
+}
+
+function filter() {
+  const q = state.search.toLowerCase();
+  return POSTINGS.filter(p => {
+    if ((p.score || 0) < state.minScore) return false;
+    if (state.company && p.company !== state.company) return false;
+    if (state.source && p.source !== state.source) return false;
+    if (state.location && !matchesLocationBucket(p.location, state.location)) return false;
+    if (q) {
+      const hay = (p.title + " " + p.company + " " + p.location + " " + p.description).toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  }).sort((a,b) => {
+    const av = a[state.sort] ?? "";
+    const bv = b[state.sort] ?? "";
+    if (av < bv) return -1 * state.dir;
+    if (av > bv) return 1 * state.dir;
+    return 0;
+  });
+}
+
+function badge(score) {
+  const cls = score >= TOP_THRESHOLD ? "score-top" : score >= 55 ? "score-strong" : "score-ok";
+  return `<span class="${cls} px-2 py-0.5 rounded font-mono text-xs">${score}</span>`;
+}
+
+function escapeHtml(s) {
+  return (s || "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[c]));
+}
+
+function render() {
+  const rows = filter();
+  document.getElementById("count").textContent = `${rows.length} posting${rows.length===1?"":"s"} shown`;
+  document.getElementById("tbody").innerHTML = rows.map(p => `
+    <tr class="border-t border-slate-100 hover:bg-slate-50 cursor-pointer" onclick="this.nextElementSibling.classList.toggle('hidden')">
+      <td class="px-3 py-2">${badge(p.score)}</td>
+      <td class="px-3 py-2 font-medium">${escapeHtml(p.company)}</td>
+      <td class="px-3 py-2">${escapeHtml(p.title)}</td>
+      <td class="px-3 py-2 text-slate-600">${escapeHtml(p.location)}</td>
+      <td class="px-3 py-2 text-slate-600">${escapeHtml(p.compensation)}</td>
+      <td class="px-3 py-2 text-slate-500 text-xs">${escapeHtml(p.source)}</td>
+    </tr>
+    <tr class="hidden bg-slate-50">
+      <td colspan="6" class="px-6 py-3 text-sm">
+        <div class="flex items-center gap-3 mb-2">
+          ${p.url ? `<a href="${escapeHtml(p.url)}" target="_blank" rel="noopener" class="inline-block bg-blue-600 text-white px-3 py-1.5 rounded text-xs font-medium hover:bg-blue-700">Open posting →</a>` : ""}
+          <span class="text-xs text-slate-500">First seen ${p.first_seen} · last seen ${p.last_seen} · status ${p.status}</span>
+        </div>
+        <div class="whitespace-pre-wrap text-slate-700">${escapeHtml(p.description) || "<em>No description captured.</em>"}</div>
+      </td>
+    </tr>
+  `).join("");
+}
+
+document.getElementById("minScore").addEventListener("input", e => {
+  state.minScore = parseInt(e.target.value, 10);
+  document.getElementById("minScoreVal").textContent = state.minScore;
+  render();
+});
+document.getElementById("search").addEventListener("input", e => { state.search = e.target.value; render(); });
+document.getElementById("clear").addEventListener("click", () => {
+  state = { minScore: MIN_SCORE_DEFAULT, search: "", company: "", location: "", source: "", sort: "score", dir: -1 };
+  document.getElementById("minScore").value = MIN_SCORE_DEFAULT;
+  document.getElementById("minScoreVal").textContent = MIN_SCORE_DEFAULT;
+  document.getElementById("search").value = "";
+  render();
+});
+document.querySelectorAll("[data-filter-company]").forEach(b => b.addEventListener("click", () => { state.company = b.dataset.filterCompany; render(); }));
+document.querySelectorAll("[data-filter-location]").forEach(b => b.addEventListener("click", () => { state.location = b.dataset.filterLocation; render(); }));
+document.querySelectorAll("[data-filter-source]").forEach(b => b.addEventListener("click", () => { state.source = b.dataset.filterSource; render(); }));
+document.querySelectorAll("[data-sort]").forEach(th => th.addEventListener("click", () => {
+  const col = th.dataset.sort;
+  state.dir = (state.sort === col) ? -state.dir : -1;
+  state.sort = col;
+  render();
+}));
+
+render();
+</script>
+</body>
+</html>
