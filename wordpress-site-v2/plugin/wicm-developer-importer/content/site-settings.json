@@ -1,0 +1,33 @@
+{
+  "site_title": "West Island Conservatory of Music",
+  "tagline": "Making music magical",
+  "timezone": "America/Toronto",
+  "contact": {
+    "phone": "+1-514-XXX-XXXX",
+    "email": "info@westisland.music",
+    "website": "https://westisland.music",
+    "address": {
+      "street": "Bb-245 Blvd St-Jean",
+      "city": "Pointe-Claire",
+      "province": "QC",
+      "postal_code": "H9R-3J1",
+      "country": "CA"
+    }
+  },
+  "hours": {
+    "monday": "Closed",
+    "tuesday": "12:00 PM - 6:00 PM",
+    "wednesday": "12:00 PM - 6:00 PM",
+    "thursday": "12:00 PM - 6:00 PM",
+    "friday": "12:00 PM - 6:00 PM",
+    "saturday": "10:00 AM - 4:00 PM",
+    "sunday": "Closed"
+  },
+  "social_media": {
+    "facebook": "https://www.facebook.com/westislandmusicschool",
+    "instagram": "https://www.instagram.com/westislandmusicschool"
+  },
+  "service_areas": ["Pointe-Claire", "Dorval", "Dollard-des-Ormeaux", "Kirkland", "Beaconsfield", "Pierrefonds"],
+  "payment_methods": ["Cash", "Credit Card", "Debit Card", "E-Transfer"],
+  "currency": "CAD"
+}

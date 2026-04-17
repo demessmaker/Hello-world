@@ -1,0 +1,112 @@
+name: Daily Job Search
+
+on:
+  schedule:
+    # 11:00 UTC = 07:00 EDT (Apr-Oct) / 06:00 EST (Nov-Mar).
+    - cron: "0 11 * * 1-5"
+    # - cron: "0 12 * * 1-5"   # uncomment for 07:00 EST in winter
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Run without sending email (prints to log)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+
+    defaults:
+      run:
+        working-directory: job-search-app
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: job-search-app/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Restore job_search.db from cache
+        id: db-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: job-search-app/job_search.db
+          key: job-search-db-${{ github.run_id }}
+          restore-keys: |
+            job-search-db-
+
+      - name: Initialize DB if missing
+        run: |
+          if [ ! -f job_search.db ]; then
+            python main.py --init
+          fi
+
+      - name: Run pipeline
+        env:
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
+          ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
+        run: |
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            python main.py --dry-run
+          else
+            python main.py --run-now
+          fi
+
+      - name: Regenerate dashboard (defensive)
+        run: python main.py --dashboard
+
+      - name: Save job_search.db to cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: job-search-app/job_search.db
+          key: job-search-db-${{ github.run_id }}
+
+      - name: Upload DB snapshot as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: job_search_db_${{ github.run_id }}
+          path: job-search-app/job_search.db
+          retention-days: 30
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs_${{ github.run_id }}
+          path: job-search-app/logs/
+          retention-days: 14
+          if-no-files-found: ignore
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: job-search-app/docs
+
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4

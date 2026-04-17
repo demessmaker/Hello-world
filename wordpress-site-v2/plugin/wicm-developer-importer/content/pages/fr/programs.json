@@ -1,0 +1,17 @@
+{
+  "title": "Programmes",
+  "slug": "programmes",
+  "template": "",
+  "seo": {
+    "meta_title": "Programmes de musique | École de musique West Island",
+    "meta_description": "Explorez nos programmes de musique : cours de piano, guitare, batterie, chant et violon pour tous les âges et niveaux à l'École de musique West Island à Pointe-Claire."
+  },
+  "yoast_seo": {
+    "focuskw": "programmes de musique Pointe-Claire",
+    "title": "Programmes et cours de musique | École de musique West Island",
+    "metadesc": "Explorez nos programmes de musique : cours de piano, guitare, batterie, chant et violon pour tous les âges et niveaux à l'École de musique West Island à Pointe-Claire, QC.",
+    "opengraph-title": "Programmes de musique | École de musique West Island",
+    "opengraph-description": "Cours de piano, guitare, batterie, chant et violon pour tous les âges. Trouvez le programme musical parfait à l'École de musique West Island à Pointe-Claire."
+  },
+  "html_content": "<section class=\"page-hero\">\n<div class=\"wicm-container\">\n<h1>Nos programmes</h1>\n<p>Découvrez l'instrument parfait pour vous ou votre enfant</p>\n</div>\n</section>\n\n<div class=\"page-content\">\n<div class=\"wicm-container\">\n\n<h2>Trouvez votre son</h2>\n<p>À l'École de musique West Island, nous offrons des programmes de musique complets conçus pour les étudiants de tous âges et niveaux. Que vous soyez un débutant complet ou un musicien avancé cherchant à perfectionner votre technique, nos instructeurs expérimentés créeront un plan d'apprentissage personnalisé pour vous.</p>\n\n[wicm_programs]\n\n<h2>Forfaits de cours</h2>\n<p>Nous offrons des forfaits de cours flexibles pour convenir à tous les horaires et budgets. Contactez-nous pour les tarifs actuels et la disponibilité.</p>\n<p><a href=\"/fr/contactez-nous/\" class=\"btn btn-outline-dark\">Contactez-nous pour les tarifs</a></p>\n\n<h2>Vous ne savez pas quel programme vous convient?</h2>\n<p>Réservez un cours d'essai gratuit et nos instructeurs vous aideront à trouver le choix parfait.</p>\n<p><a href=\"/fr/reserver-un-essai/\" class=\"btn btn-primary\">Réservez un essai gratuit</a></p>\n\n</div>\n</div>"
+}

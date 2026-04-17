@@ -1,0 +1,44 @@
+{
+  "title": "Courses",
+  "slug": "courses",
+  "status": "publish",
+  "type": "page",
+  "seo": {
+    "meta_title": "Music Courses & Lessons | Piano, Guitar, Voice, Drums | West Island Montreal",
+    "meta_description": "16 music courses available: piano, guitar, voice, drums, violin, saxophone & more. Private lessons from beginners to advanced. RCM exam prep. West Island, Montreal.",
+    "focus_keywords": ["music courses west island", "piano lessons pointe-claire", "guitar lessons montreal west island", "RCM exam preparation"],
+    "og_title": "Music Courses - West Island Conservatory of Music",
+    "og_description": "16 music courses from beginner to advanced. Piano, guitar, voice, drums, violin, and more. Book your free trial!",
+    "og_type": "website"
+  },
+  "content": {
+    "heading": "Private music lessons by highly qualified teachers!",
+    "subheading": "From Beginners to Advanced!",
+    "description": "Courses are taught by highly qualified teachers in professional studio classrooms. Programs are customized based on students' age, specific goals and music genres, ranging from rock to R&B to jazz and classical.",
+    "courses": [
+      "Voice",
+      "Piano",
+      "Guitar",
+      "Drums",
+      "Bass",
+      "Violin",
+      "Cello",
+      "Keyboard",
+      "Music Initiation",
+      "Saxophone",
+      "Trumpet",
+      "Flute",
+      "Clarinet",
+      "Rock Band (semi-private)",
+      "Garage Band (semi-private)",
+      "Recording Programming"
+    ],
+    "features": [
+      "Professional concerts - some of the largest amateur concerts in Canada",
+      "RCM exam preparation with internationally recognized credentials",
+      "Band performance opportunities with experienced instructors",
+      "Customized programs based on age, goals, and music genres"
+    ]
+  },
+  "html_content": "<div class=\"courses-hero\">\n  <h1>Music Lessons in West Island Montreal &mdash; Private Instruction for All Levels</h1>\n  <h2>From Beginners to Advanced!</h2>\n  <p>Our courses are taught by highly qualified teachers in professional studio classrooms at our Pointe-Claire location. Programs are customized based on students' age, specific goals and music genres, ranging from rock to R&amp;B to jazz and classical. Serving students from Pointe-Claire, DDO, Kirkland, Beaconsfield, Pierrefonds, and Dorval.</p>\n</div>\n\n<div class=\"course-offerings\">\n  <h2>Our 16 Music Course Offerings</h2>\n  <div class=\"course-grid\">\n    <div class=\"course-item\">Voice Lessons</div>\n    <div class=\"course-item\">Piano Lessons</div>\n    <div class=\"course-item\">Guitar Lessons</div>\n    <div class=\"course-item\">Drum Lessons</div>\n    <div class=\"course-item\">Bass Lessons</div>\n    <div class=\"course-item\">Violin Lessons</div>\n    <div class=\"course-item\">Cello Lessons</div>\n    <div class=\"course-item\">Keyboard Lessons</div>\n    <div class=\"course-item\">Music Initiation</div>\n    <div class=\"course-item\">Saxophone Lessons</div>\n    <div class=\"course-item\">Trumpet Lessons</div>\n    <div class=\"course-item\">Flute Lessons</div>\n    <div class=\"course-item\">Clarinet Lessons</div>\n    <div class=\"course-item\">Rock Band (semi-private)</div>\n    <div class=\"course-item\">Garage Band (semi-private)</div>\n    <div class=\"course-item\">Recording Programming</div>\n  </div>\n</div>\n\n<div class=\"program-features\">\n  <h2>Why Choose Our Music Programs</h2>\n  <ul>\n    <li>Professional concerts &ndash; some of the largest amateur concerts in Canada</li>\n    <li>RCM exam preparation with internationally recognized credentials</li>\n    <li>Band performance opportunities with experienced instructors</li>\n    <li>Customized programs based on age, goals, and music genres</li>\n    <li>Over 50 years of teaching excellence in the West Island</li>\n  </ul>\n</div>\n\n<div class=\"courses-cta\">\n  <h2>Start Your Musical Journey</h2>\n  <p>Book a <strong>free trial lesson</strong> today! Call <a href=\"tel:514-428-5080\">514-428-5080</a> or <a href=\"/contact-us/\">contact us online</a>.</p>\n  <p>Located at Plaza Pointe-Claire, 269 St-Jean blvd, Suite 101, Pointe-Claire, QC H9R 3J1.</p>\n</div>"
+}

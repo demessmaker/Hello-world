@@ -1,0 +1,87 @@
+{
+  "logo": {
+    "url": "https://westislandmusiclessons.com/wp-content/uploads/2017/02/logo-flip-red.png",
+    "alt": "West Island Conservatory of Music logo",
+    "use_as_favicon": true
+  },
+  "page_images": {
+    "home": [
+      {
+        "url": "https://westislandmusiclessons.com/wp-content/uploads/2016/11/voice2-252x111.jpg",
+        "alt": "Voice training lessons at West Island Conservatory of Music in Pointe-Claire",
+        "placement": "service-card-voice"
+      },
+      {
+        "url": "https://westislandmusiclessons.com/wp-content/uploads/2016/11/piano-lesson-150x111.jpg",
+        "alt": "Piano lessons for all ages at West Island Conservatory of Music",
+        "placement": "service-card-piano"
+      },
+      {
+        "url": "https://westislandmusiclessons.com/wp-content/uploads/2016/11/home-guitar-lesson-150x111.jpg",
+        "alt": "Guitar lessons in West Island Montreal at WICM Pointe-Claire",
+        "placement": "service-card-guitar"
+      }
+    ],
+    "testimonials": [
+      {
+        "url": "https://westislandmusiclessons.com/wp-content/uploads/2016/11/amanda-walsh-150x150.jpg",
+        "alt": "Amanda Walsh - former violin and voice student at West Island Conservatory of Music",
+        "placement": "testimonial-amanda"
+      }
+    ]
+  },
+  "slider_images": [
+    {
+      "url": "https://westislandmusiclessons.com/wp-content/uploads/layerslider/wicm2/1197x404-slider-free-lessons-strings.jpg",
+      "alt": "Free trial string instrument lessons at West Island Conservatory of Music"
+    },
+    {
+      "url": "https://westislandmusiclessons.com/wp-content/uploads/layerslider/wicm2/1197x404-voice.jpg",
+      "alt": "Voice and vocal coaching lessons in West Island Montreal"
+    },
+    {
+      "url": "https://westislandmusiclessons.com/wp-content/uploads/layerslider/wicm2/1197x404-play-piano.jpg",
+      "alt": "Piano lessons at West Island Conservatory of Music Pointe-Claire"
+    },
+    {
+      "url": "https://westislandmusiclessons.com/wp-content/uploads/layerslider/wicm2/1197x404-play-guitar-2.jpg",
+      "alt": "Guitar lessons at West Island Conservatory of Music"
+    },
+    {
+      "url": "https://westislandmusiclessons.com/wp-content/uploads/layerslider/wicm2/1197x404-store.jpg",
+      "alt": "West Island music store with Gibson Fender and Gretsch guitars in Pointe-Claire"
+    },
+    {
+      "url": "https://westislandmusiclessons.com/wp-content/uploads/layerslider/wicm2/1197x404-slider-free-lessons-wind.jpg",
+      "alt": "Wind instrument lessons - saxophone clarinet flute trumpet at WICM"
+    },
+    {
+      "url": "https://westislandmusiclessons.com/wp-content/uploads/layerslider/wicm2/1197x404-slider-free-lessons-drums.jpg",
+      "alt": "Drum lessons at West Island Conservatory of Music Pointe-Claire"
+    },
+    {
+      "url": "https://westislandmusiclessons.com/wp-content/uploads/layerslider/wicm2/1197x404-girl-band.jpg",
+      "alt": "Rock band program for girls at West Island Conservatory of Music"
+    },
+    {
+      "url": "https://westislandmusiclessons.com/wp-content/uploads/layerslider/wicm2/1197x404-boy-band.jpg",
+      "alt": "Rock band program for boys at West Island Conservatory of Music"
+    },
+    {
+      "url": "https://westislandmusiclessons.com/wp-content/uploads/layerslider/wicm2/1197x404-voice-2.jpg",
+      "alt": "Vocal coaching and singing lessons in West Island Montreal"
+    },
+    {
+      "url": "https://westislandmusiclessons.com/wp-content/uploads/layerslider/wicm2/1197x404-store-2.jpg",
+      "alt": "Musical instruments for sale at West Island Conservatory music store"
+    },
+    {
+      "url": "https://westislandmusiclessons.com/wp-content/uploads/layerslider/wicm2/1197x404-gibson-alpine-white-christmas-1.jpg",
+      "alt": "Gibson Les Paul Studio Alpine White available at West Island music store"
+    },
+    {
+      "url": "https://westislandmusiclessons.com/wp-content/uploads/layerslider/wicm2/1197x404-gibson-green-christmas.jpg",
+      "alt": "Gibson Les Paul Classic Green Ocean Burst at West Island music store"
+    }
+  ]
+}

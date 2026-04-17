@@ -1,0 +1,74 @@
+{
+  "title": "Home",
+  "slug": "home",
+  "status": "publish",
+  "type": "page",
+  "seo": {
+    "meta_title": "Music Lessons in West Island Montreal | Piano, Guitar, Voice | WICM",
+    "meta_description": "Private music lessons in West Island, Montreal. Piano, guitar, voice, drums & more. Free trial lesson! Serving Pointe-Claire, Kirkland, DDO & Beaconsfield.",
+    "focus_keywords": ["music lessons west island", "piano lessons montreal", "guitar lessons west island", "voice lessons pointe-claire"],
+    "og_title": "West Island Conservatory of Music | Music Lessons & Instrument Store",
+    "og_description": "The West Island's leading music school. Private lessons in piano, guitar, voice, drums & more. Book your free trial lesson today!",
+    "og_type": "website"
+  },
+  "content": {
+    "hero": {
+      "tagline": "Making music magical",
+      "description": "The West Island's leading music school offering instruction in voice, piano, guitar, drums, and brass with an in-store inventory of instruments.",
+      "cta": {
+        "text": "Free Trial Lesson",
+        "note": "Limited Time: Free trial lesson for new students"
+      }
+    },
+    "services_overview": [
+      {
+        "name": "Voice Training",
+        "description": "Collaborative coaching emphasizing performance"
+      },
+      {
+        "name": "Piano & Keyboard",
+        "description": "All levels and ages"
+      },
+      {
+        "name": "Guitar & Strings",
+        "description": "All levels and ages"
+      },
+      {
+        "name": "Rock/Garage Bands",
+        "description": "Integrating talent and confidence building"
+      },
+      {
+        "name": "Brass & Wind Instruments",
+        "description": "Including trumpet, saxophone, clarinet"
+      }
+    ],
+    "about_snippet": "The West Island's 'one stop' destination for ALL your musical needs. Our studios and store feature steam air purification.",
+    "featured_products": [
+      {
+        "name": "2016 Gibson Les Paul Studio",
+        "variant": "Alpine White"
+      },
+      {
+        "name": "2017 Gibson Les Paul Classic T",
+        "variant": "Green Ocean Burst"
+      },
+      {
+        "name": "2017 Gibson Les Paul Standard T",
+        "variant": "Cherry Sunburst"
+      },
+      {
+        "name": "Gibson Les Paul 50s Tribute 2016",
+        "variant": "Satin Gold Top"
+      }
+    ],
+    "blog_post_teasers": [
+      "The Piano Man – Not Just a Modern day Rock Song",
+      "Percussion instruments: Drumming to the beat of your own music",
+      "History of the Guitar",
+      "The Sound's of Modern Music",
+      "How to Decide Which Guitar to Buy",
+      "Saxophone, Clarinet, Bass, Trumpet, and Violin lessons"
+    ]
+  },
+  "html_content": "<div class=\"hero-section\">\n  <h1>Music Lessons in West Island, Montreal</h1>\n  <p>The West Island's leading music school offering private instruction in voice, piano, guitar, drums, and brass. Proudly serving Pointe-Claire, Dollard-des-Ormeaux, Kirkland, Beaconsfield, Pierrefonds, and Dorval.</p>\n  <a href=\"/contact-us/\" class=\"btn btn-primary\">Book Your Free Trial Lesson</a>\n  <p class=\"promo\">Limited Time: Free trial lesson for new students!</p>\n</div>\n\n<div class=\"services-section\">\n  <h2>Our Music Programs</h2>\n  <div class=\"service-cards\">\n    <div class=\"service-card\">\n      <h3>Voice Training</h3>\n      <p>Collaborative vocal coaching emphasizing performance and technique for all ages.</p>\n    </div>\n    <div class=\"service-card\">\n      <h3>Piano &amp; Keyboard Lessons</h3>\n      <p>Private piano lessons for all levels and ages, from beginners to RCM exam preparation.</p>\n    </div>\n    <div class=\"service-card\">\n      <h3>Guitar &amp; Strings Lessons</h3>\n      <p>Learn guitar, violin, cello, and bass from experienced West Island instructors.</p>\n    </div>\n    <div class=\"service-card\">\n      <h3>Rock/Garage Bands</h3>\n      <p>Semi-private band programs integrating talent and confidence building.</p>\n    </div>\n    <div class=\"service-card\">\n      <h3>Brass &amp; Wind Instruments</h3>\n      <p>Trumpet, saxophone, clarinet, and flute lessons in our Pointe-Claire studio.</p>\n    </div>\n  </div>\n</div>\n\n<div class=\"about-snippet\">\n  <h2>West Island's Premier Music School</h2>\n  <p>Founded over 50 years ago, we are the West Island's \"one stop\" destination for all your musical needs. Located at Plaza Pointe-Claire, our studios and store feature steam air purification for your safety and comfort.</p>\n</div>\n\n<div class=\"featured-products\">\n  <h2>Featured Instruments in Our Store</h2>\n  <div class=\"product-grid\">\n    <div class=\"product-card\">\n      <h3>2016 Gibson Les Paul Studio</h3>\n      <p>Alpine White</p>\n    </div>\n    <div class=\"product-card\">\n      <h3>2017 Gibson Les Paul Classic T</h3>\n      <p>Green Ocean Burst</p>\n    </div>\n    <div class=\"product-card\">\n      <h3>2017 Gibson Les Paul Standard T</h3>\n      <p>Cherry Sunburst</p>\n    </div>\n    <div class=\"product-card\">\n      <h3>Gibson Les Paul 50s Tribute 2016</h3>\n      <p>Satin Gold Top</p>\n    </div>\n  </div>\n</div>\n\n<div class=\"blog-teasers\">\n  <h2>From Our Blog</h2>\n  <ul>\n    <li>The Piano Man &ndash; Not Just a Modern day Rock Song</li>\n    <li>Percussion instruments: Drumming to the beat of your own music</li>\n    <li>History of the Guitar</li>\n    <li>The Sound's of Modern Music</li>\n    <li>How to Decide Which Guitar to Buy</li>\n    <li>Saxophone, Clarinet, Bass, Trumpet, and Violin lessons</li>\n  </ul>\n</div>\n\n<div class=\"site-footer-info\">\n  <h2>Visit Us</h2>\n  <p><strong>West Island Conservatory of Music</strong><br>\n  Plaza Pointe-Claire, 269 St-Jean blvd, Suite 101<br>\n  Pointe-Claire, QC H9R 3J1</p>\n  <p>Phone: <a href=\"tel:514-428-5080\">514-428-5080</a> | Email: <a href=\"mailto:westislandmusic@gmail.com\">westislandmusic@gmail.com</a></p>\n  <p>Serving: Pointe-Claire, Dorval, Dollard-des-Ormeaux, Kirkland, Beaconsfield &amp; Pierrefonds</p>\n</div>"
+}

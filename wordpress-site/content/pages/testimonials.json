@@ -1,0 +1,55 @@
+{
+  "title": "Testimonials",
+  "slug": "testimonials",
+  "status": "publish",
+  "type": "page",
+  "seo": {
+    "meta_title": "Student Testimonials | West Island Conservatory of Music Reviews",
+    "meta_description": "Read what students and parents say about West Island Conservatory of Music. Top-rated music school in Pointe-Claire with qualified, passionate teachers.",
+    "focus_keywords": ["west island music school reviews", "music lessons testimonials", "WICM reviews"],
+    "og_title": "What Our Students Say - West Island Conservatory of Music",
+    "og_description": "Hear from our students and parents about their experience at West Island Conservatory of Music.",
+    "og_type": "website"
+  },
+  "content": {
+    "heading": "What Our Students Say",
+    "testimonials": [
+      {
+        "name": "Amanda Walsh",
+        "role": "Former violin and voice student",
+        "quote": "The Conservatory is a warm and encouraging environment in which to learn."
+      },
+      {
+        "name": "Donna Burgess",
+        "role": "Parent of multiple students",
+        "quote": "The Quality of the music teachers continues to be top notch. The learning environment and tools are very professional."
+      },
+      {
+        "name": "Alaric Antos",
+        "role": "Vocal and piano student (10+ years)",
+        "quote": "They are all very dynamic and passionate about what they do, and really allow their students to share this enthusiasm."
+      },
+      {
+        "name": "John McGuinness",
+        "role": "Parent of Declan McGuinness",
+        "quote": "The West Island Conservatory of Music has a great range of teachers which makes it easy to find a teacher that best fits."
+      },
+      {
+        "name": "Robert Groeneveld",
+        "role": "Guitar student",
+        "quote": "The lessons helped a lot and I improved more than I could have imagined."
+      },
+      {
+        "name": "Damien Holtz",
+        "role": "Parent and current student",
+        "quote": "The teachers made such a connection with the kids that they still have a joy of making music."
+      },
+      {
+        "name": "Rebecca Fiset Côté",
+        "role": "Singer, competition participant",
+        "quote": "West island conservatory of music is one of the top music schools in Canada."
+      }
+    ]
+  },
+  "html_content": "<div class=\"testimonials-hero\">\n  <h1>What Our Students Say</h1>\n</div>\n\n<div class=\"testimonials-grid\">\n  <div class=\"testimonial-card\">\n    <blockquote>\n      <p>&ldquo;The Conservatory is a warm and encouraging environment in which to learn.&rdquo;</p>\n    </blockquote>\n    <cite>\n      <strong>Amanda Walsh</strong><br>\n      <span>Former violin and voice student</span>\n    </cite>\n  </div>\n\n  <div class=\"testimonial-card\">\n    <blockquote>\n      <p>&ldquo;The Quality of the music teachers continues to be top notch. The learning environment and tools are very professional.&rdquo;</p>\n    </blockquote>\n    <cite>\n      <strong>Donna Burgess</strong><br>\n      <span>Parent of multiple students</span>\n    </cite>\n  </div>\n\n  <div class=\"testimonial-card\">\n    <blockquote>\n      <p>&ldquo;They are all very dynamic and passionate about what they do, and really allow their students to share this enthusiasm.&rdquo;</p>\n    </blockquote>\n    <cite>\n      <strong>Alaric Antos</strong><br>\n      <span>Vocal and piano student (10+ years)</span>\n    </cite>\n  </div>\n\n  <div class=\"testimonial-card\">\n    <blockquote>\n      <p>&ldquo;The West Island Conservatory of Music has a great range of teachers which makes it easy to find a teacher that best fits.&rdquo;</p>\n    </blockquote>\n    <cite>\n      <strong>John McGuinness</strong><br>\n      <span>Parent of Declan McGuinness</span>\n    </cite>\n  </div>\n\n  <div class=\"testimonial-card\">\n    <blockquote>\n      <p>&ldquo;The lessons helped a lot and I improved more than I could have imagined.&rdquo;</p>\n    </blockquote>\n    <cite>\n      <strong>Robert Groeneveld</strong><br>\n      <span>Guitar student</span>\n    </cite>\n  </div>\n\n  <div class=\"testimonial-card\">\n    <blockquote>\n      <p>&ldquo;The teachers made such a connection with the kids that they still have a joy of making music.&rdquo;</p>\n    </blockquote>\n    <cite>\n      <strong>Damien Holtz</strong><br>\n      <span>Parent and current student</span>\n    </cite>\n  </div>\n\n  <div class=\"testimonial-card\">\n    <blockquote>\n      <p>&ldquo;West island conservatory of music is one of the top music schools in Canada.&rdquo;</p>\n    </blockquote>\n    <cite>\n      <strong>Rebecca Fiset C&ocirc;t&eacute;</strong><br>\n      <span>Singer, competition participant</span>\n    </cite>\n  </div>\n</div>"
+}

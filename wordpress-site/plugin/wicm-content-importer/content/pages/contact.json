@@ -1,0 +1,35 @@
+{
+  "title": "Contact Us",
+  "slug": "contact-us",
+  "status": "publish",
+  "type": "page",
+  "seo": {
+    "meta_title": "Contact Us | West Island Conservatory of Music | 514-428-5080",
+    "meta_description": "Contact West Island Conservatory of Music at Plaza Pointe-Claire. Call 514-428-5080 or email us. Open Mon-Sat. Free parking. Book your free trial lesson!",
+    "focus_keywords": ["west island music school contact", "music lessons pointe-claire", "514-428-5080"],
+    "og_title": "Contact West Island Conservatory of Music",
+    "og_description": "Visit us at Plaza Pointe-Claire or call 514-428-5080. Open Monday-Saturday. Free parking available.",
+    "og_type": "website"
+  },
+  "content": {
+    "heading": "Contact Us",
+    "description": "West Island's premier musical destination. Our knowledgeable staff are here to answer your questions.",
+    "address": {
+      "building": "Plaza Pointe-Claire",
+      "street": "269 St-Jean blvd, Suite 101",
+      "city": "Pointe-Claire",
+      "province": "QC",
+      "postal_code": "H9R 3J1"
+    },
+    "phone": "514-428-5080",
+    "email": "westislandmusic@gmail.com",
+    "hours": {
+      "monday_thursday": "11:00 AM - 9:00 PM",
+      "friday": "11:00 AM - 8:00 PM",
+      "saturday": "9:00 AM - 5:00 PM",
+      "sunday": "Closed"
+    },
+    "parking": "Ample parking available at Plaza Pointe-Claire"
+  },
+  "html_content": "<div class=\"contact-hero\">\n  <h1>Contact Us</h1>\n  <p>West Island's premier musical destination. Making music magical.</p>\n</div>\n\n<div class=\"contact-details\">\n  <div class=\"contact-info\">\n    <h2>Get In Touch</h2>\n    <p>Our knowledgeable staff are here to answer your questions.</p>\n    \n    <h3>Address</h3>\n    <p>Plaza Pointe-Claire<br>\n    269 St-Jean blvd, Suite 101<br>\n    Pointe-Claire, QC H9R 3J1</p>\n    \n    <h3>Phone</h3>\n    <p><a href=\"tel:514-428-5080\">514-428-5080</a></p>\n    \n    <h3>Email</h3>\n    <p><a href=\"mailto:westislandmusic@gmail.com\">westislandmusic@gmail.com</a></p>\n  </div>\n  \n  <div class=\"contact-hours\">\n    <h2>Business Hours</h2>\n    <table>\n      <tr><td>Monday - Thursday</td><td>11:00 AM - 9:00 PM</td></tr>\n      <tr><td>Friday</td><td>11:00 AM - 8:00 PM</td></tr>\n      <tr><td>Saturday</td><td>9:00 AM - 5:00 PM</td></tr>\n      <tr><td>Sunday</td><td>Closed</td></tr>\n    </table>\n  </div>\n</div>\n\n<div class=\"contact-parking\">\n  <p>Ample parking available at Plaza Pointe-Claire.</p>\n</div>"
+}

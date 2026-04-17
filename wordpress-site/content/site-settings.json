@@ -1,0 +1,40 @@
+{
+  "site_title": "West Island Conservatory of Music",
+  "tagline": "Making music magical",
+  "contact": {
+    "phone": "514.428.5080",
+    "email": "westislandmusic@gmail.com",
+    "address": {
+      "street": "269 St-Jean blvd, Suite 101",
+      "building": "Plaza Pointe-Claire",
+      "city": "Pointe-Claire",
+      "province": "QC",
+      "postal_code": "H9R 3J1",
+      "country": "Canada"
+    }
+  },
+  "hours": {
+    "monday": "11:00 AM - 9:00 PM",
+    "tuesday": "11:00 AM - 9:00 PM",
+    "wednesday": "11:00 AM - 9:00 PM",
+    "thursday": "11:00 AM - 9:00 PM",
+    "friday": "11:00 AM - 8:00 PM",
+    "saturday": "9:00 AM - 5:00 PM",
+    "sunday": "Closed"
+  },
+  "social_media": {
+    "facebook": "https://www.facebook.com/WestIslandConservatoryOfMusic"
+  },
+  "service_areas": [
+    "Pointe-Claire",
+    "Dorval",
+    "Dollard-des-Ormeaux",
+    "Kirkland",
+    "Beaconsfield",
+    "Pierrefonds"
+  ],
+  "payment_methods": ["Cash", "Credit Card", "Debit Card", "E-Transfer"],
+  "currency": "CAD",
+  "timezone": "America/Toronto",
+  "languages": ["English", "French"]
+}

@@ -1,0 +1,45 @@
+Job Search Update — {{ run_date }}
+{{ new_postings|length }} new posting(s), {{ pipeline_active|length }} active in pipeline.
+
+============================================================
+NEW POSTINGS (scored >= {{ min_score }})
+============================================================
+{% if not new_postings %}
+No new relevant matches today.
+{% endif %}
+{% for p in new_postings %}
+{% if p.score >= top_match_threshold %}*** TOP MATCH ***{% else %}NEW{% endif %} (score: {{ p.score }})
+{{ p.title }} — {{ p.company }}
+Location: {{ p.location or "—" }}
+{% if p.compensation %}Compensation: {{ p.compensation }}{% endif %}
+{% if p.url %}URL: {{ p.url }}{% endif %}
+{% if p.snippet %}{{ p.snippet }}{% endif %}
+{% if p.why %}Why: {{ p.why }}{% endif %}
+------------------------------------------------------------
+{% endfor %}
+
+============================================================
+PIPELINE STATUS
+============================================================
+{% for p in pipeline_active %}
+- {{ p.company }} — {{ p.title }} ({{ p.location }})
+{% else %}
+Pipeline empty.
+{% endfor %}
+
+{% if pipeline_closed %}
+============================================================
+POSSIBLY CLOSED (not seen 3+ days)
+============================================================
+{% for p in pipeline_closed %}
+- {{ p.company }} — {{ p.title }}
+{% endfor %}
+{% endif %}
+
+============================================================
+STATS
+============================================================
+Postings scanned: {{ stats.scanned }}
+New matches: {{ stats.new_matches }}
+Pipeline active: {{ pipeline_active|length }}
+Sources checked: {{ stats.sources|join(", ") }}
