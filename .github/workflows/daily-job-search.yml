@@ -52,6 +52,8 @@ jobs:
       - name: Run pipeline
         env:
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
+          ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
         run: |
           if [ "${{ inputs.dry_run }}" = "true" ]; then
             python main.py --dry-run

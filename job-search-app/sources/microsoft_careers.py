@@ -1,8 +1,7 @@
 import logging
 from typing import Iterable
 
-import httpx
-
+from ._http import get_json
 from .base import JobPosting, Source
 
 log = logging.getLogger(__name__)
@@ -33,31 +32,25 @@ class MicrosoftSource(Source):
             "o": "Relevance",
             "flt": "true",
         }
-        try:
-            with httpx.Client(timeout=30, headers={"User-Agent": _UA}) as client:
-                resp = client.get(SEARCH_URL, params=params)
-                resp.raise_for_status()
-                data = resp.json()
-        except Exception as exc:
-            log.warning("microsoft query %r failed: %s", query, exc)
+        data = get_json(SEARCH_URL, params=params, max_retries=3)
+        if not data:
             return
 
         jobs = (data.get("operationResult") or {}).get("result", {}).get("jobs", [])
         for job in jobs:
             job_id = str(job.get("jobId", ""))
+            props = job.get("properties") or {}
+            locations = props.get("locations") or []
+            location = ", ".join(
+                p.get("name", "") if isinstance(p, dict) else str(p) for p in locations
+            ) or props.get("primaryLocation", "")
             yield JobPosting(
                 source="microsoft",
                 source_job_id=job_id,
                 company="Microsoft",
                 title=job.get("title", "") or "",
-                location=", ".join(
-                    p.get("name", "")
-                    for p in (job.get("properties") or {}).get("locations", []) or []
-                ) or (job.get("properties") or {}).get("primaryLocation", ""),
+                location=location,
                 url=f"https://jobs.careers.microsoft.com/global/en/job/{job_id}" if job_id else "",
-                description=(job.get("properties") or {}).get("description", "") or "",
+                description=props.get("description", "") or "",
                 query=query,
             )
-
-
-_UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/124.0 Safari/537.36"

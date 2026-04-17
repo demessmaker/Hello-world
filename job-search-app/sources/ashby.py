@@ -1,8 +1,7 @@
 import logging
 from typing import Iterable
 
-import httpx
-
+from ._http import get_json
 from .base import JobPosting, Source
 
 log = logging.getLogger(__name__)
@@ -11,6 +10,11 @@ BASE_URL = "https://api.ashbyhq.com/posting-api/job-board/{org}"
 
 
 class AshbySource(Source):
+    """Fetches from Ashby's public job board API.
+
+    Note: Ashby slugs are case-sensitive. If a lowercase slug 404s we retry
+    with the title-cased variant."""
+
     name = "ashby"
 
     def fetch(self) -> Iterable[JobPosting]:
@@ -20,13 +24,10 @@ class AshbySource(Source):
             yield from self._fetch_org(org, location_filters)
 
     def _fetch_org(self, org: str, location_filters):
-        try:
-            with httpx.Client(timeout=30) as client:
-                resp = client.get(BASE_URL.format(org=org))
-                resp.raise_for_status()
-                data = resp.json()
-        except Exception as exc:
-            log.warning("ashby %s failed: %s", org, exc)
+        data = get_json(BASE_URL.format(org=org), max_retries=1)
+        if not data and org.lower() == org:
+            data = get_json(BASE_URL.format(org=org.title()), max_retries=1)
+        if not data:
             return
 
         for job in data.get("jobs", []):

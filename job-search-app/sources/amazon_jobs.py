@@ -1,8 +1,7 @@
 import logging
 from typing import Iterable
 
-import httpx
-
+from ._http import get_json
 from .base import JobPosting, Source
 
 log = logging.getLogger(__name__)
@@ -33,13 +32,8 @@ class AmazonSource(Source):
             "sort": "recent",
             "base_query": query,
         }
-        try:
-            with httpx.Client(timeout=30, headers={"User-Agent": _UA}) as client:
-                resp = client.get(SEARCH_URL, params=params)
-                resp.raise_for_status()
-                data = resp.json()
-        except Exception as exc:
-            log.warning("amazon query %r failed: %s", query, exc)
+        data = get_json(SEARCH_URL, params=params)
+        if not data:
             return
 
         for job in data.get("jobs", []):
@@ -53,6 +47,3 @@ class AmazonSource(Source):
                 description=job.get("description_short", "") or "",
                 query=query,
             )
-
-
-_UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/124.0 Safari/537.36"

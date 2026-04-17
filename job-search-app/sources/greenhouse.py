@@ -1,8 +1,7 @@
 import logging
 from typing import Iterable
 
-import httpx
-
+from ._http import get_json
 from .base import JobPosting, Source
 
 log = logging.getLogger(__name__)
@@ -20,16 +19,9 @@ class GreenhouseSource(Source):
             yield from self._fetch_board(board, location_filters)
 
     def _fetch_board(self, board: str, location_filters):
-        url = BASE_URL.format(board=board)
-        try:
-            with httpx.Client(timeout=30) as client:
-                resp = client.get(url, params={"content": "true"})
-                resp.raise_for_status()
-                data = resp.json()
-        except Exception as exc:
-            log.warning("greenhouse %s failed: %s", board, exc)
+        data = get_json(BASE_URL.format(board=board), params={"content": "true"})
+        if not data:
             return
-
         for job in data.get("jobs", []):
             loc = (job.get("location") or {}).get("name", "") or ""
             if location_filters and not any(f in loc.lower() for f in location_filters):
@@ -37,7 +29,7 @@ class GreenhouseSource(Source):
             yield JobPosting(
                 source=f"greenhouse:{board}",
                 source_job_id=str(job.get("id")),
-                company=board.title(),
+                company=(job.get("company_name") or board.title()),
                 title=job.get("title", ""),
                 location=loc,
                 url=job.get("absolute_url", ""),

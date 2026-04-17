@@ -23,6 +23,7 @@ from database import (
 from emailer import compose, send
 from processing import mark_closed_postings, normalize, score_posting, upsert_posting
 from sources import (
+    AdzunaSource,
     AmazonSource,
     AshbySource,
     DiceSource,
@@ -73,6 +74,8 @@ def build_sources(cfg: dict):
         a_cfg = dict(srcs["ashby"])
         a_cfg["location_filters"] = location_filters
         built.append(AshbySource(a_cfg))
+    if srcs.get("adzuna", {}).get("enabled"):
+        built.append(AdzunaSource(srcs["adzuna"]))
     if srcs.get("indeed", {}).get("enabled"):
         built.append(IndeedSource(srcs["indeed"]))
     if srcs.get("dice", {}).get("enabled"):

@@ -98,7 +98,7 @@ profile:
 
 sources:
   indeed:
-    enabled: true
+    enabled: false  # HTML scrape frequently 403s; use Adzuna instead
     country_code: "CA"
     queries:
       - "solutions architect GenAI AI data cloud agentic"
@@ -107,7 +107,7 @@ sources:
       - "director AI data platform cloud lead GenAI"
       - "GenAI solutions architect AWS data"
   dice:
-    enabled: true
+    enabled: false  # undocumented endpoint; re-enable manually if desired
     default_workplace: ["Remote"]
     queries:
       - "Data Architect AWS GenAI agentic AI Bedrock solutions architect"
@@ -117,10 +117,27 @@ sources:
     boards:
       - caylent
       - databricks
-  ashby:
-    enabled: true
-    orgs:
       - anthropic
+  ashby:
+    enabled: false
+    orgs: []
+  adzuna:
+    enabled: true
+    country: "ca"
+    app_id_env: "ADZUNA_APP_ID"
+    app_key_env: "ADZUNA_APP_KEY"
+    results_per_page: 40
+    max_days_old: 3
+    queries:
+      - "principal data architect"
+      - "principal solutions architect AI"
+      - "director AI data cloud"
+      - "GenAI architect AWS"
+      - "agentic AI architect"
+    locations:
+      - "Montreal"
+      - "Toronto"
+      - ""
   microsoft:
     enabled: true
   amazon:

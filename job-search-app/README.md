@@ -9,8 +9,9 @@ Montreal, QC.
 
 ## Features
 
-- Multi-source fetch: Greenhouse (Caylent, Databricks), Ashby (Anthropic),
-  Microsoft Careers, Amazon Jobs, Indeed (scraped), Dice.
+- Multi-source fetch: Greenhouse (Caylent, Databricks, Anthropic), Adzuna
+  (aggregator across thousands of boards), Microsoft Careers, Amazon Jobs.
+  Ashby, Indeed-scrape and Dice are included but disabled by default.
 - Persistent SQLite store of seen postings, search runs, and an application
   pipeline.
 - Relevance scoring engine (title, company tier, skill overlap, location,
@@ -38,10 +39,12 @@ Edit `config.yaml`:
 - `sources.*.enabled` → toggle each source.
 - `profile.*` → skills, target titles, tier 1/2/3 companies.
 
-Export the SMTP password:
+Export secrets:
 
 ```bash
 export SMTP_PASSWORD="your-app-password"
+export ADZUNA_APP_ID="xxxxxxxx"      # free at developer.adzuna.com
+export ADZUNA_APP_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 ```
 
 ## Run
@@ -72,6 +75,7 @@ Setup:
 1. Push this repo to GitHub.
 2. Settings → Secrets and variables → Actions → **New repository secret**:
    - `SMTP_PASSWORD` = your SMTP app password.
+   - `ADZUNA_APP_ID`, `ADZUNA_APP_KEY` = free tier at developer.adzuna.com.
 3. Edit `job-search-app/config.yaml` and commit:
    - `email.smtp_host`, `smtp_port`, `smtp_user`, `from_address`, `to_address`.
    - `candidate.email`.
@@ -97,12 +101,15 @@ pytest tests/
 
 ## Notes on sources
 
-- **Indeed** no longer offers a public Publisher API. The included scraper
-  works against the HTML search page but is fragile and may be rate-limited.
-  Swap in an Indeed MCP connector, Adzuna, or SerpAPI for production.
-- **Dice** public endpoint is undocumented and may change without notice.
+- **Adzuna** is the primary aggregator (free 250 calls/month). Fills the gap
+  left by Indeed's closed Publisher API.
+- **Indeed** HTML scraper is included but disabled by default — frequently
+  returns 403. Swap in an MCP connector or SerpAPI if you need it.
+- **Dice** public endpoint is undocumented and disabled by default.
 - **Google / Snowflake / Apple / Meta** career sites render client-side; add
   Playwright scrapers in `sources/` when needed.
+- All HTTP sources share `sources/_http.py` which retries 429/5xx and network
+  errors with exponential backoff.
 
 ## Architecture
 
