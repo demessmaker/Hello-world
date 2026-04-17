@@ -1,0 +1,151 @@
+candidate:
+  name: "Éric"
+  email: "eric@example.com"
+  location: "Montreal, QC"
+  min_compensation_cad: 170000
+  min_compensation_usd: 130000
+
+schedule:
+  cron: "0 7 * * 1-5"
+  timezone: "America/Toronto"
+  skip_weekends: true
+  weekly_stats_day: "Friday"
+
+email:
+  smtp_host: "smtp.gmail.com"
+  smtp_port: 587
+  smtp_user: "your-email@gmail.com"
+  smtp_password_env: "SMTP_PASSWORD"
+  from_address: "Job Search Bot <jobsearch@example.com>"
+  to_address: "eric@example.com"
+
+scoring:
+  min_score_for_email: 40
+  top_match_threshold: 70
+
+profile:
+  primary_skills:
+    - AWS Bedrock
+    - AWS S3
+    - AWS Redshift
+    - AWS Glue
+    - AWS Lake Formation
+    - AWS Lex
+    - AWS SageMaker
+    - Anthropic Claude
+    - Multi-agent
+    - Agentic AI
+    - RAG
+    - LangChain
+    - LangGraph
+    - GenAI
+    - LLM
+    - Oracle Forms
+    - Data lake
+    - Data platform
+  secondary_skills:
+    - Databricks
+    - Snowflake
+    - Python
+    - SQL
+    - Power BI
+    - Terraform
+    - Docker
+    - Kubernetes
+  target_titles:
+    - Principal Architect
+    - Principal Data Architect
+    - Principal Solutions Architect
+    - Principal Consultant
+    - Director, AI
+    - Director, Data
+    - Director, Cloud
+    - Director, Solutions Architecture
+    - Lead Architect
+    - Senior Manager, AI
+    - Senior Manager, Data
+    - Data Practice Director
+    - Head of AI
+    - VP, Data
+  excluded_titles:
+    - Junior
+    - Intern
+    - Associate
+    - Developer I
+    - Developer II
+    - Engineer I
+    - Engineer II
+    - Analyst
+  tier_1_companies:
+    - Meta
+    - Apple
+    - Amazon
+    - AWS
+    - Microsoft
+    - Google
+  tier_2_companies:
+    - Anthropic
+    - Databricks
+    - Snowflake
+    - Caylent
+  tier_3_companies:
+    - Softchoice
+    - Intact
+    - Avanade
+    - Mistral AI
+    - Deloitte
+    - Accenture
+
+sources:
+  indeed:
+    enabled: true
+    country_code: "CA"
+    queries:
+      - "solutions architect GenAI AI data cloud agentic"
+      - "AI architect cloud GenAI data platform senior"
+      - "principal architect AI data cloud GenAI"
+      - "director AI data platform cloud lead GenAI"
+      - "GenAI solutions architect AWS data"
+  dice:
+    enabled: true
+    default_workplace: ["Remote"]
+    queries:
+      - "Data Architect AWS GenAI agentic AI Bedrock solutions architect"
+      - "principal architect GenAI AI data cloud solutions AWS Bedrock"
+  greenhouse:
+    enabled: true
+    boards:
+      - caylent
+      - databricks
+  ashby:
+    enabled: true
+    orgs:
+      - anthropic
+  microsoft:
+    enabled: true
+  amazon:
+    enabled: true
+  google:
+    enabled: false
+  snowflake:
+    enabled: false
+
+filters:
+  locations:
+    - Canada
+    - Remote
+    - Montreal
+    - Toronto
+    - Ottawa
+    - Québec
+    - Quebec
+
+database:
+  path: "./job_search.db"
+  retention_days: 90
+
+logging:
+  level: "INFO"
+  file: "./logs/job_search.log"
+  max_size_mb: 10
+  backup_count: 5
